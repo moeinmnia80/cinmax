@@ -22,7 +22,7 @@ export const FilterDrawer = () => {
 
   return (
     <>
-      {!filterOpen && (
+      {filterOpen && (
         <div className="relative z-20 mb-2">
           <div className=" backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
