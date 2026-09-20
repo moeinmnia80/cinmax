@@ -7,11 +7,11 @@ import { Command as CommandPrimitive } from "cmdk";
 import { cn } from "@/utils";
 import {
   Dialog,
+  DialogTitle,
+  DialogHeader,
   DialogContent,
   DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./dialog";
+} from "@/components/ui/Dialog";
 
 function Command({
   className,

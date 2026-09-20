@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { CircleIcon } from "lucide-react";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
-import { cn } from "./utils";
+import { cn } from "@/utils";
 
 function RadioGroup({
   className,

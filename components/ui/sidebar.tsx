@@ -2,28 +2,28 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { VariantProps, cva } from "class-variance-authority";
 import { PanelLeftIcon } from "lucide-react";
+import { VariantProps, cva } from "class-variance-authority";
 
-import { useIsMobile } from "./use-mobile";
-import { cn } from "./utils";
-import { Button } from "./Button";
-import { Input } from "./input";
-import { Separator } from "./separator";
+import { cn } from "@/utils";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { useIsMobile } from "@/utils/use-mobile";
+import { Separator } from "@/components/ui/Separator";
 import {
   Sheet,
+  SheetTitle,
+  SheetHeader,
   SheetContent,
   SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "./sheet";
-import { Skeleton } from "./skeleton";
+} from "./Sheet";
+import { Skeleton } from "@/components/ui/Skeleton";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
-} from "./tooltip";
+  TooltipProvider,
+} from "@/components/ui/Tooltip";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -606,10 +606,9 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
 }) {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+  const [width] = React.useState(
+    () => `${Math.floor(Math.random() * 40) + 50}%`,
+  );
 
   return (
     <div
