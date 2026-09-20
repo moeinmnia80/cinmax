@@ -1,9 +1,14 @@
-import { MobileMenu } from "@/components";
+import { Container, Hero, MobileMenu } from "@/components";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center font-san">
-      <MobileMenu />
-    </div>
+    <main>
+      <Container>
+        <div className="flex flex-col flex-1 items-center min-h-dvh">
+          <MobileMenu />
+          <Hero />
+        </div>
+      </Container>
+    </main>
   );
 }

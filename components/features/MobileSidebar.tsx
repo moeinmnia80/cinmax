@@ -4,17 +4,13 @@ import { useState } from "react";
 import { LogIn, X } from "lucide-react";
 
 import { navItems } from "@/constants";
+import { useModalStore } from "@/store/useModalStore";
 
-interface MobileSidebarProps {
-  mobileNavOpen: boolean;
-  setMobileNavOpen: (value: boolean) => void;
-}
-
-export const MobileSidebar = ({
-  mobileNavOpen,
-  setMobileNavOpen,
-}: MobileSidebarProps) => {
+export const MobileSidebar = () => {
   const [activeNavItem, setActiveNavItem] = useState("Home");
+
+  const mobileNavOpen = useModalStore((state) => state.mobileNavOpen);
+  const setMobileNavOpen = useModalStore((state) => state.toggleMobileNav);
 
   return (
     <div

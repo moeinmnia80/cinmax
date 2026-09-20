@@ -1,0 +1,383 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum SerialStatus {
+  Ongoing
+  Ended
+  Cancelled
+}
+
+enum PersonType {
+  Actor
+  Director
+  Writer
+  Producer
+}
+
+enum MovieCategory {
+  Hollywood
+  Independent
+  Bollywood
+  Korean
+  Animation
+}
+
+// ==========================================
+// CORE BASE ENTITIES
+// ==========================================
+
+model Genre {
+  id      Int           @id @default(autoincrement())
+  slug    String        @unique
+  name    String        @unique
+  movies  MovieGenre[]
+  serials SerialGenre[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model Country {
+  id     Int     @id @default(autoincrement())
+  code   String  @unique // e.g. "USA", "UK", "IR"
+  name   String
+  movies Movie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Language {
+  id             Int             @id @default(autoincrement())
+  code           String          @unique // e.g. "en", "fa", "fr", "es"
+  name           String          @unique // e.g. "English", "Spanish"
+  movies         Movie[]         @relation("MoviePrimaryLanguage")
+  movieSubtitles MovieSubtitle[]
+  movieAudios    MovieAudio[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Studio {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Person {
+  id              Int        @id @default(autoincrement())
+  slug            String     @unique
+  name            String
+  role            PersonType @default(Actor)
+  image           String?
+  bio             String?    @db.Text
+  birthDate       String?
+  birthPlace      String?
+  height          String?
+  activeYears     String?
+  socialInstagram String?
+  socialTwitter   String?
+  socialImdb      String?
+
+  // Many-to-Many Relations via Junction Tables
+  movieCast       MovieCast[]
+  directedMovies  MovieCrew[] @relation("PersonDirectedMovies")
+  writtenMovies   MovieCrew[] @relation("PersonWrittenMovies")
+  producedMovies  MovieCrew[] @relation("PersonProducedMovies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([name])
+}
+
+model Plan {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  price       Decimal  @db.Decimal(10, 2)
+  period      String
+  popular     Boolean  @default(false)
+  features    String[]
+  downloadMax String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// MOVIES & RELATED TABLES
+// ==========================================
+
+model Movie {
+  id              Int           @id @default(autoincrement())
+  slug            String        @unique
+  title           String
+  tagline         String?
+  rating          Decimal       @db.Decimal(3, 1) // e.g. 8.1
+  votes           String?       // e.g. "1.2M"
+  year            Int
+  duration        String
+  category        MovieCategory @default(Hollywood)
+  description     String        @db.Text
+  longDescription String?       @db.Text         // Full Plot
+  image           String        // Poster
+  backdrop        String        // Hero Wide Image
+  trailer         String?
+  budget          String?       // e.g. "$94M"
+  boxOffice       String?       // e.g. "$412M"
+  recognition     String?       // e.g. "Audience Choice — Toronto"
+
+  // Primary Language & Location
+  languageId Int
+  language   Language @relation("MoviePrimaryLanguage", fields: [languageId], references: [id])
+
+  countryId Int?
+  country   Country? @relation(fields: [countryId], references: [id])
+
+  studioId Int?
+  studio   Studio? @relation(fields: [studioId], references: [id])
+
+  // Relations
+  directors MovieCrew[]    @relation("MovieDirectors")
+  writers   MovieCrew[]    @relation("MovieWriters")
+  producers MovieCrew[]    @relation("MovieProducers")
+
+  genres    MovieGenre[]
+  cast      MovieCast[]
+  awards    MovieAward[]
+  downloads MovieDownload[]
+  subtitles MovieSubtitle[]
+  audios    MovieAudio[]
+  reviews   Review[]
+  streamings MovieStreaming[]
+  
+  // Recommendations / Related
+  relatedMovies MovieRelated[] @relation("SourceMovie")
+  relatedTo     MovieRelated[] @relation("TargetMovie")
+  relatedSerials SerialRelatedMovie[]
+
+  continueWatching ContinueWatching[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // INDEXES for Performance
+  @@index([slug])
+  @@index([title])
+  @@index([rating])
+  @@index([year])
+  @@index([category])
+}
+
+// Junction table for Movie Crew (Multiple Directors, Writers, Producers)
+model MovieCrew {
+  id          Int     @id @default(autoincrement())
+  movieId     Int
+  personId    Int
+  
+  // Relations to differentiate roles
+  directedMovie Movie? @relation("MovieDirectors", fields: [movieId], references: [id], onDelete: Cascade)
+  director      Person? @relation("PersonDirectedMovies", fields: [personId], references: [id], onDelete: Cascade)
+
+  writtenMovie  Movie? @relation("MovieWriters", fields: [movieId], references: [id], onDelete: Cascade)
+  writer        Person? @relation("PersonWrittenMovies", fields: [personId], references: [id], onDelete: Cascade)
+
+  producedMovie Movie? @relation("MovieProducers", fields: [movieId], references: [id], onDelete: Cascade)
+  producer      Person? @relation("PersonProducedMovies", fields: [personId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+  @@index([personId])
+}
+
+model MovieGenre {
+  movieId Int
+  genreId Int
+  movie   Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  genre   Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, genreId])
+}
+
+model MovieCast {
+  id        Int     @id @default(autoincrement())
+  movieId   Int
+  personId  Int
+  role      String  // Lead Actor, Supporting, Antagonist, Lead Actress
+  character String? // e.g. "Erik Strand", "Vasily Kern"
+
+  movie  Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+  @@index([personId])
+}
+
+model MovieAward {
+  id      Int    @id @default(autoincrement())
+  movieId Int
+  title   String // e.g. "Best Action Film — CineFest 2024"
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+}
+
+model MovieDownload {
+  id         Int     @id @default(autoincrement())
+  movieId    Int
+  quality    String  // e.g. "4K", "1080p", "720p", "480p"
+  resolution String  // e.g. "2160p", "1920×1080", "1280×720", "854×480"
+  size       String  // e.g. "18.4 GB", "980 MB"
+  format     String  // e.g. "MKV", "MP4"
+  language   String  // e.g. "English"
+  url        String? // Link for actual download file
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+}
+
+model MovieSubtitle {
+  movieId    Int
+  languageId Int
+  movie      Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, languageId])
+}
+
+model MovieAudio {
+  id         Int      @id @default(autoincrement())
+  movieId    Int
+  languageId Int
+  details    String?  // e.g. "5.1 Dolby Atmos", "2.0 Stereo"
+
+  movie    Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+  @@index([languageId])
+}
+
+model MovieStreaming {
+  id        Int     @id @default(autoincrement())
+  movieId   Int
+  platform  String  // e.g. "Cinemax Premium"
+  available Boolean @default(true)
+  price     String? // e.g. "$3.99 rent"
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+}
+
+model MovieRelated {
+  sourceMovieId Int
+  targetMovieId Int
+
+  sourceMovie Movie @relation("SourceMovie", fields: [sourceMovieId], references: [id], onDelete: Cascade)
+  targetMovie Movie @relation("TargetMovie", fields: [targetMovieId], references: [id], onDelete: Cascade)
+
+  @@id([sourceMovieId, targetMovieId])
+}
+
+// ==========================================
+// SERIALS & RELATED TABLES
+// ==========================================
+
+model Serial {
+  id          Int          @id @default(autoincrement())
+  slug        String       @unique
+  title       String
+  rating      Decimal      @db.Decimal(3, 1)
+  years       String       // e.g. "2022–present"
+  seasons     Int          @default(1)
+  episodes    Int          @default(0)
+  language    String       // e.g. "English"
+  description String       @db.Text
+  image       String
+  backdrop    String?
+  status      SerialStatus @default(Ongoing)
+  badge       String?      // e.g. "Audience Choice — Toronto"
+
+  genres        SerialGenre[]
+  relatedMovies SerialRelatedMovie[]
+
+  continueWatching ContinueWatching[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([title])
+  @@index([rating])
+}
+
+model SerialGenre {
+  serialId Int
+  genreId  Int
+  serial   Serial @relation(fields: [serialId], references: [id], onDelete: Cascade)
+  genre    Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([serialId, genreId])
+}
+
+model SerialRelatedMovie {
+  serialId Int
+  movieId  Int
+  serial   Serial @relation(fields: [serialId], references: [id], onDelete: Cascade)
+  movie    Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@id([serialId, movieId])
+}
+
+// ==========================================
+// USER INTERACTIONS / REVIEWS / WATCHLIST
+// ==========================================
+
+model Review {
+  id      Int      @id @default(autoincrement())
+  movieId Int
+  author  String   // e.g. "CineVault", "FilmGrid"
+  avatar  String?
+  rating  Int      // e.g. 9 (out of 10)
+  text    String   @db.Text
+  date    String   // e.g. "Mar 12, 2024" or DateTime
+
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+}
+
+model ContinueWatching {
+  id             Int      @id @default(autoincrement())
+  userId         Int?
+  movieId        Int?
+  serialId       Int?
+  progress       Int      // e.g. 65 (%)
+  remaining      String   // e.g. "45m left"
+  currentSeason  Int?
+  currentEpisode Int?
+  updatedAt      DateTime @updatedAt
+
+  movie  Movie?  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  serial Serial? @relation(fields: [serialId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
