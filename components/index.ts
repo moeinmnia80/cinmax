@@ -10,6 +10,7 @@ export { SearchBox } from "@/components/features/Search/SearchBox";
 export { MobileSidebar } from "@/components/features/MobileSidebar";
 export { MobileOverlay } from "@/components/features/MobileOverlay";
 export { HeroNavActions } from "@/components/features/HeroNavActions";
+export { HeroBackground } from "@/components/features/HeroBackground";
 export { HeroNavigation } from "@/components/features/HeroNavigation";
 export { SearchInput } from "@/components/features/Search/SearchInput";
 export { SearchItems } from "@/components/features/Search/SearchItems";
