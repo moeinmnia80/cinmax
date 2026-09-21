@@ -1,19 +1,14 @@
-import { Pool } from "pg";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import { PrismaNeon } from "@prisma/adapter-neon";
 
 const connectionString = process.env.DATABASE_URL;
 
-const pool = new Pool({
+const adapter = new PrismaNeon({
   connectionString,
-  max: 10,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false },
   connectionTimeoutMillis: 15000,
   idleTimeoutMillis: 5000,
 });
-const adapter = new PrismaPg(pool);
 
 const db = new PrismaClient({ adapter });
 
