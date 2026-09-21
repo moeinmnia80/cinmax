@@ -15,4 +15,6 @@ const pool = new Pool({
 });
 const adapter = new PrismaPg(pool);
 
-export const db = new PrismaClient({ adapter });
+const db = new PrismaClient({ adapter });
+
+export default db;
