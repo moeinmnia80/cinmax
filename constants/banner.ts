@@ -97,4 +97,53 @@ export const featuredMovies = [
       },
     ],
   },
+  {
+    id: 2,
+    title: "DEAD",
+    subtitle: "HORIZON",
+    rating: "7.9",
+    category: "WORLDWIDE",
+    language: "ENGLISH",
+    year: 2023,
+    duration: "1h 58m",
+    price: "19.99",
+    description:
+      "A lone cartographer mapping the last unmapped continent discovers something that was never meant to be found. Part survival horror, part geopolitical thriller.",
+    bg: "https://images.unsplash.com/photo-1665602878676-219e01293b51?w=1920&h=1080&fit=crop&auto=format",
+    poster:
+      "https://images.unsplash.com/photo-1634733049839-0292be607569?w=420&h=600&fit=crop&auto=format",
+    slug: "cold-meridian",
+    crew: [
+      {
+        role: "Directed by",
+        name: "Yuki Tanaka",
+        avatar:
+          "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&auto=format",
+      },
+      {
+        role: "Produced by",
+        name: "Glen Rourke",
+        avatar:
+          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&auto=format",
+      },
+      {
+        role: "Screenplay by",
+        name: "Isla Fontaine",
+        avatar:
+          "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&auto=format",
+      },
+      {
+        role: "Based on",
+        name: "Story by C. Merrill",
+        avatar:
+          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&auto=format",
+      },
+      {
+        role: "Main Actor",
+        name: "Renata Cruz",
+        avatar:
+          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&auto=format",
+      },
+    ],
+  },
 ];
