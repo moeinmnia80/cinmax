@@ -4,8 +4,10 @@ export { Footer } from "@/components/layouts/Footer";
 
 // Features
 export { Hero } from "@/components/features/Hero";
+export { CrewStrip } from "@/components/features/CrewStrip";
 export { MobileMenu } from "@/components/features/MobileMenu";
 export { HeroContent } from "@/components/features/HeroContent";
+export { FilterDrawer } from "@/components/features/FilterDrawer";
 export { SearchBox } from "@/components/features/Search/SearchBox";
 export { MobileSidebar } from "@/components/features/MobileSidebar";
 export { MobileOverlay } from "@/components/features/MobileOverlay";

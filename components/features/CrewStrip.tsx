@@ -1,16 +1,24 @@
 "use client";
 
+import { use } from "react";
 import Image from "next/image";
-import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { featuredMovies } from "@/constants";
+import { useHeroSlide } from "@/store/useHeroSlide";
+import { FeaturedItems } from "@/components/features/Hero";
 
-export const CrewStrip = () => {
-  const [current, setCurrent] = useState(0);
+export const CrewStrip = ({
+  params,
+}: {
+  params: Promise<{ data: FeaturedItems[] }>;
+}) => {
+  const current = useHeroSlide((state) => state.current);
+  const setCurrent = useHeroSlide((state) => state.setCurrent);
+  const { data } = use(params);
   const prev = () =>
-    setCurrent((c) => (c - 1 + featuredMovies.length) % featuredMovies.length);
-  const next = () => setCurrent((c) => (c + 1) % featuredMovies.length);
+    setCurrent(() => (current - 1 + data.length) % data.length);
+  const next = () => setCurrent(() => (current + 1) % data.length);
 
   const movie = featuredMovies[current];
   return (
@@ -58,7 +66,7 @@ export const CrewStrip = () => {
           {featuredMovies.map((_, i) => (
             <span
               key={i}
-              onClick={() => setCurrent(i)}
+              onClick={() => setCurrent(() => i)}
               className={`h-0.5 rounded-full cursor-pointer transition-all ${i === current ? "bg-primary w-8" : "bg-white/25 hover:bg-white/50 w-5"}`}
             />
           ))}

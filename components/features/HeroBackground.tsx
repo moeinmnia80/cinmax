@@ -1,10 +1,24 @@
+"use client";
+import { use } from "react";
 import Image from "next/image";
 
-export const HeroBackground = () => {
+import { useHeroSlide } from "@/store/useHeroSlide";
+import { FeaturedItems } from "@/components/features/Hero";
+
+interface HeroBackgroundProps {
+  params: Promise<{ data: FeaturedItems[] }>;
+}
+
+export const HeroBackground = ({ params }: HeroBackgroundProps) => {
+  const { data } = use(params);
+
+  const current = useHeroSlide((state) => state.current);
+  const movie = data[current];
+
   return (
     <div className="absolute left-0 top-0 w-full h-dvh overflow-hidden">
       <Image
-        src="https://res.cloudinary.com/imsawsxo/image/upload/v1789976645/62cdbae108f3b.webp"
+        src={movie.backdrop}
         className="w-full h-full object-cover transition-all duration-700 object-[70%]"
         width={1920}
         height={1080}
