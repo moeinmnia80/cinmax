@@ -37,7 +37,7 @@ export interface FeaturedItems {
 }
 
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api");
+  const res = await fetch(`${process.env.BASE_URL}/api`);
   if (!res.ok) {
     notFound();
   }
