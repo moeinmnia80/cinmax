@@ -19,16 +19,17 @@ export interface FeaturedItems {
   title: string;
   rating: number;
   description: string;
+  durationMinutes: number;
   image: string;
   backdrop: string;
   genres: string[];
   year: number;
   crew: {
-    person: { name: string };
+    person: { name: string; image: string };
     role: string;
   }[];
   cast: {
-    person: { name: string };
+    person: { name: string; image: string };
     role: string;
   }[];
   language: {

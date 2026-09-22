@@ -2,7 +2,6 @@ import { Barlow_Condensed } from "next/font/google";
 
 import "@/app/globals.css";
 import type { Metadata } from "next";
-import { Footer } from "@/components";
 
 export const metadata: Metadata = {
   title: "cinmax",
@@ -17,6 +16,11 @@ export const barlowCondensed = Barlow_Condensed({
   display: "swap",
 });
 
+// This root layout is intentionally minimal now. It used to also render
+// <Footer /> after {children}, but that meant the public site footer
+// showed up on /admin pages too. The footer moved into
+// app/(site)/layout.tsx, which wraps the public pages only —
+// app/admin/layout.tsx wraps the admin pages instead.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -27,7 +31,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         className={`${barlowCondensed.className} min-h-full flex flex-col bg-background`}
       >
         {children}
-        <Footer />
       </body>
     </html>
   );

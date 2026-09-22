@@ -14,6 +14,7 @@ export async function GET() {
             rating: true,
             year: true,
             description: true,
+            durationMinutes: true,
             image: true,
             backdrop: true,
             genres: {
@@ -23,13 +24,13 @@ export async function GET() {
             },
             crew: {
               select: {
-                person: { select: { name: true } },
+                person: { select: { name: true, image: true } },
                 role: true,
               },
             },
             cast: {
               select: {
-                person: { select: { name: true } },
+                person: { select: { name: true, image: true } },
                 role: true,
               },
             },
@@ -47,6 +48,7 @@ export async function GET() {
             seasons: true,
             episodes: true,
             description: true,
+            durationMinutes: true,
             image: true,
             backdrop: true,
             genres: {
@@ -56,13 +58,13 @@ export async function GET() {
             },
             crew: {
               select: {
-                person: { select: { name: true } },
+                person: { select: { name: true, image: true } },
                 role: true,
               },
             },
             cast: {
               select: {
-                person: { select: { name: true } },
+                person: { select: { name: true, image: true } },
                 role: true,
               },
             },
@@ -87,6 +89,9 @@ export async function GET() {
           title: target.title,
           rating: Number(target.rating),
           description: target.description,
+          session: !isMovie && item.serial?.seasons,
+          episodes: !isMovie && item.serial?.episodes,
+          durationMinutes: target.durationMinutes,
           image: target.image,
           backdrop: target.backdrop,
           genres: target.genres.map((g) => g.genre.name),

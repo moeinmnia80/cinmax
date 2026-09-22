@@ -1,4 +1,5 @@
 "use client";
+
 import { use } from "react";
 import Image from "next/image";
 
@@ -24,6 +25,7 @@ export const HeroBackground = ({ params }: HeroBackgroundProps) => {
         height={1080}
         loading="eager"
         alt="banner"
+        preload
       />
 
       <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-black/30" />

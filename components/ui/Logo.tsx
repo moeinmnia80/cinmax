@@ -1,7 +1,12 @@
+import Link from "next/link";
+
 export const Logo = () => {
   return (
-    <span className="text-primary font-black tracking-widest text-4xl select-none shrink-0">
+    <Link
+      href="/"
+      className="text-primary font-black tracking-widest text-4xl select-none shrink-0"
+    >
       CINEMAX
-    </span>
+    </Link>
   );
 };

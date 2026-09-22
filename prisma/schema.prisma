@@ -332,19 +332,20 @@ model MovieRelated {
 // ==========================================
 
 model Serial {
-  id          Int          @id @default(autoincrement())
-  slug        String       @unique
-  title       String
-  rating      Decimal      @db.Decimal(3, 1)
-  startYear   Int
-  endYear     Int?
-  seasons     Int          @default(1)
-  episodes    Int          @default(0)
-  description String       @db.Text
-  image       String
-  backdrop    String?
-  status      SerialStatus @default(Ongoing)
-  badge       String?
+  id              Int          @id @default(autoincrement())
+  slug            String       @unique
+  title           String
+  rating          Decimal      @db.Decimal(3, 1)
+  startYear       Int
+  endYear         Int?
+  seasons         Int          @default(1)
+  durationMinutes Int
+  episodes        Int          @default(0)
+  description     String       @db.Text
+  image           String
+  backdrop        String?
+  status          SerialStatus @default(Ongoing)
+  badge           String?
 
   languageId Int
   language   Language @relation("SerialPrimaryLanguage", fields: [languageId], references: [id])
