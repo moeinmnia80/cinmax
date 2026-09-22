@@ -37,8 +37,10 @@ export interface FeaturedItems {
   };
 }
 
-const getData = async () => {
-  const res = await fetch(`${process.env.BASE_URL}/api`);
+const getFeaturedData = async () => {
+  const res = await fetch(`${process.env.BASE_URL}/api`, {
+    next: { revalidate: 86400 },
+  });
   if (!res.ok) {
     notFound();
   }
@@ -48,7 +50,7 @@ const getData = async () => {
 };
 
 export const Hero = () => {
-  const featuredMovies = getData();
+  const featuredMovies = getFeaturedData();
   return (
     <div className="flex flex-col w-full min-h-dvh">
       <Suspense fallback={<HeroBackgroundLoading />}>

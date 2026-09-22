@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Divide } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { useHeroSlide } from "@/store/useHeroSlide";
 import { FeaturedItems } from "@/components/features/Hero";
@@ -31,8 +31,8 @@ export const CrewStrip = ({
               {member.person.image ? (
                 <Image
                   priority
-                  width={200}
-                  height={200}
+                  width={100}
+                  height={100}
                   alt={member.person.name}
                   src={member.person.image}
                   className="w-9 h-9 rounded-full object-cover border border-white/15"
@@ -59,8 +59,8 @@ export const CrewStrip = ({
             <div key={i} className="flex items-center gap-2.5 shrink-0">
               {member.person.image ? (
                 <Image
-                  width={200}
-                  height={200}
+                  width={100}
+                  height={100}
                   priority
                   src={member.person.image}
                   alt={member.person.name}
