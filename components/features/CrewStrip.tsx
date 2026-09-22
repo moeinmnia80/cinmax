@@ -30,12 +30,11 @@ export const CrewStrip = ({
             <div key={i} className="flex items-center gap-2.5 shrink-0">
               {member.person.image ? (
                 <Image
-                  preload
+                  priority
                   width={200}
                   height={200}
                   alt={member.person.name}
                   src={member.person.image}
-                  loading="eager"
                   className="w-9 h-9 rounded-full object-cover border border-white/15"
                 />
               ) : (
@@ -60,10 +59,9 @@ export const CrewStrip = ({
             <div key={i} className="flex items-center gap-2.5 shrink-0">
               {member.person.image ? (
                 <Image
-                  preload
                   width={200}
                   height={200}
-                  loading="eager"
+                  priority
                   src={member.person.image}
                   alt={member.person.name}
                   className="w-9 h-9 rounded-full object-cover border border-white/15"

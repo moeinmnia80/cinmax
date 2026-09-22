@@ -19,13 +19,12 @@ export const HeroBackground = ({ params }: HeroBackgroundProps) => {
   return (
     <div className="absolute left-0 top-0 w-full h-dvh overflow-hidden">
       <Image
-        src={movie.backdrop}
-        className="w-full h-full object-cover transition-all duration-700 object-[70%]"
+        priority
+        alt="banner"
         width={1920}
         height={1080}
-        loading="eager"
-        alt="banner"
-        preload
+        src={movie.backdrop}
+        className="w-full h-full object-cover transition-all duration-700 object-[70%]"
       />
 
       <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-black/30" />
