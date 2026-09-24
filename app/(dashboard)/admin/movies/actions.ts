@@ -2,16 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 
-// Adjust this import to wherever your Prisma client instance actually
-// lives (the `db.ts` you shared exports `export const db = new PrismaClient(...)`).
 import db from "@/lib/db";
 
-import { movieFormSchema, type MovieFormValues } from "./schema";
+import {
+  movieFormSchema,
+  type MovieFormValues,
+} from "@/app/(dashboard)/admin/movies/schema";
 
-// Prisma's `Decimal` (rating) and `BigInt` (budget/boxOffice) types
-// can't cross the server/client boundary as-is — every movie handed to
-// a Client Component has to go through this first. `0` for budget/
-// boxOffice is treated as "not entered" and comes back as `null`.
 function serializeMovie<
   T extends {
     rating: unknown;
@@ -29,8 +26,6 @@ function serializeMovie<
   };
 }
 
-// `budget`/`boxOffice` come out of the form as plain numbers (0 = not
-// entered) and go into Prisma as `bigint | null`.
 function toBigIntOrNull(value: number) {
   return value > 0 ? BigInt(value) : null;
 }
@@ -49,8 +44,6 @@ export async function getMovies(options?: {
     : {};
 
   const [movies, total] = await Promise.all([
-    // Explicit `select` here (rather than the full model) so we never
-    // accidentally hand a BigInt field to the Client Component table.
     db.movie.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -88,7 +81,6 @@ export async function getMovieById(id: number) {
   return serializeMovie(movie);
 }
 
-// Options needed to populate the selects/checkboxes in the movie form.
 export async function getMovieFormOptions() {
   const [genres, languages, countries, studios] = await Promise.all([
     db.genre.findMany({ orderBy: { name: "asc" } }),
@@ -121,8 +113,6 @@ export async function updateMovie(id: number, values: MovieFormValues) {
   const { genreIds, budget, boxOffice, ...data } =
     movieFormSchema.parse(values);
 
-  // MovieGenre is an explicit join model, so there's no Prisma `set`
-  // shorthand for many-to-many here — clear and re-create instead.
   await db.$transaction([
     db.movieGenre.deleteMany({ where: { movieId: id } }),
     db.movie.update({

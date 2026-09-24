@@ -3,15 +3,22 @@
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Resolver } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Loader2, UploadCloud } from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { uploadMovieImage } from "@/app/(dashboard)/admin/movies/upload";
+
+import {
+  createMovie,
+  updateMovie,
+} from "@/app/(dashboard)/admin/movies/actions";
+
 import {
   Select,
   SelectItem,
@@ -19,6 +26,7 @@ import {
   SelectContent,
   SelectTrigger,
 } from "@/components/ui/Select";
+
 import {
   Form,
   FormItem,
@@ -28,14 +36,12 @@ import {
   FormMessage,
 } from "@/components/ui/Form";
 
-import { createMovie, updateMovie } from "../actions";
-import { uploadMovieImage } from "../upload";
 import {
   MOVIE_CATEGORIES,
   movieFormSchema,
   movieFormDefaults,
   type MovieFormValues,
-} from "../schema";
+} from "@/app/(dashboard)/admin/movies/schema";
 
 interface FormOptions {
   genres: { id: number; name: string }[];
@@ -50,9 +56,6 @@ interface MovieFormProps {
   defaultValues?: Partial<MovieFormValues>;
 }
 
-// Sentinel used in the Select components below, since Radix Select
-// items can't have an empty-string value — we map it back to
-// `null`/`undefined` before submitting.
 const NONE = "none";
 
 export const MovieForm = ({
@@ -80,8 +83,7 @@ export const MovieForm = ({
         } else {
           await createMovie(values);
         }
-        router.push("/admin/movies");
-        router.refresh();
+        redirect("/admin/movies");
       } catch (err) {
         setServerError(
           err instanceof Error ? err.message : "Something went wrong",
@@ -110,7 +112,6 @@ export const MovieForm = ({
           </div>
         )}
 
-        {/* ---------- Basics ---------- */}
         <section className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
           <h3 className="text-white font-bold uppercase tracking-wider text-sm">
             Basics
@@ -264,9 +265,8 @@ export const MovieForm = ({
           />
         </section>
 
-        {/* ---------- Descriptions ---------- */}
         <section className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
-          <h3 className="text-white font-bold uppercase tracking-wider text-sm text-primary">
+          <h3 className="text-white font-bold uppercase tracking-wider text-sm">
             Descriptions
           </h3>
           <FormField
@@ -297,9 +297,8 @@ export const MovieForm = ({
           />
         </section>
 
-        {/* ---------- Images ---------- */}
         <section className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
-          <h3 className="text-white font-bold uppercase tracking-wider text-sm text-primary">
+          <h3 className="text-white font-bold uppercase tracking-wider text-sm">
             Images
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -341,9 +340,8 @@ export const MovieForm = ({
           />
         </section>
 
-        {/* ---------- Relations ---------- */}
         <section className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
-          <h3 className="text-white font-bold uppercase tracking-wider text-sm text-primary">
+          <h3 className="text-white font-bold uppercase tracking-wider text-sm">
             Language, Origin &amp; Genres
           </h3>
 
@@ -487,9 +485,8 @@ export const MovieForm = ({
           />
         </section>
 
-        {/* ---------- Business info ---------- */}
         <section className="rounded-2xl border border-white/10 bg-card p-6 space-y-5">
-          <h3 className="text-white font-bold uppercase tracking-wider text-sm text-primary">
+          <h3 className="text-white font-bold uppercase tracking-wider text-sm">
             Business info (optional)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -563,10 +560,6 @@ export const MovieForm = ({
   );
 };
 
-// ---------------------------------------------------------------------
-// Small local component: handles picking a file, uploading it to S3 via
-// the `uploadMovieImage` server action, and previewing the result.
-// ---------------------------------------------------------------------
 function ImageUploadField({
   label,
   category,

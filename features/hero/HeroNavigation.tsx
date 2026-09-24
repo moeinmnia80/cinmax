@@ -1,4 +1,5 @@
-import { Logo, SearchBox, HeroNavActions } from "@/components";
+import { Logo } from "@/features/server";
+import { SearchBox, HeroNavActions } from "@/features/client";
 
 export const HeroNavigation = () => {
   return (

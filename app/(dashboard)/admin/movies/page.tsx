@@ -1,5 +1,5 @@
 import { getMovies } from "./actions";
-import { MoviesTable } from "./_components/MoviesTable";
+import { MoviesTable } from "../../../../features/admin/MoviesTable";
 
 interface MoviesPageProps {
   searchParams: Promise<{ search?: string; page?: string }>;

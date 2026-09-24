@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getMovieById, getMovieFormOptions } from "../actions";
-import { MovieForm } from "../_components/MovieForm";
+import { MovieForm } from "../../../../../features/admin/MovieForm";
 
 interface EditMoviePageProps {
   params: Promise<{ id: string }>;

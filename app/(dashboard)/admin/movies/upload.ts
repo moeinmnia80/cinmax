@@ -1,7 +1,5 @@
 "use server";
 
-// Adjust this import to match where you placed s3.ts (the version with
-// `uploadPublicFile`, using AWS_ENDPOINT_URL_S3 / AWS_BUCKET_NAME).
 import { uploadPublicFile } from "@/lib/s3";
 
 type UploadCategory = "poster" | "backdrop";

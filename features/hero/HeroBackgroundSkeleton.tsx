@@ -1,4 +1,4 @@
-export const HeroBackgroundLoading = () => {
+export const HeroBackgroundSkeleton = () => {
   return (
     <div className="absolute left-0 top-0 w-full h-dvh overflow-hidden bg-gray-300/20">
       <div className="w-full h-full object-cover" />

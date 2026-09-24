@@ -1,4 +1,4 @@
-import { Container } from "@/components";
+import { Container } from "@/features/server";
 
 export async function Footer() {
   return (

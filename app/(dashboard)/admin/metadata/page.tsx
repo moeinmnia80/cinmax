@@ -8,8 +8,8 @@ import {
   deleteCountry,
   createStudio,
   deleteStudio,
-} from "./actions";
-import { EntityManager } from "./_components/EntityManager";
+} from "@/app/(dashboard)/admin/metadata/actions";
+import { EntityManager } from "@/features/admin/EntityManager";
 
 export default async function MetadataPage() {
   const { genres, languages, countries, studios } = await getMetadata();

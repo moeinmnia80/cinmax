@@ -1,7 +1,7 @@
 "use client";
 
 import { useModalStore } from "@/store/useModalStore";
-import { MobileOverlay, MobileSidebar } from "@/components";
+import { MobileSidebar, MobileOverlay } from "@/features/client";
 
 export const MobileMenu = () => {
   const setMobileNavOpen = useModalStore((state) => state.toggleSearchModal);

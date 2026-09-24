@@ -7,6 +7,13 @@ export function cn(...inputs: ClassValue[]) {
 
 export const calculateActiveFilters = (
   sortBy: string,
-  releaseYear: number[],
+  releaseYear: string[],
   selectedGenre: string[],
-) => selectedGenre.length + (sortBy ? 1 : 0) + (releaseYear.length ? 1 : 0);
+  MinRating: "Any" | "9+" | "8+" | "7+" | null,
+) =>
+  selectedGenre.length
+    ? 1
+    : 0 +
+      (sortBy === "newest" ? 0 : 1) +
+      (releaseYear.length ? 1 : 0) +
+      (MinRating ? 1 : 0);

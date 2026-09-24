@@ -1,6 +1,6 @@
 import { Disc3, Play } from "lucide-react";
 
-export const HeroContentLoading = () => {
+export const HeroContentSkeleton = () => {
   return (
     <div className="relative z-10 flex flex-1 items-center h-full py-10">
       <div className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10 lg:gap-0">
@@ -9,10 +9,10 @@ export const HeroContentLoading = () => {
             <span className="bg-yellow-400 text-black text-xs font-black px-2 py-0.5 rounded-sm tracking-wide">
               IMDb
             </span>
-            <span className="flex items-center text-yellow-400 font-bold text-sm">
+            <div className="flex items-center text-yellow-400 font-bold text-sm">
               <span className="inline-block w-4 h-4 rounded-sm bg-gray-200/20 animate-pulse mr-1" />
               <span className="text-white/40 font-normal">/ 10</span>
-            </span>
+            </div>
             <span className="text-white/25">|</span>
             <span className="inline-block w-12 h-4 rounded-sm bg-gray-200/20 animate-pulse mr-1" />
             <span className="text-white/25">|</span>

@@ -1,7 +1,6 @@
 "use client";
 
 import { Search, X } from "lucide-react";
-
 import { useFilterStore } from "@/store/useFilterStore";
 
 export const SearchInput = () => {

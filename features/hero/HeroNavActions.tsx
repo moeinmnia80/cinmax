@@ -10,6 +10,7 @@ import { calculateActiveFilters } from "@/utils";
 
 export const HeroNavActions = () => {
   const sortBy = useFilterStore((state) => state.sortBy);
+  const minRating = useFilterStore((state) => state.minRating);
   const releaseYear = useFilterStore((state) => state.releaseYear);
   const filterOpen = useModalStore((state) => state.filterModalOpen);
   const searchModal = useModalStore((state) => state.searchModalOpen);
@@ -25,6 +26,7 @@ export const HeroNavActions = () => {
     sortBy,
     releaseYear,
     selectedGenre,
+    minRating,
   );
 
   return (

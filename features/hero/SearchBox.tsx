@@ -1,10 +1,9 @@
 "use client";
 
 import { movies } from "@/constants";
-import { SearchItems } from "@/components";
 import { useModalStore } from "@/store/useModalStore";
 import { useFilterStore } from "@/store/useFilterStore";
-import { SearchInput } from "./SearchInput";
+import { SearchItems, SearchInput } from "@/features/client";
 
 export const SearchBox = () => {
   const searchQuery = useFilterStore((state) => state.searchQuery);

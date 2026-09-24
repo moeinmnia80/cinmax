@@ -1,4 +1,5 @@
-import { Container, Hero, MobileMenu } from "@/components";
+import { MobileMenu } from "@/features/client";
+import { Container, Hero } from "@/features/server";
 
 export default function Home() {
   return (

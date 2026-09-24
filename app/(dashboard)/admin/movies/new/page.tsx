@@ -1,5 +1,5 @@
 import { getMovieFormOptions } from "../actions";
-import { MovieForm } from "../_components/MovieForm";
+import { MovieForm } from "../../../../../features/admin/MovieForm";
 
 export default async function NewMoviePage() {
   const options = await getMovieFormOptions();

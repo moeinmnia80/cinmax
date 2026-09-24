@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 
-// Adjust to your actual Prisma client path.
 import db from "@/lib/db";
 
 function slugify(value: string) {

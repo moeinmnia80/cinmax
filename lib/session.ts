@@ -3,24 +3,13 @@ import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 
 const secretKey = process.env.SESSION_KEY;
+if (!secretKey) throw new Error("Secret key not found");
+
 const encodedKey = new TextEncoder().encode(secretKey);
-
-export async function createSession(userId: string) {
-  const expireAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ userId, expireAt });
-
-  const cookieStore = await cookies();
-  cookieStore.set("session", session, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    expires: expireAt,
-    path: "/",
-  });
-}
 
 type SessionPayload = {
   userId: string;
-  expireAt: Date;
+  expireAt: string;
 };
 
 export async function encrypt(payload: SessionPayload) {
@@ -39,7 +28,25 @@ export async function decrypt(session: string | undefined = "") {
     });
     return payload;
   } catch (err) {
-    console.log("Failed to verify session \n", err);
+    console.log("Failed to verify session:", (err as Error).message);
     return null;
   }
+}
+
+export async function createSession(userId: string) {
+  const expireAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const session = await encrypt({ userId, expireAt: expireAt.toISOString() });
+
+  const cookieStore = await cookies();
+  cookieStore.set("session", session, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    expires: expireAt,
+    path: "/",
+  });
+}
+
+export async function deleteSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
 }

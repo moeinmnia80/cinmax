@@ -4,23 +4,26 @@ import { use } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { FeaturedItem } from "@/features/server";
 import { useHeroSlide } from "@/store/useHeroSlide";
-import { FeaturedItems } from "@/components/features/Hero";
 
-export const CrewStrip = ({
-  params,
-}: {
-  params: Promise<{ data: FeaturedItems[] }>;
-}) => {
-  const { data } = use(params);
+interface CrewStripProps {
+  data: Promise<FeaturedItem[]>;
+}
 
-  const prev = () =>
-    setCurrent(() => (current - 1 + data.length) % data.length);
-  const next = () => setCurrent(() => (current + 1) % data.length);
+export const CrewStrip = ({ data }: CrewStripProps) => {
+  const featuredContent = use(data);
+
+  const prev = () => {
+    setCurrent(
+      () => (current - 1 + featuredContent.length) % featuredContent.length,
+    );
+  };
+  const next = () => setCurrent(() => (current + 1) % featuredContent.length);
 
   const current = useHeroSlide((state) => state.current);
   const setCurrent = useHeroSlide((state) => state.setCurrent);
-  const movie = data[current];
+  const movie = featuredContent[current];
 
   return (
     <div className="flex flex-col md:flex-row justify-center md:justify-between relative z-10 border-t border-white/10 py-5 items-center gap-6">
@@ -99,7 +102,7 @@ export const CrewStrip = ({
           Previous
         </button>
         <div className="flex gap-1.5">
-          {(data || []).map((_, i) => (
+          {(featuredContent || []).map((_, i) => (
             <span
               key={i}
               onClick={() => setCurrent(() => i)}

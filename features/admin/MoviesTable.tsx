@@ -36,7 +36,7 @@ import {
   PaginationNext,
 } from "@/components/ui/Pagination";
 
-import { deleteMovie } from "../actions";
+import { deleteMovie } from "../../app/(dashboard)/admin/movies/actions";
 
 interface MovieRow {
   id: number;

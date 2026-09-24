@@ -6,17 +6,17 @@ import Image from "next/image";
 import { Disc3, Play } from "lucide-react";
 
 import { useHeroSlide } from "@/store/useHeroSlide";
-import { FeaturedItems } from "@/components/features/Hero";
+import { FeaturedItem } from "@/features/server";
 
-export const HeroContent = ({
-  params,
-}: {
-  params: Promise<{ data: FeaturedItems[] }>;
-}) => {
-  const { data } = use(params);
+interface HeroContentProps {
+  data: Promise<FeaturedItem[]>;
+}
+
+export const HeroContent = ({ data }: HeroContentProps) => {
+  const featuredContent = use(data);
 
   const current = useHeroSlide((state) => state.current);
-  const movie = data[current];
+  const movie = featuredContent[current];
   return (
     <div className="relative z-10 flex flex-1 items-center h-full py-10">
       <div className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10 lg:gap-0">

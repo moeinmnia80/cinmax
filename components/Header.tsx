@@ -1,4 +1,4 @@
-import { Container } from "@/components/ui/Container";
+import { Container } from "@/features/server";
 
 interface HeaderProps {
   children?: React.ReactNode;
