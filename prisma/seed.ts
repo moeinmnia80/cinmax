@@ -1,10 +1,14 @@
 import {
-  PrismaClient,
+  Role,
+  Gender,
+  Provider,
   PersonType,
-  ImageCategory,
+  PrismaClient,
   SerialStatus,
   FeaturedType,
+  ImageCategory,
 } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 import { PrismaNeon } from "@prisma/adapter-neon";
 
@@ -22,8 +26,38 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log("🌱 Starting database seeding...");
 
+  const storageBaseUrl =
+    "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax";
+
   // ------------------------------------------------------
-  // 1. Languages
+  // 1. Users
+  // ------------------------------------------------------
+  const testUserId = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
+  const plainPassword = "password123";
+  const hashedPassword = await bcrypt.hash(plainPassword, 10);
+
+  const userData = {
+    id: testUserId,
+    firstName: "Demo",
+    lastName: "User",
+    email: "demo@example.com",
+    username: "demouser",
+    password: hashedPassword,
+    gender: Gender.male,
+    image: "",
+    role: Role.admin,
+    provider: Provider.local,
+  };
+
+  await prisma.user.upsert({
+    where: { id: userData.id },
+    update: userData,
+    create: userData,
+  });
+  console.log("✅ Users seeded.");
+
+  // ------------------------------------------------------
+  // 2. Languages
   // ------------------------------------------------------
   const languagesData = [
     { id: 1, code: "en", name: "English" },
@@ -48,7 +82,7 @@ async function main() {
   console.log("✅ Languages seeded.");
 
   // ------------------------------------------------------
-  // 2. Countries
+  // 3. Countries
   // ------------------------------------------------------
   const countriesData = [
     { id: 1, code: "USA", name: "United States" },
@@ -73,7 +107,7 @@ async function main() {
   console.log("✅ Countries seeded.");
 
   // ------------------------------------------------------
-  // 3. Genres
+  // 4. Genres
   // ------------------------------------------------------
   const genresData = [
     { id: 1, slug: "action", name: "Action" },
@@ -103,7 +137,7 @@ async function main() {
   console.log("✅ Genres seeded.");
 
   // ------------------------------------------------------
-  // 4. Studios
+  // 5. Studios
   // ------------------------------------------------------
   const studiosData = [
     { id: 1, name: "Warner Bros. Pictures" },
@@ -129,17 +163,16 @@ async function main() {
   console.log("✅ Studios seeded.");
 
   // ------------------------------------------------------
-  // 5. People (بازیگران و عوامل جدید اضافه شدند)
+  // 6. People
   // ------------------------------------------------------
   const peopleData = [
-    // --- Love Like the Galaxy ---
     {
       id: 1,
       slug: "zhao-lusi",
       name: "Zhao Lusi",
       role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/A0tq4iXf1fG7iXW3bA3b4.jpg",
-      bio: "Zhao Lusi, also known as Rosy Zhao, is a Chinese actress and singer. She is well known for her roles in Love Like the Galaxy, The Romance of Tiger and Rose, and Who Rules The World.",
+      image: `${storageBaseUrl}/people/zhao-lusi/profile.webp`,
+      bio: "Zhao Lusi, also known as Rosy Zhao, is a Chinese actress and singer.",
       birthDate: new Date("1998-11-09"),
       birthPlace: "Chengdu, Sichuan, China",
       height: "161 cm",
@@ -153,8 +186,8 @@ async function main() {
       slug: "wu-lei",
       name: "Wu Lei (Leo Wu)",
       role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/wulei_photo.jpg",
-      bio: "Wu Lei, also known as Leo Wu, is a Chinese actor. Known as the 'Nation's Little Brother' in China, he started his career as a child actor and starred in Nirvana in Fire and Cross Fire.",
+      image: `${storageBaseUrl}/people/wu-lei/profile.webp`,
+      bio: "Wu Lei, also known as Leo Wu, is a Chinese actor.",
       birthDate: new Date("1999-12-26"),
       birthPlace: "Shanghai, China",
       height: "182 cm",
@@ -164,12 +197,72 @@ async function main() {
       socialImdb: "nm7294498",
     },
     {
+      id: 3,
+      slug: "fei-zhen-xi",
+      name: "Fei Zhen Xiang",
+      role: PersonType.Director,
+      image: `${storageBaseUrl}/people/fei-zhen-xi/profile.webp`,
+      bio: "Renowned Chinese director.",
+      birthDate: new Date("1978-07-28"),
+      birthPlace: "Beijing, China",
+      height: "175 cm",
+      activeYears: "2000-present",
+      socialInstagram: null,
+      socialTwitter: null,
+      socialImdb: "nm8529302",
+    },
+    {
+      id: 4,
+      slug: "william-chan",
+      name: "William Chan",
+      role: PersonType.Actor,
+      image: `${storageBaseUrl}/people/william-chan/profile.webp`,
+      bio: "Hong Kong singer, dancer and actor.",
+      birthDate: new Date("1985-11-21"),
+      birthPlace: "Hong Kong",
+      height: "182 cm",
+      activeYears: "2003-present",
+      socialInstagram: "williamchanwaiting",
+      socialTwitter: null,
+      socialImdb: "nm3848123",
+    },
+    {
+      id: 5,
+      slug: "liu-yuning",
+      name: "Liu Yuning",
+      role: PersonType.Actor,
+      image: `${storageBaseUrl}/people/liu-yuning/profile.webp`,
+      bio: "Lead singer of Modern Brothers, Liu Yuning is a popular singer and actor.",
+      birthDate: new Date("1990-01-08"),
+      birthPlace: "Dandong, Liaoning, China",
+      height: "189 cm",
+      activeYears: "2014-present",
+      socialInstagram: null,
+      socialTwitter: null,
+      socialImdb: "nm10705231",
+    },
+    {
+      id: 6,
+      slug: "xie-ze",
+      name: "Xie Ze",
+      role: PersonType.Director,
+      image: `${storageBaseUrl}/people/xie-ze/profile.webp`,
+      bio: "Director specializing in historical and period drama series.",
+      birthDate: null,
+      birthPlace: "China",
+      height: null,
+      activeYears: "2015-present",
+      socialInstagram: null,
+      socialTwitter: null,
+      socialImdb: null,
+    },
+    {
       id: 7,
       slug: "li-yun-rui",
       name: "Li Yun Rui",
       role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/li_yunrui.jpg",
-      bio: "Chinese actor and singer who gained wide recognition for his role as Yuan Shen in Love Like the Galaxy.",
+      image: `${storageBaseUrl}/people/li-yun-rui/profile.webp`,
+      bio: "Chinese actor and singer.",
       birthDate: new Date("1996-08-24"),
       birthPlace: "Hubei, China",
       height: "182 cm",
@@ -183,8 +276,8 @@ async function main() {
       slug: "yu-cheng-en",
       name: "Yu Cheng En",
       role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/yu_chengen.jpg",
-      bio: "Chinese actor and dancer, famous for Go Go Squid! and playing Lou Yao in Love Like the Galaxy.",
+      image: `${storageBaseUrl}/people/yu-cheng-en/profile.webp`,
+      bio: "Chinese actor and dancer.",
       birthDate: new Date("1998-09-21"),
       birthPlace: "Wuhan, Hubei, China",
       height: "178 cm",
@@ -193,30 +286,13 @@ async function main() {
       socialTwitter: null,
       socialImdb: "nm10892312",
     },
-
-    // --- Love's Ambition ---
-    {
-      id: 4,
-      slug: "william-chan",
-      name: "William Chan",
-      role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/william_chan.jpg",
-      bio: "Hong Kong singer, dancer and actor. He gained widespread popularity in Mainland China for his role in Swords of Legends and The Mystic Nine.",
-      birthDate: new Date("1985-11-21"),
-      birthPlace: "Hong Kong",
-      height: "182 cm",
-      activeYears: "2003-present",
-      socialInstagram: "williamchanwaiting",
-      socialTwitter: null,
-      socialImdb: "nm3848123",
-    },
     {
       id: 9,
       slug: "wan-peng",
       name: "Wan Peng",
       role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/wan_peng.jpg",
-      bio: "Chinese actress who debuted with When We Were Young and starred in My Girlfriend is an Alien.",
+      image: `${storageBaseUrl}/people/wan-peng/profile.webp`,
+      bio: "Chinese actress.",
       birthDate: new Date("1996-08-20"),
       birthPlace: "Beijing, China",
       height: "172 cm",
@@ -225,30 +301,13 @@ async function main() {
       socialTwitter: null,
       socialImdb: "nm10492831",
     },
-
-    // --- The Story of Pearl Girl ---
-    {
-      id: 5,
-      slug: "liu-yuning",
-      name: "Liu Yuning",
-      role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/liu_yuning.jpg",
-      bio: "Lead singer of Modern Brothers, Liu Yuning is a popular singer and actor known for A Journey to Love and The Long Ballad.",
-      birthDate: new Date("1990-01-08"),
-      birthPlace: "Dandong, Liaoning, China",
-      height: "189 cm",
-      activeYears: "2014-present",
-      socialInstagram: null,
-      socialTwitter: null,
-      socialImdb: "nm10705231",
-    },
     {
       id: 10,
       slug: "tang-xiao-tian",
       name: "Tang Xiao Tian (Daddi Tang)",
       role: PersonType.Actor,
-      image: "https://image.tmdb.org/t/p/w500/daddi_tang.jpg",
-      bio: "Chinese actor and model, best known for My Little Happiness and Put Your Head on My Shoulder.",
+      image: `${storageBaseUrl}/people/tang-xiao-tian/profile.webp`,
+      bio: "Chinese actor and model.",
       birthDate: new Date("1991-06-02"),
       birthPlace: "Tianjin, China",
       height: "188 cm",
@@ -257,34 +316,17 @@ async function main() {
       socialTwitter: null,
       socialImdb: "nm10582910",
     },
-
-    // --- Directors ---
     {
-      id: 3,
-      slug: "fei-zhen-xi",
-      name: "Fei Zhen Xiang",
+      id: 11,
+      slug: "chen-chang",
+      name: "Chen Chang",
       role: PersonType.Director,
-      image: null,
-      bio: "Renowned Chinese director known for directing Candle in the Tomb series and Love Like the Galaxy.",
-      birthDate: new Date("1978-07-28"),
-      birthPlace: "Beijing, China",
-      height: "175 cm",
-      activeYears: "2000-present",
-      socialInstagram: null,
-      socialTwitter: null,
-      socialImdb: "nm8529302",
-    },
-    {
-      id: 6,
-      slug: "xie-zhe-bin",
-      name: "Xie Zhe Bin",
-      role: PersonType.Director,
-      image: null,
-      bio: "Director specializing in historical and period drama series.",
+      image: `${storageBaseUrl}/people/chen-chang/profile.webp`,
+      bio: "Chinese director known for modern romantic and urban drama series.",
       birthDate: null,
       birthPlace: "China",
       height: null,
-      activeYears: "2015-present",
+      activeYears: "2012-present",
       socialInstagram: null,
       socialTwitter: null,
       socialImdb: null,
@@ -301,7 +343,7 @@ async function main() {
   console.log("✅ People seeded.");
 
   // ------------------------------------------------------
-  // 6. Serials
+  // 7. Serials
   // ------------------------------------------------------
   const serialsData = [
     {
@@ -314,12 +356,9 @@ async function main() {
       seasons: 2,
       episodes: 56,
       durationMinutes: 45,
-      description:
-        "The young Cheng Shaoshang was left behind because her parents had to go off to war. In order to protect herself, she had to be extra vigilant and pretend to be clumsy, hiding her true talents while waiting for her parents return.",
-      image:
-        "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax/serials/love-like-the-galaxy/poster.webp",
-      backdrop:
-        "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax/serials/love-like-the-galaxy/backdrop.webp",
+      description: "The young Cheng Shaoshang was left behind...",
+      image: `${storageBaseUrl}/serials/love-like-the-galaxy/poster.webp`,
+      backdrop: `${storageBaseUrl}/serials/love-like-the-galaxy/backdrop.webp`,
       status: SerialStatus.Ended,
       badge: "Top Rated C-Drama",
       languageId: 3,
@@ -337,11 +376,9 @@ async function main() {
       episodes: 36,
       durationMinutes: 45,
       description:
-        "A captivating modern drama following high-stakes romance, professional rivalries, and ambition in the modern business world.",
-      image:
-        "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax/serials/loves-ambition/poster.webp",
-      backdrop:
-        "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax/serials/loves-ambition/backdrop.webp",
+        "A captivating modern drama following high-stakes romance...",
+      image: `${storageBaseUrl}/serials/loves-ambition/poster.webp`,
+      backdrop: `${storageBaseUrl}/serials/loves-ambition/backdrop.webp`,
       status: SerialStatus.Ongoing,
       badge: "Trending Now",
       languageId: 3,
@@ -358,12 +395,9 @@ async function main() {
       seasons: 1,
       episodes: 40,
       durationMinutes: 45,
-      description:
-        "A pearl diver slave girl escapes her tragic fate and joins a merchant caravan, rising through determination and intelligence in the booming jewelry trade during the Tang Dynasty.",
-      image:
-        "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax/serials/the-story-of-pearl-girl/poster.webp",
-      backdrop:
-        "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax/serials/the-story-of-pearl-girl/backdrop.webp",
+      description: "A pearl diver slave girl escapes her tragic fate...",
+      image: `${storageBaseUrl}/serials/the-story-of-pearl-girl/poster.webp`,
+      backdrop: `${storageBaseUrl}/serials/the-story-of-pearl-girl/backdrop.webp`,
       status: SerialStatus.Ongoing,
       badge: "Must Watch",
       languageId: 3,
@@ -382,7 +416,42 @@ async function main() {
   console.log("✅ Serials seeded.");
 
   // ------------------------------------------------------
-  // 7. Serial Genres
+  // 8. Continue Watching
+  // ------------------------------------------------------
+  const continueWatchingData = [
+    {
+      id: 1,
+      userId: testUserId,
+      serialId: 1,
+      movieId: null,
+      progress: 65,
+      remainingSec: 900,
+      currentSeason: 1,
+      currentEpisode: 12,
+    },
+    {
+      id: 2,
+      userId: testUserId,
+      serialId: 2,
+      movieId: null,
+      progress: 30,
+      remainingSec: 1800,
+      currentSeason: 1,
+      currentEpisode: 3,
+    },
+  ];
+
+  for (const cw of continueWatchingData) {
+    await prisma.continueWatching.upsert({
+      where: { id: cw.id },
+      update: cw,
+      create: cw,
+    });
+  }
+  console.log("✅ ContinueWatching seeded.");
+
+  // ------------------------------------------------------
+  // 9. Serial Genres
   // ------------------------------------------------------
   const serialGenresData = [
     { serialId: 1, genreId: 2 },
@@ -409,10 +478,9 @@ async function main() {
   console.log("✅ SerialGenres seeded.");
 
   // ------------------------------------------------------
-  // 8. Serial Cast & Crew (ارتباط بازیگران مکمل به سریال‌ها)
+  // 10. Serial Cast & Crew
   // ------------------------------------------------------
   const serialCastData = [
-    // Love Like the Galaxy (Serial #1)
     {
       id: 1,
       serialId: 1,
@@ -441,8 +509,6 @@ async function main() {
       role: "Supporting Actor",
       character: "Lou Yao",
     },
-
-    // Love's Ambition (Serial #2)
     {
       id: 3,
       serialId: 2,
@@ -464,8 +530,6 @@ async function main() {
       role: "Supporting Actress",
       character: "Lin Shuang",
     },
-
-    // The Story of Pearl Girl (Serial #3)
     {
       id: 5,
       serialId: 3,
@@ -500,6 +564,7 @@ async function main() {
   const serialCrewData = [
     { id: 1, serialId: 1, personId: 3, role: PersonType.Director },
     { id: 2, serialId: 3, personId: 6, role: PersonType.Director },
+    { id: 3, serialId: 2, personId: 11, role: PersonType.Director },
   ];
 
   for (const crew of serialCrewData) {
@@ -512,16 +577,13 @@ async function main() {
   console.log("✅ SerialCast & SerialCrew seeded.");
 
   // ------------------------------------------------------
-  // 9. Serial Images (اصلاح URLهای ناقص)
+  // 11. Serial Images
   // ------------------------------------------------------
-  const baseUrl =
-    "https://br-small-bar-b204sfwu.storage.c-6.eu-central-1.aws.neon.tech/cinmax";
-
   const serialImagesData = [
     {
       id: 1,
       serialId: 1,
-      url: `${baseUrl}/serials/love-like-the-galaxy/gallery-1.jpg`,
+      url: `${storageBaseUrl}/serials/love-like-the-galaxy/gallery-1.jpg`,
       key: "serials/love-like-the-galaxy/gallery-1.jpg",
       caption: "Cheng Shaoshang & Ling Buyi",
       type: ImageCategory.gallery,
@@ -529,7 +591,7 @@ async function main() {
     {
       id: 2,
       serialId: 1,
-      url: `${baseUrl}/serials/love-like-the-galaxy/gallery-2.jpg`,
+      url: `${storageBaseUrl}/serials/love-like-the-galaxy/gallery-2.jpg`,
       key: "serials/love-like-the-galaxy/gallery-2.jpg",
       caption: "Palace Scene",
       type: ImageCategory.gallery,
@@ -537,7 +599,7 @@ async function main() {
     {
       id: 3,
       serialId: 2,
-      url: `${baseUrl}/serials/loves-ambition/gallery-1.jpg`,
+      url: `${storageBaseUrl}/serials/loves-ambition/gallery-1.jpg`,
       key: "serials/loves-ambition/gallery-1.jpg",
       caption: "Main Poster Scene",
       type: ImageCategory.gallery,
@@ -545,7 +607,7 @@ async function main() {
     {
       id: 4,
       serialId: 3,
-      url: `${baseUrl}/serials/the-story-of-pearl-girl/gallery-1.jpg`,
+      url: `${storageBaseUrl}/serials/the-story-of-pearl-girl/gallery-1.jpg`,
       key: "serials/the-story-of-pearl-girl/gallery-1.jpg",
       caption: "Pearl Market Scene",
       type: ImageCategory.gallery,
@@ -562,7 +624,7 @@ async function main() {
   console.log("✅ SerialImages seeded.");
 
   // ------------------------------------------------------
-  // 10. Featured Items
+  // 12. Featured Items
   // ------------------------------------------------------
   const featuredItemsData = [
     {

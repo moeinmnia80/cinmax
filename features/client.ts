@@ -12,3 +12,5 @@ export { MobileSidebar } from "@/features/hero/MobileSidebar";
 export { MobileOverlay } from "@/features/hero/MobileOverlay";
 export { HeroBackground } from "@/features/hero/HeroBackground";
 export { HeroNavActions } from "@/features/hero/HeroNavActions";
+
+export { LoginForm } from "@/features/auth/LoginForm";

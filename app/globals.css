@@ -131,10 +131,6 @@
     @apply bg-background text-foreground;
   }
 
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
   ::-webkit-scrollbar {
     width: 0;
   }
@@ -185,5 +181,13 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-background) inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
   }
 }

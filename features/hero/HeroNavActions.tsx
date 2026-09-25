@@ -20,7 +20,10 @@ export const HeroNavActions = () => {
   const setMobileNavOpen = useModalStore((state) => state.toggleMobileNav);
   const toggleSearchModal = useModalStore((state) => state.toggleSearchModal);
 
-  const { user, isAuthenticated } = { user: null, isAuthenticated: false };
+  const { user, isAuthenticated } = {
+    user: { name: null, image: "" },
+    isAuthenticated: false,
+  };
 
   const activeFilterCount = calculateActiveFilters(
     sortBy,
@@ -59,11 +62,11 @@ export const HeroNavActions = () => {
       {isAuthenticated ? (
         <div className="hidden sm:flex items-center gap-2">
           <Image
-            src=""
+            src={user?.image}
             alt="replace"
-            className="w-7 h-7 rounded-full object-cover border border-primary/50"
+            className="w-9 h-9 rounded-full object-cover border border-primary/50"
           />
-          <span className="text-white/80 text-sm font-medium">{user}</span>
+          <span className="text-white/80 text-sm font-medium">{user.name}</span>
           <button
             onClick={() => {
               // logout
