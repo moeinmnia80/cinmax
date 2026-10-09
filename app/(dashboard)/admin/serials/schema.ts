@@ -4,28 +4,23 @@ import { z } from "zod";
 export const SERIAL_STATUSES = ["Ongoing", "Ended", "Cancelled"] as const;
 
 export const serialFormSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  slug: z
-    .string()
-    .min(1, "Slug is required")
-    .regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and dashes only"),
-  rating: z.coerce.number().min(0, "Min 0").max(10, "Max 10"),
-  startYear: z.coerce.number().int().min(1900).max(2100),
-  // 0 = "no end year yet" (still ongoing) -> stored as `null` in actions.ts.
-  endYear: z.coerce.number().int().nonnegative().default(0),
-  seasons: z.coerce.number().int().min(1, "At least 1 season"),
+  title: z.string().min(1, "عنوان الزامی است"),
+  slug: z.string().min(1, "اسلاگ الزامی است"),
+  rating: z.coerce.number().min(0).max(10),
+  startYear: z.coerce.number().int(),
+  endYear: z.coerce.number().int(),
+  seasons: z.coerce.number().int().min(1),
   episodes: z.coerce.number().int().min(0),
-  description: z.string().min(1, "Description is required"),
-  image: z.string().min(1, "Poster image is required"),
-  durationMinutes: z.number().int().positive(),
-  // Unlike Movie, `backdrop` is optional on Serial.
-  backdrop: z.string().optional().or(z.literal("")),
+  durationMinutes: z.coerce.number().int().default(0),
+  description: z.string(),
+  image: z.string().url("آدرس تصویر معتبر نیست"),
+  backdrop: z.string().optional(),
   status: z.enum(SERIAL_STATUSES),
-  badge: z.string().optional().or(z.literal("")),
-  languageId: z.coerce.number().int().min(1, "Language is required"),
-  countryId: z.coerce.number().int().optional().nullable(),
-  studioId: z.coerce.number().int().optional().nullable(),
-  genreIds: z.array(z.number()).min(1, "Pick at least one genre"),
+  badge: z.string().optional(),
+  languageId: z.coerce.number().int(),
+  countryId: z.coerce.number().int().nullable().optional(),
+  studioId: z.coerce.number().int().nullable().optional(),
+  genreIds: z.array(z.number()),
 });
 
 export type SerialFormValues = z.infer<typeof serialFormSchema>;
