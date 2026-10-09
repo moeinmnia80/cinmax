@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import { LogOut, MenuIcon, Search, SlidersHorizontal, X } from "lucide-react";
 
 import { useFilterStore } from "@/store/useFilterStore";
@@ -79,19 +79,19 @@ export const HeroNavActions = () => {
         </div>
       ) : (
         <>
-          <button
-            onClick={() => redirect("/login")}
+          <Link
+            href="/login"
             className="hidden sm:block text-white/50 hover:text-white text-sm transition-colors px-1"
           >
             Login
-          </button>
+          </Link>
           <span className="hidden sm:block text-white/20 text-sm">/</span>
-          <button
-            onClick={() => redirect("/register")}
+          <Link
+            href="/register"
             className="hidden sm:block text-white/50 hover:text-white text-sm transition-colors px-1"
           >
             Register
-          </button>
+          </Link>
         </>
       )}
       <button

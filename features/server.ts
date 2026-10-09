@@ -8,8 +8,13 @@ export { HeroNavigation } from "@/features/hero/HeroNavigation";
 export { LoginBackground } from "@/features/auth/LoginBackground";
 export { LoginMovieCards } from "@/features/auth/LoginMovieCards";
 export { LoginFormHeader } from "@/features/auth/LoginFormHeader";
+export { RegisterContent } from "@/features/auth/RegisterContent";
 export { LoginTestImonial } from "@/features/auth/LoginTestImonial";
 export { LoginFormDivider } from "@/features/auth/LoginFormDivider";
+export { LoginOAuthMethods } from "@/features/auth/LoginOAuthMethods";
+export { RegisterBackground } from "@/features/auth/RegisterBackground";
+export { RegisterFeatureList } from "@/features/auth/RegisterFeatureList";
+export { RegisterContentInfo } from "@/features/auth/RegisterContentInfo";
 
 // Skeleton Loadings
 export { CrewStripSkeleton } from "@/features/hero/CrewStripSkeleton";

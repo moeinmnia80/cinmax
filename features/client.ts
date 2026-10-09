@@ -14,3 +14,4 @@ export { HeroBackground } from "@/features/hero/HeroBackground";
 export { HeroNavActions } from "@/features/hero/HeroNavActions";
 
 export { LoginForm } from "@/features/auth/LoginForm";
+export { RegisterForm } from "@/features/auth/RegisterForm";

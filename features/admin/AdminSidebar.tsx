@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Database,
   ExternalLink,
+  Tv,
 } from "lucide-react";
 
 import {
@@ -25,6 +26,7 @@ import {
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/movies", label: "Movies", icon: Clapperboard },
+  { href: "/admin/serials", label: "Serials", icon: Tv },
   { href: "/admin/metadata", label: "Metadata", icon: Database },
 ];
 

@@ -13,20 +13,19 @@ export const FilterYear = () => {
         Release Year
       </p>
       <div className="flex flex-wrap gap-1.5">
-        {filterYears.map((y) => {
-          const isSelected = releaseYear.includes(y);
+        {filterYears.map((year) => {
+          const isSelected = releaseYear.includes(year);
           return (
             <button
-              key={y}
-              onClick={() => setReleaseYear(y)}
+              key={year}
+              onClick={() => setReleaseYear(year)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                 isSelected
                   ? "bg-primary border-primary text-white"
                   : "border-white/12 text-white/45 hover:border-white/30 hover:text-white/70"
               }`}
-              style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
             >
-              {y}
+              {year}
             </button>
           );
         })}

@@ -36,10 +36,18 @@ export const useFilterStore = create<FilterState>((set) => ({
   setSortBy: (sortBy) => set({ sortBy }),
   setMediaType: (mediaType) => set({ mediaType }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
-  setMinRating: (minRating) => set({ minRating }),
+  setMinRating: (minRate) =>
+    set((state) => {
+      const exists = state.minRating === minRate;
+      return {
+        minRating: exists
+          ? (state.minRating = null)
+          : (state.minRating = minRate),
+      };
+    }),
   setReleaseYear: (releaseYear) =>
     set((state) => {
-      const exists = state.selectedGenre.includes(releaseYear);
+      const exists = state.releaseYear.includes(releaseYear);
 
       return {
         releaseYear: exists

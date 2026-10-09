@@ -1,9 +1,10 @@
+import { Toaster } from "@/components/ui/Sonner";
+import { AdminSidebar } from "@/features/admin/AdminSidebar";
 import {
-  SidebarProvider,
   SidebarInset,
   SidebarTrigger,
+  SidebarProvider,
 } from "@/components/ui/Sidebar";
-import { AdminSidebar } from "@/features/admin/AdminSidebar";
 
 export default function AdminLayout({
   children,
@@ -20,6 +21,7 @@ export default function AdminLayout({
         </header>
         <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
+      <Toaster />
     </SidebarProvider>
   );
 }

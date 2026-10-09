@@ -1,50 +1,8 @@
 import Link from "next/link";
-import { Clapperboard, Tags, Globe2, Building2 } from "lucide-react";
 
-// Adjust to your actual Prisma client path.
-import db from "@/lib/db";
-
-async function getStats() {
-  const [movieCount, genreCount, languageCount, studioCount] =
-    await Promise.all([
-      db.movie.count(),
-      db.genre.count(),
-      db.language.count(),
-      db.studio.count(),
-    ]);
-  return { movieCount, genreCount, languageCount, studioCount };
-}
+import { cards } from "@/constants/adminCards";
 
 export default async function AdminDashboardPage() {
-  const stats = await getStats();
-
-  const cards = [
-    {
-      label: "Movies",
-      value: stats.movieCount,
-      icon: Clapperboard,
-      href: "/admin/movies",
-    },
-    {
-      label: "Genres",
-      value: stats.genreCount,
-      icon: Tags,
-      href: "/admin/metadata",
-    },
-    {
-      label: "Languages",
-      value: stats.languageCount,
-      icon: Globe2,
-      href: "/admin/metadata",
-    },
-    {
-      label: "Studios",
-      value: stats.studioCount,
-      icon: Building2,
-      href: "/admin/metadata",
-    },
-  ];
-
   return (
     <div className="space-y-6">
       <div>

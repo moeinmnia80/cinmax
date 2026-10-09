@@ -24,7 +24,6 @@ export const FilterRating = () => {
                   ? "bg-primary border-primary text-white"
                   : "border-white/12 text-white/45 hover:border-white/30 hover:text-white/70"
               }`}
-              style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
             >
               {r}
             </button>
