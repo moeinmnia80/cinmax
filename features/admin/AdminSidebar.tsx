@@ -2,87 +2,38 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Clapperboard,
-  LayoutDashboard,
-  Database,
-  ExternalLink,
-  Tv,
-} from "lucide-react";
 
-import {
-  Sidebar,
-  SidebarMenu,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarContent,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-} from "@/components/ui/Sidebar";
-
-const navItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/movies", label: "Movies", icon: Clapperboard },
-  { href: "/admin/serials", label: "Serials", icon: Tv },
-  { href: "/admin/metadata", label: "Metadata", icon: Database },
-];
+import { AdminSidebarHeader } from "./AdminSidebarHeader";
+import { navItems } from "@/constants/mobileSidebarNavItems";
 
 export const AdminSidebar = () => {
   const pathname = usePathname();
-
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <Link href="/admin" className="flex items-center gap-2 px-2 py-1.5">
-          <span className="text-primary font-black tracking-widest text-lg">
-            CINEMAX
-          </span>
-          <span className="text-white/30 text-xs uppercase tracking-widest">
-            Admin
-          </span>
-        </Link>
-      </SidebarHeader>
+    <div className="flex-1 border-r border-foreground/10">
+      <AdminSidebarHeader />
+      <nav className="flex flex-col gap-2 p-4">
+        {navItems.map((item) => {
+          const isActive = item.exact
+            ? pathname === item.href
+            : pathname.startsWith(item.href);
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Manage</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const isActive = item.exact
-                  ? pathname === item.href
-                  : pathname.startsWith(item.href);
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.href}>
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/" target="_blank">
-                <ExternalLink />
-                <span>View site</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+          const IconComponent = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
+                isActive
+                  ? "bg-destructive text-foreground"
+                  : "hover:bg-foreground/10"
+              }`}
+            >
+              <IconComponent size={15} />
+              <span className="font-light">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 };

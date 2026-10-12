@@ -663,6 +663,54 @@ async function main() {
   console.log("✅ FeaturedItems seeded.");
 
   console.log("🚀 Database seeding completed successfully.");
+
+  // ------------------------------------------------------
+  // 13. Plans
+  // ------------------------------------------------------
+
+  const plans = [
+    {
+      slug: "basic",
+      name: "Basic",
+      price: 9.99,
+      period: "month",
+      popular: false,
+      downloadMax: "0",
+      features: ["Basic HD Quality", "1 Screen", "Ad-supported"],
+    },
+    {
+      slug: "standard",
+      name: "Standard",
+      price: 14.99,
+      period: "month",
+      popular: true,
+      downloadMax: "10 downloads",
+      features: ["1080p Full HD", "2 Screens", "No ads", "10 downloads"],
+    },
+    {
+      slug: "premium",
+      name: "Premium",
+      price: 22.99,
+      period: "month",
+      popular: false,
+      downloadMax: "Unlimited",
+      features: [
+        "4K Ultra HD",
+        "4 Screens",
+        "Unlimited downloads",
+        "Dolby Atmos",
+      ],
+    },
+  ];
+  for (const plan of plans) {
+    await prisma.plan.upsert({
+      where: { slug: plan.slug },
+      update: plan,
+      create: plan,
+    });
+  }
+
+  console.log("✅ Plans Added.");
 }
 
 main()

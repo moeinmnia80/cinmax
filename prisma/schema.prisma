@@ -16,7 +16,7 @@ enum Gender {
 }
 
 enum Role {
-  manager
+  user
   admin
 }
 
@@ -71,7 +71,7 @@ model User {
   username  String   @unique @db.VarChar(50)
   password  String   @db.VarChar(255)
   gender    Gender   @default(male)
-  role      Role     @default(manager)
+  role      Role     @default(user)
   provider  Provider @default(local)
   image     String?
 
@@ -79,6 +79,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   continueWatchings ContinueWatching[]
+  subscriptions     UserSubscription?
+  purchases         UserPurchase[]
 }
 
 model Genre {
@@ -96,7 +98,7 @@ model Genre {
 
 model Country {
   id      Int      @id @default(autoincrement())
-  code    String   @unique // e.g. "USA", "UK", "CN"
+  code    String   @unique
   name    String
   movies  Movie[]
   serials Serial[]
@@ -166,8 +168,45 @@ model Plan {
   features    String[]
   downloadMax String
 
+  subscriptions UserSubscription[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model UserSubscription {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @db.Uuid
+  planId    Int
+  startDate DateTime @default(now()) @map("start_date") @db.Timestamptz(6)
+  endDate   DateTime @map("end_date") @db.Timestamptz(6)
+  isActive  Boolean  @default(true) @map("is_active")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model UserPurchase {
+  id       String  @id @default(uuid()) @db.Uuid
+  userId   String  @db.Uuid
+  movieId  Int?
+  serialId Int?
+  price    Decimal @db.Decimal(10, 2)
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie  Movie?  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  serial Serial? @relation(fields: [serialId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([movieId])
+  @@index([serialId])
 }
 
 // ==========================================
@@ -193,6 +232,9 @@ model Movie {
   boxOffice       BigInt?
   recognition     String?
 
+  isPurchasable Boolean  @default(false) @map("is_purchasable")
+  purchasePrice Decimal? @map("purchase_price") @db.Decimal(10, 2)
+
   languageId Int
   language   Language @relation("MoviePrimaryLanguage", fields: [languageId], references: [id])
 
@@ -214,10 +256,11 @@ model Movie {
   images           MovieImage[]
   featuredItems    FeaturedItem[]
   continueWatching ContinueWatching[]
+  purchases        UserPurchase[]
 
-  relatedMovies  MovieRelated[]       @relation("SourceMovie")
-  relatedTo      MovieRelated[]       @relation("TargetMovie")
-  relatedSerials SerialRelatedMovie[]
+  relatedMovies MovieRelated[]       @relation("SourceMovie")
+  relatedTo     MovieRelated[]       @relation("TargetMovie")
+  serialMovies  SerialRelatedMovie[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -371,6 +414,9 @@ model Serial {
   status          SerialStatus @default(Ongoing)
   badge           String?
 
+  isPurchasable Boolean  @default(false) @map("is_purchasable")
+  purchasePrice Decimal? @map("purchase_price") @db.Decimal(10, 2)
+
   languageId Int
   language   Language @relation("SerialPrimaryLanguage", fields: [languageId], references: [id])
 
@@ -387,6 +433,7 @@ model Serial {
   images           SerialImage[]
   featuredItems    FeaturedItem[]
   continueWatching ContinueWatching[]
+  purchases        UserPurchase[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

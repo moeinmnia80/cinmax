@@ -12,7 +12,7 @@ import {
 import { EntityManager } from "@/features/admin/EntityManager";
 
 export default async function MetadataPage() {
-  const { genres, languages, countries, studios } = await getMetadata();
+  // const { genres, languages, countries, studios } = await getMetadata();
 
   return (
     <div className="space-y-6">
@@ -27,7 +27,7 @@ export default async function MetadataPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <EntityManager
+        {/* <EntityManager
           title="Genres"
           description="Action, Sci-Fi, Thriller…"
           items={genres}
@@ -39,9 +39,9 @@ export default async function MetadataPage() {
             "use server";
             await deleteGenre(id);
           }}
-        />
+        /> */}
 
-        <EntityManager
+        {/* <EntityManager
           title="Languages"
           description="Primary spoken language of a movie."
           items={languages}
@@ -83,7 +83,7 @@ export default async function MetadataPage() {
             "use server";
             await deleteStudio(id);
           }}
-        />
+        /> */}
       </div>
     </div>
   );

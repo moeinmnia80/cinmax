@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
-
 import "@/app/globals.css";
+import type { Metadata } from "next";
 import { barlowCondensed } from "@/lib/fonts";
+import { ReduxProvider } from "@/components/ReduxProvider";
+import { ToastContainer } from "@/components/ToastContainer";
+import { QueryProvider } from "@/components/QueryProvider";
 
 export const metadata: Metadata = {
   title: "cinmax",
@@ -14,7 +16,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body
         className={`${barlowCondensed.className} min-h-full flex flex-col bg-background`}
       >
-        {children}
+        <QueryProvider>
+          <ReduxProvider>{children}</ReduxProvider>
+        </QueryProvider>
+        <ToastContainer />
       </body>
     </html>
   );

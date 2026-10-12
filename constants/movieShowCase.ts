@@ -8,7 +8,7 @@ export const showcaseMovies = [
   {
     title: "Rings Of Powers",
     rating: "6.8",
-    genre: "Action · Adventure ·Drama ·Fantasy · Mystery",
+    genre: "Action · Adventure · Drama · Fantasy · Mystery",
     image: "/images/poster-2.webp",
   },
   {

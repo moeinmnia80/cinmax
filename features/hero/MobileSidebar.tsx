@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { LogIn, X } from "lucide-react";
 
-import { navItems } from "@/constants";
+import { navItems } from "@/constants/mobileSidebarNavItems";
 import { useModalStore } from "@/store/useModalStore";
 
 export const MobileSidebar = () => {

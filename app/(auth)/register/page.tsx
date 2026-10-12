@@ -8,7 +8,7 @@ export default function RegisterPage() {
         <RegisterBackground />
         <RegisterContent />
       </div>
-      <div className="flex-1 flex flex-col justify-center px-8 md:px-14 lg:px-16 py-12 relative w-full">
+      <div className="flex-1 flex flex-col justify-center px-8 md:px-14 lg:px-16 py-12 lg:py-8 relative w-full">
         <Logo className="md:hidden mb-8" />
         <RegisterForm />
       </div>

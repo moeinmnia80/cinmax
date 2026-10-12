@@ -13,5 +13,11 @@ export { MobileOverlay } from "@/features/hero/MobileOverlay";
 export { HeroBackground } from "@/features/hero/HeroBackground";
 export { HeroNavActions } from "@/features/hero/HeroNavActions";
 
+export { AuthField } from "@/features/auth/AuthFiled";
 export { LoginForm } from "@/features/auth/LoginForm";
+export { SubmitButton } from "@/features/auth/SubmitButton";
 export { RegisterForm } from "@/features/auth/RegisterForm";
+export { RegisterPlans } from "@/features/auth/RegisterPlans";
+export { PlanOption } from "@/features/auth/RegisterPlanOption";
+export { RegisterAccount } from "@/features/auth/RegisterAccount";
+export { RegisterStepIndicator } from "@/features/auth/RegisterStepIndicator";

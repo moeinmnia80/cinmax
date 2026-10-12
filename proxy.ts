@@ -22,9 +22,7 @@ export default async function proxy(request: NextRequest) {
   }
 
   if (isAdminRoute && session?.role !== "admin") {
-    // TODO: in production fix
-    // return NextResponse.redirect(new URL("/admin", request.url));
-    return NextResponse.next();
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (isAuthPage && session?.userId) {

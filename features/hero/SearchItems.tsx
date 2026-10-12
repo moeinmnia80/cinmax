@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Star } from "lucide-react";
 
-import type { Movie } from "@/constants";
+import type { Movie } from "@/constants/movies";
 import { useModalStore } from "@/store/useModalStore";
 import { useFilterStore } from "@/store/useFilterStore";
 

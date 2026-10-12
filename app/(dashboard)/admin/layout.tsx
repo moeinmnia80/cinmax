@@ -1,10 +1,4 @@
-import { Toaster } from "@/components/ui/Sonner";
 import { AdminSidebar } from "@/features/admin/AdminSidebar";
-import {
-  SidebarInset,
-  SidebarTrigger,
-  SidebarProvider,
-} from "@/components/ui/Sidebar";
 
 export default function AdminLayout({
   children,
@@ -12,16 +6,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <div className="flex min-h-screen">
       <AdminSidebar />
-      <SidebarInset>
-        <header className="flex items-center gap-3 border-b border-white/8 px-6 py-4 bg-background">
-          <SidebarTrigger />
-          <span className="text-white/40 text-sm">Admin panel</span>
-        </header>
-        <main className="flex-1 p-6">{children}</main>
-      </SidebarInset>
-      <Toaster />
-    </SidebarProvider>
+      <div className="flex-5">
+        <main className="">{children}</main>
+      </div>
+    </div>
   );
 }

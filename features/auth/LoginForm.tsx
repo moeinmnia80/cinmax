@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
-import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
+import { redirect } from "next/navigation";
+import { Check, LogIn } from "lucide-react";
+import { useActionState, useEffect } from "react";
 
-import { SubmitButton } from "@/features/auth/SubmitButton";
+import { toast, useAppDispatch } from "@/store";
+import { SubmitButton } from "@/features/client";
+import { LOGIN_FIELDS } from "@/constants/authFields";
+import { AuthField } from "@/features/auth/AuthFiled";
 import { LoginFormState, loginAction } from "@/app/actions/auth";
 
 const initialState: LoginFormState = {
@@ -14,104 +18,55 @@ const initialState: LoginFormState = {
 
 export const LoginForm = () => {
   const [state, formAction] = useActionState(loginAction, initialState);
-  const [showPw, setShowPw] = useState(false);
-  const [remember, setRemember] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const formError = state.errors?._form?.[0];
+
+  useEffect(() => {
+    if (state.success) {
+      redirect("/");
+    } else if (formError) {
+      toast.error("Something went wrong", {
+        description: formError,
+        actions: [
+          { label: "Retry", variant: "primary", onClick: () => {} },
+          { label: "Dismiss" },
+        ],
+      });
+    }
+  }, [state.success, formError, dispatch]);
+
   return (
     <form action={formAction} className="space-y-4">
-      <div>
-        <label className="block text-xs uppercase tracking-widest text-white/40 mb-2">
-          Email Address
+      {LOGIN_FIELDS.map((field) => (
+        <AuthField
+          key={field.name}
+          {...field}
+          error={state.errors?.[field.name]?.[0]}
+        />
+      ))}
+      <div className="flex items-center justify-between">
+        <label className="flex items-center justify-start gap-3">
+          <input name="remember" type="checkbox" className="size-0 peer" />
+          <span className="peer-checked:*:inline-block w-5 h-5 rounded flex items-center justify-center peer-checked:bg-destructive border border-foreground/10 transition-all shrink-0">
+            <Check size={15} className="hidden text-foreground" />
+          </span>
+          <div className="flex flex-wrap items-center text-sm font-normal text-foreground/20 gap-0.5">
+            Keep me signed in
+          </div>
         </label>
-        <div className="relative">
-          <Mail
-            size={15}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
-          />
-          <input
-            id="email"
-            type="email"
-            name="email"
-            placeholder="you@example.com"
-            autoComplete="email"
-            className="w-full bg-white/5 border border-white/10 hover:border-white/20 focus:border-destructive/50 rounded-xl pl-11 pr-4 py-3.5 text-white text-sm placeholder-white/25 outline-none transition-all"
-          />
-          {state.errors?.email && (
-            <p className="mt-1 text-xs text-red-500">{state.errors.email[0]}</p>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="block text-xs uppercase tracking-widest text-white/40">
-            Password
-          </label>
-          <Link
-            href="/forgot-password"
-            className="text-xs text-white/40 hover:text-white/70 transition-colors"
-          >
-            Forgot password?
-          </Link>
-        </div>
-        <div className="relative">
-          <Lock
-            size={15}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
-          />
-          <input
-            id="password"
-            type={showPw ? "text" : "password"}
-            name="password"
-            autoComplete="current-password"
-            placeholder="••••••••"
-            className="w-full bg-white/5 border border-white/10 hover:border-white/20 focus:border-[#E50914]/60 rounded-xl pl-11 pr-12 py-3.5 text-white text-sm placeholder-white/25 outline-none transition-all"
-          />
-          {state.errors?.password && (
-            <p className="mt-1 text-xs text-red-500">
-              {state.errors.password[0]}
-            </p>
-          )}
-          <button
-            type="button"
-            onClick={() => setShowPw((v) => !v)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
-          >
-            {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
-          </button>
-        </div>
-      </div>
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => setRemember((v) => !v)}
-          className={`w-5 h-5 rounded flex items-center justify-center border transition-all shrink-0 ${remember ? "bg-[#E50914] border-[#E50914]" : "border-white/20 bg-white/4"}`}
+        <Link
+          href="/forgot-password"
+          className="text-xs text-white/40 hover:text-white/70 transition-colors"
         >
-          {remember && (
-            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-              <path
-                d="M1 4L4 7L9 1"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </button>
-        <span
-          className="text-white/50 text-sm select-none cursor-pointer"
-          onClick={() => setRemember((v) => !v)}
-        >
-          Keep me signed in
-        </span>
+          Forgot password?
+        </Link>
       </div>
-
-      {state.errors?._form && (
-        <div className="bg-[#E50914]/10 border border-[#E50914]/30 rounded-xl px-4 py-3">
-          <p className="text-[#E50914] text-sm">{state.errors._form}</p>
-        </div>
+      {state.errors?.remember?.[0] && (
+        <p role="alert" className="mt-1 text-xs text-red-500">
+          {state.errors.remember[0]}
+        </p>
       )}
-
       <SubmitButton>
         <LogIn size={16} /> Sign In
       </SubmitButton>

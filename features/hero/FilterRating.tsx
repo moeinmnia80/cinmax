@@ -1,6 +1,6 @@
 "use client";
 
-import { filterRatings } from "@/constants";
+import { filterRatings } from "@/constants/filters";
 import { MinRating, useFilterStore } from "@/store/useFilterStore";
 
 export const FilterRating = () => {

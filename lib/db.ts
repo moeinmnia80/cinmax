@@ -8,8 +8,15 @@ const adapter = new PrismaNeon({
   ssl: { rejectUnauthorized: false },
   connectionTimeoutMillis: 15000,
   idleTimeoutMillis: 7500,
+  max: 10,
 });
 
-const db = new PrismaClient({ adapter });
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+
+export const db = globalForPrisma.prisma || new PrismaClient({ adapter });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = db;
+}
 
 export default db;

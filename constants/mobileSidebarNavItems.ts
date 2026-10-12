@@ -1,9 +1,17 @@
-import { Clapperboard, CreditCard, Flame, HomeIcon, Users } from "lucide-react";
+import {
+  Tv,
+  Tags,
+  Users,
+  HomeIcon,
+  CreditCard,
+  Clapperboard,
+} from "lucide-react";
 
 export const navItems = [
-  { label: "Home", icon: HomeIcon },
-  { label: "Trending", icon: Flame },
-  { label: "Movies", icon: Clapperboard },
-  { label: "Cast", icon: Users },
-  { label: "Plans", icon: CreditCard },
+  { href: "/admin", label: "Dashboard", icon: HomeIcon, exact: true },
+  { href: "/admin/serials", label: "Serials", icon: Tv },
+  { href: "/admin/cast", label: "Cast", icon: Users },
+  { href: "/admin/plans", label: "Plans", icon: CreditCard },
+  { href: "/admin/movies", label: "Movies", icon: Clapperboard },
+  { href: "/admin/genres", label: "Genres", icon: Tags },
 ];

@@ -1,6 +1,6 @@
 "use client";
 
-import { filterGenres } from "@/constants";
+import { filterGenres } from "@/constants/filters";
 import { useFilterStore } from "@/store/useFilterStore";
 
 export const FilterGenre = () => {

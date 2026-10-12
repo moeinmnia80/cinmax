@@ -1,6 +1,6 @@
 "use client";
 
-import { filterYears } from "@/constants";
+import { filterYears } from "@/constants/filters";
 import { useFilterStore } from "@/store/useFilterStore";
 
 export const FilterYear = () => {

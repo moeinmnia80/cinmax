@@ -1,6 +1,6 @@
 "use client";
 
-import { movies } from "@/constants";
+import { movies } from "@/constants/movies";
 import { useModalStore } from "@/store/useModalStore";
 import { useFilterStore } from "@/store/useFilterStore";
 import { SearchItems, SearchInput } from "@/features/client";
