@@ -52,21 +52,16 @@ export interface FeaturedItem {
 }
 
 const getFeaturedData = async (): Promise<FeaturedItem[]> => {
-  try {
-    const res = await fetch(`${process.env.BASE_URL}/api`, {
-      next: { revalidate: 86400 },
-    });
+  const res = await fetch(`${process.env.BASE_URL}/api`, {
+    next: { revalidate: 86400 },
+  });
 
-    if (!res.ok) {
-      if (res.status === 404) notFound();
-      throw new Error(`Failed to fetch featured data: ${res.statusText}`);
-    }
-    const { data }: HeroResponse = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching hero data:", error);
-    notFound();
+  if (!res.ok) {
+    if (res.status === 404) notFound();
+    throw new Error(`Failed to fetch featured data: ${res.statusText}`);
   }
+  const { data }: HeroResponse = await res.json();
+  return data;
 };
 
 export const Hero = () => {

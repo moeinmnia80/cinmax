@@ -1,23 +1,20 @@
 import { Suspense } from "react";
 
+import { AdminBox } from "@/features/admin/AdminBox";
 import { AdminCard } from "@/features/admin/AdminCard";
 import { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
+import { AdminDashboardHeader } from "@/features/admin/AdminDashboardHeader";
 
 export default async function AdminDashboardPage() {
   return (
-    <div>
-      <div className="border-b border-foreground/10 py-5 px-4">
-        <h1 className="text-2xl font-black text-white uppercase tracking-wide">
-          Dashboard
-        </h1>
-        <p className="text-foreground/40 text-sm font-light tracking-widest">
-          Overview of the Cinemax catalog.
-        </p>
-      </div>
-
+    <div className="overflow-scroll">
+      <AdminDashboardHeader />
       <Suspense fallback={<AdminCardSkeleton />}>
         <AdminCard />
       </Suspense>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-5 px-4">
+        <AdminBox />
+      </div>
     </div>
   );
 }

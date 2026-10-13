@@ -91,7 +91,7 @@ export const HeroNavActions = () => {
           ) : (
             <span className="size-9 rounded-full bg-gray-200/10 border border-destructive/50" />
           )}
-          {data?.user?.firstName && (
+          {data?.user?.username && (
             <span className="text-white/80 text-sm font-medium cursor-default underline decoration-transparent underline-offset-3 hover:decoration-foreground transition-all duration-200">
               {data?.user.username}
             </span>

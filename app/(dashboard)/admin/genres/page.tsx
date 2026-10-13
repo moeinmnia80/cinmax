@@ -1,15 +1,15 @@
-import {
-  getMetadata,
-  createGenre,
-  deleteGenre,
-  createLanguage,
-  deleteLanguage,
-  createCountry,
-  deleteCountry,
-  createStudio,
-  deleteStudio,
-} from "@/app/(dashboard)/admin/metadata/actions";
-import { EntityManager } from "@/features/admin/EntityManager";
+// import {
+//   getMetadata,
+//   createGenre,
+//   deleteGenre,
+//   createLanguage,
+//   deleteLanguage,
+//   createCountry,
+//   deleteCountry,
+//   createStudio,
+//   deleteStudio,
+// } from "@/app/(dashboard)/admin/genres/actions";
+// import { EntityManager } from "@/features/admin/EntityManager";
 
 export default async function MetadataPage() {
   // const { genres, languages, countries, studios } = await getMetadata();

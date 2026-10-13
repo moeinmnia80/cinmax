@@ -4,10 +4,10 @@ import db from "@/lib/db";
 import { decrypt } from "@/lib/session";
 
 export async function GET(request: NextRequest) {
-  try {
-    const cookie = request.cookies.get("session")?.value;
-    const session = await decrypt(cookie);
+  const cookie = request.cookies.get("session")?.value;
+  const session = (await decrypt(cookie)) || null;
 
+  try {
     if (!session?.userId) {
       return NextResponse.json(
         { error: "Unauthorized - Please log in to continue" },

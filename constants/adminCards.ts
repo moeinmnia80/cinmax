@@ -1,34 +1,34 @@
-import { connection } from "next/server";
-import { Tv, Tags, Clapperboard } from "lucide-react";
-
 import db from "@/lib/db";
 
 export async function getCards() {
-  await connection();
-  const [movieCount, serialCount, genreCount] = await Promise.all([
-    db.movie.count(),
-    db.serial.count(),
-    db.genre.count(),
-  ]);
+  const [movieCount, serialCount, genreCount, userCount] =
+    await Promise.allSettled([
+      db.movie.count(),
+      db.serial.count(),
+      db.genre.count(),
+      db.user.count(),
+    ]);
 
   return [
     {
       label: "Movies",
       value: movieCount,
-      icon: Clapperboard,
       href: "/admin/movies",
     },
     {
       label: "Serials",
       value: serialCount,
-      icon: Tv,
       href: "/admin/serials",
     },
     {
       label: "Genres",
       value: genreCount,
-      icon: Tags,
       href: "/admin/metadata",
+    },
+    {
+      label: "Users",
+      value: userCount,
+      href: "/admin/users",
     },
   ];
 }
