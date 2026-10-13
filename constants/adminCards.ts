@@ -1,6 +1,11 @@
 import db from "@/lib/db";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCards() {
+  "use cache";
+  cacheTag("dashboard-cards");
+  cacheLife("hours");
+
   const [movieCount, serialCount, genreCount, userCount] =
     await Promise.allSettled([
       db.movie.count(),
@@ -13,22 +18,18 @@ export async function getCards() {
     {
       label: "Movies",
       value: movieCount,
-      href: "/admin/movies",
     },
     {
       label: "Serials",
       value: serialCount,
-      href: "/admin/serials",
     },
     {
       label: "Genres",
       value: genreCount,
-      href: "/admin/metadata",
     },
     {
       label: "Users",
       value: userCount,
-      href: "/admin/users",
     },
   ];
 }

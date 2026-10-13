@@ -8,7 +8,7 @@ export const MovieList = ({ data }: { data: Promise<Movie[]> }) => {
   const movies = use(data);
   return (
     <section
-      className="bg-foreground/5 rounded-md border border-foreground/10"
+      className="bg-foreground/5 rounded-md border border-foreground/10 animate-scale-in"
       aria-labelledby="serials"
     >
       <div className="flex items-center justify-between px-4 py-5 border-b border-foreground/10">

@@ -370,6 +370,8 @@ export interface FeaturedItem {
   serialId: number | null;
   createdAt: Date;
   updatedAt: Date;
+  movie: Movie | null;
+  serial: Serial | null;
 }
 
 // ==========================================

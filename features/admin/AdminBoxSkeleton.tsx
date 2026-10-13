@@ -1,6 +1,6 @@
 export const AdminBoxSkeleton = () => {
   return (
-    <div className="bg-foreground/5 rounded-md border border-foreground/10">
+    <div className="bg-foreground/5 rounded-md border border-foreground/10 animate-slide-down">
       <div className="flex items-center justify-between px-4 py-5 border-b border-foreground/10">
         <span className="w-15 h-7.5 bg-gray-200/20 animate-pulse rounded-sm" />
         <span className="w-23.5 h-6 bg-gray-200/20 animate-pulse rounded-sm" />

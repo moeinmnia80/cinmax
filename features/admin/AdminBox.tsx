@@ -6,6 +6,7 @@ import { MovieList } from "./MovieList";
 import { SerialList } from "./SerialList";
 import { cacheLife, cacheTag } from "next/cache";
 import { AdminBoxSkeleton } from "./AdminBoxSkeleton";
+import { FeaturedItemsList } from "./FeaturedItemsList";
 
 export const AdminBox = async () => {
   "use cache";
@@ -24,6 +25,10 @@ export const AdminBox = async () => {
     skip: 0,
   });
 
+  const featuredItemsPromise = db.featuredItem.findMany({
+    include: { movie: true, serial: true },
+  });
+
   return (
     <>
       <Suspense fallback={<AdminBoxSkeleton />}>
@@ -31,6 +36,9 @@ export const AdminBox = async () => {
       </Suspense>
       <Suspense fallback={<AdminBoxSkeleton />}>
         <SerialList data={serialsPromise} />
+      </Suspense>
+      <Suspense fallback={<AdminBoxSkeleton />}>
+        <FeaturedItemsList data={featuredItemsPromise} />
       </Suspense>
     </>
   );
