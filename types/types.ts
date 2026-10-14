@@ -408,13 +408,25 @@ export type SerialCard = Pick<
 > & { genres: Pick<Genre, "id" | "slug" | "name">[] };
 
 /** Full movie details page */
+export interface MovieDetailGenre extends MovieGenre {
+  genre: Genre;
+}
+export interface MovieDetailCast extends MovieCast {
+  person: Person;
+}
+export interface MovieDetailCrew extends MovieCrew {
+  person: Person;
+}
+export interface MovieDetailRelated extends MovieRelated {
+  targetMovie: Movie;
+}
 export interface MovieDetail extends Movie {
   language: Language;
   country: Country | null;
   studio: Studio | null;
-  genres: Genre[];
-  cast: WithPerson<MovieCast>[];
-  crew: WithPerson<MovieCrew>[];
+  genres: MovieDetailGenre[];
+  cast: MovieDetailCast[];
+  crew: MovieDetailCrew[];
   awards: MovieAward[];
   downloads: MovieDownload[];
   subtitles: (MovieSubtitle & { language: Language })[];
@@ -422,19 +434,35 @@ export interface MovieDetail extends Movie {
   streamings: MovieStreaming[];
   images: MovieImage[];
   reviews: Review[];
-  relatedMovies: MovieCard[];
+  relatedMovies: MovieDetailRelated[];
 }
 
 /** Full serial details page */
+export interface SerialDetailGenre extends SerialGenre {
+  genre: Genre;
+}
+
+export interface SerialDetailCast extends SerialCast {
+  person: Person;
+}
+
+export interface SerialDetailCrew extends SerialCrew {
+  person: Person;
+}
+
+export interface SerialDetailRelatedMovie extends SerialRelatedMovie {
+  movie: Movie;
+}
+
 export interface SerialDetail extends Serial {
   language: Language;
   country: Country | null;
   studio: Studio | null;
-  genres: Genre[];
-  cast: WithPerson<SerialCast>[];
-  crew: WithPerson<SerialCrew>[];
+  genres: SerialDetailGenre[];
+  cast: SerialDetailCast[];
+  crew: SerialDetailCrew[];
   images: SerialImage[];
-  relatedMovies: MovieCard[];
+  relatedMovies: SerialDetailRelatedMovie[];
 }
 
 /** Person page with filmography */
