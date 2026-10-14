@@ -5,14 +5,14 @@ import { Loader2, Plus, Trash2 } from "lucide-react";
 
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import {
-  Table,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-} from "@/components/ui/Table";
+// import {
+//   Table,
+//   TableRow,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+// } from "@/components/ui/Table";
 
 interface EntityItem {
   id: number;
@@ -95,7 +95,7 @@ export const EntityManager = ({
       </form>
 
       <div className="rounded-lg border border-white/10 overflow-hidden">
-        <Table>
+        {/* <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
@@ -135,7 +135,7 @@ export const EntityManager = ({
               </TableRow>
             ))}
           </TableBody>
-        </Table>
+        </Table> */}
       </div>
     </div>
   );
