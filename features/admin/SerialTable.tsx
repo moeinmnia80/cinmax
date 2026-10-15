@@ -49,7 +49,7 @@ export const SerialTable = async ({
 
   return (
     <>
-      <Table>
+      <Table className="animate-slide-up">
         <THead className="text-sm border-b border-foreground/10">
           <Row className="flex py-2">
             <TD className="flex-2 ps-3">TITLE</TD>
@@ -75,13 +75,16 @@ export const SerialTable = async ({
                     alt={serial.title}
                     width={200}
                     height={200}
+                    loading="eager"
                     className="max-w-14 aspect-3/4 rounded-xs"
                   />
                   <div>
                     <p className="text-foreground">{serial.title}</p>
                     <p>{serial.language.name}</p>
                     <div className="flex items-center gap-1 text-xs">
-                      <span className="capitalize">{serial.studio?.name}</span>
+                      <span className="capitalize">
+                        {serial.studio?.name.split(" ")[0]}
+                      </span>
                       <span className="mx-1">|</span>
                       <span className="capitalize">{serial.country?.name}</span>
                     </div>
@@ -89,7 +92,7 @@ export const SerialTable = async ({
                 </TD>
                 <TD className="flex-1 flex items-center text-sm">
                   {serial.startYear}
-                  {serial.endYear ? `- ${serial.endYear}` : "- Present"}
+                  {serial.endYear ? ` - ${serial.endYear}` : "- Present"}
                 </TD>
                 <TD className="flex-1 flex items-center text-foreground">
                   {serial.seasons}
@@ -116,7 +119,7 @@ export const SerialTable = async ({
                       serial.status === "Ongoing"
                         ? "text-green-400 bg-green-400/30 px-2 before:size-1.5 before:bg-green-400 before:rounded-full"
                         : serial.status === "Ended"
-                          ? "text-gray-200 bg-gray-200/30 px-2 before:size-1.5 before:bg-gray-200 before:rounded-full"
+                          ? "text-foreground/60 bg-foreground/5 px-2 before:size-1.5 before:bg-foreground/60 before:rounded-full"
                           : ""
                     }`}
                   >

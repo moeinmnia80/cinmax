@@ -1,5 +1,6 @@
-import db from "@/lib/db";
 import { cacheLife, cacheTag } from "next/cache";
+
+import db from "@/lib/db";
 
 export async function getCards() {
   "use cache";

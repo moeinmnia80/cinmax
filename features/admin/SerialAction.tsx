@@ -1,15 +1,32 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Check, Trash2 } from "lucide-react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 interface SerialActionsProps {
   serialId: number;
   slug: string;
 }
 
-export const SerialActions = ({ serialId }: SerialActionsProps) => {
+export const SerialActions = ({ serialId, slug }: SerialActionsProps) => {
+  const [isEdit, setIsEdit] = useState(false);
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+
+  const params = new URLSearchParams(searchParams.toString());
+
   const handleEdit = () => {
-    console.log("Edit serial:", serialId);
+    if (isEdit) {
+      setIsEdit(false);
+      params.delete("edit");
+    } else {
+      setIsEdit(true);
+      params.set("edit", slug);
+    }
+    replace(`${pathname}?${params}`);
   };
 
   const handleDelete = () => {
@@ -20,9 +37,9 @@ export const SerialActions = ({ serialId }: SerialActionsProps) => {
     <div className="flex items-center gap-2">
       <button
         onClick={handleEdit}
-        className="px-2 py-1 text-xs bg-gray-200/10 text-gray-200 rounded hover:bg-gray-200/20 transition uppercase"
+        className="px-2 py-1 text-xs bg-foreground/5 text-foreground/60 rounded hover:bg-gray-200/20 transition uppercase"
       >
-        Edit
+        {isEdit ? <Check size={15} className="text-foreground/60" /> : "Edit"}
       </button>
       <button
         onClick={handleDelete}

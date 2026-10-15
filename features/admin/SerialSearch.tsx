@@ -40,7 +40,7 @@ export const SerialSearch = () => {
         type="search"
         name="search"
         placeholder="Series title"
-        className="w-70 border border-foreground/15 outline-0 rounded-sm pl-15 pr-3 py-2 focus:border-foreground/60"
+        className="w-50 border border-foreground/15 outline-0 rounded-sm pl-15 pr-3 py-2 focus:border-foreground/60 placeholder:text-foreground/40 placeholder:text-md"
         value={search}
         onChange={handleChange}
       />

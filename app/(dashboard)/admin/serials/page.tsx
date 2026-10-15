@@ -2,14 +2,16 @@ import { Suspense } from "react";
 
 import { AdminCard } from "@/features/admin/AdminCard";
 import { getSerialCards } from "@/constants/serialCards";
+import { EditSeries } from "@/features/admin/EditSeries";
 import { SerialTable } from "@/features/admin/SerialTable";
 import { AdminHeader } from "@/features/admin/AdminHeader";
 import { SerialSearch } from "@/features/admin/SerialSearch";
-import { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
 import { SerialAddButton } from "@/features/admin/SerialAddButton";
+import { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
+import { SerialTableSkeleton } from "@/features/admin/SerialTableSkeleton";
 
 interface SerialPageProps {
-  searchParams: Promise<{ search?: string }>;
+  searchParams: Promise<{ search?: string; edit?: string }>;
 }
 
 const SerialsPage = async ({ searchParams }: SerialPageProps) => {
@@ -25,16 +27,23 @@ const SerialsPage = async ({ searchParams }: SerialPageProps) => {
           <SerialAddButton />
         </Suspense>
       </AdminHeader>
-      <Suspense fallback={<AdminCardSkeleton />}>
-        <AdminCard fetchCards={getSerialCards} />
-      </Suspense>
-      <div className="px-4 pb-5">
-        <div className="w-full min-h-12 bg-foreground/5 rounded-md border border-foreground/10">
-          <h2 className="p-3 border-b border-foreground/10">All serial</h2>
-          <Suspense>
-            <SerialTable searchParams={searchParams} />
+      <div className="flex">
+        <div className="flex-5">
+          <Suspense fallback={<AdminCardSkeleton />}>
+            <AdminCard fetchCards={getSerialCards} />
           </Suspense>
+          <div className="px-4 pb-5">
+            <div className="w-full min-h-12 bg-foreground/5 rounded-md border border-foreground/10">
+              <h2 className="p-3 border-b border-foreground/10">All serial</h2>
+              <Suspense fallback={<SerialTableSkeleton />}>
+                <SerialTable searchParams={searchParams} />
+              </Suspense>
+            </div>
+          </div>
         </div>
+        <Suspense fallback={<></>}>
+          <EditSeries searchParams={searchParams} />
+        </Suspense>
       </div>
     </div>
   );

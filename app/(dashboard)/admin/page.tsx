@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 
-import { getCards } from "@/constants/adminCards";
+import { getCards } from "@/data/adminCards";
 import { AdminBox } from "@/features/admin/AdminBox";
 import { AdminCard } from "@/features/admin/AdminCard";
-import { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
 import { AdminHeader } from "@/features/admin/AdminHeader";
+import { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
 
 export default async function AdminDashboardPage() {
   return (
