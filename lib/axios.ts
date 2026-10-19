@@ -8,7 +8,11 @@ export const api = axios.create({
   },
 });
 
-export async function fetchData(path: string, options?: AxiosRequestConfig) {
+export async function getData(path: string, options?: AxiosRequestConfig) {
   const response = await api.get(path, options);
+  return response.data;
+}
+export async function postData(path: string, options?: AxiosRequestConfig) {
+  const response = await api.post(path, { ...options });
   return response.data;
 }

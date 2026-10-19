@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LogOut, MenuIcon, Search, SlidersHorizontal, X } from "lucide-react";
 
-import { fetchData } from "@/lib/axios";
+import { getData } from "@/lib/axios";
 import { calculateActiveFilters } from "@/utils";
 import { logoutAction } from "@/app/actions/auth";
 import { useModalStore } from "@/store/useModalStore";
@@ -27,7 +27,7 @@ export const HeroNavActions = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["user-me"],
-    queryFn: () => fetchData("/api/user/me"),
+    queryFn: () => getData("/api/user/me"),
     refetchOnWindowFocus: false,
   });
 

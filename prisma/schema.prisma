@@ -296,6 +296,7 @@ model MovieCrew {
   movie  Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
   person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
 
+  @@unique([movieId, personId, role])
   @@index([movieId])
   @@index([personId])
 }
@@ -320,6 +321,7 @@ model MovieCast {
   movie  Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
   person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
 
+  @@unique([movieId, personId])
   @@index([movieId])
   @@index([personId])
 }
@@ -453,6 +455,7 @@ model SerialCast {
   serial Serial @relation(fields: [serialId], references: [id], onDelete: Cascade)
   person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
 
+  @@unique([serialId, personId])
   @@index([serialId])
   @@index([personId])
 }
@@ -466,6 +469,7 @@ model SerialCrew {
   serial Serial @relation(fields: [serialId], references: [id], onDelete: Cascade)
   person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
 
+  @@unique([serialId, personId, role])
   @@index([serialId])
   @@index([personId])
 }

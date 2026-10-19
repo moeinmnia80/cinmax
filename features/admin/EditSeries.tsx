@@ -15,6 +15,7 @@ import {
   SelectContent,
 } from "@/components/ui/Select";
 import { CastsField } from "./CastsField";
+import { CrewField } from "./CrewField";
 
 interface EditSeriesProps {
   searchParams: Promise<{ edit?: string }>;
@@ -141,7 +142,7 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
             />
           </Field>
 
-          <fieldset className="rounded-xl border border-foreground/10 p-4 col-span-4">
+          <fieldset className="bg-foreground/5 rounded-xl border border-foreground/10 p-4 col-span-4">
             <legend className="sr-only">Media</legend>
             <p className={LABEL_TEXT} aria-hidden="true">
               media
@@ -163,7 +164,18 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
               />
             </div>
           </fieldset>
-          <CastsField defaultValue={serial?.cast} />
+          {serial?.id && (
+            <>
+              <CastsField
+                target={{ type: "serial", id: serial.id }}
+                defaultValue={serial?.cast}
+              />
+              <CrewField
+                target={{ type: "serial", id: serial.id }}
+                defaultValue={serial?.crew}
+              />
+            </>
+          )}
           <SubmitButton className="col-span-3 rounded-lg bg-destructive/60 px-4 py-3 font-semibold text-background outline-0 transition hover:bg-destructive/50 focus-visible:ring-2 focus-visible:ring-destructive/40">
             Save changes
           </SubmitButton>

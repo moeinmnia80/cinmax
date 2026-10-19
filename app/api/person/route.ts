@@ -7,6 +7,9 @@ export async function GET(request: NextRequest) {
   const cookie = request.cookies.get("session")?.value;
   const session = (await decrypt(cookie)) || null;
 
+  const searchParams = request.nextUrl.searchParams;
+  const search = searchParams.get("search")?.trim();
+
   try {
     if (!session?.userId) {
       return NextResponse.json(
@@ -15,15 +18,26 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const person = await db.person.findMany();
+    if (!search) {
+      return NextResponse.json({ success: true, persons: [] });
+    }
 
-    if (!person) {
+    const persons = await db.person.findMany({
+      where: {
+        role: "Actor",
+        name: { contains: search, mode: "insensitive" },
+      },
+      select: { id: true, name: true, image: true },
+      take: 8,
+    });
+
+    if (!persons) {
       return NextResponse.json({ error: "person not found" }, { status: 404 });
     }
 
     return NextResponse.json({
       success: true,
-      person,
+      persons,
     });
   } catch (error) {
     console.log(error);

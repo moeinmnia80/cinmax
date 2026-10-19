@@ -1,7 +1,7 @@
 "use client";
 
 import { Genre } from "@/types/types";
-import { fetchData } from "@/lib/axios";
+import { getData } from "@/lib/axios";
 import { Plus, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ComponentProps, useEffect, useRef, useState } from "react";
@@ -28,7 +28,7 @@ export const GenresField = ({
 
   const { data } = useQuery<{ success: boolean; genres: Genre[] }>({
     queryKey: ["genres"],
-    queryFn: () => fetchData("/api/genres"),
+    queryFn: () => getData("/api/genres"),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
     enabled: adding,
