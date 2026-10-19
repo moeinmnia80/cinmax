@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 export const api = axios.create({
   baseURL: import.meta.env.BASE_URL,
@@ -8,7 +8,7 @@ export const api = axios.create({
   },
 });
 
-export async function fetchData(path: string) {
-  const response = await api.get(path);
+export async function fetchData(path: string, options?: AxiosRequestConfig) {
+  const response = await api.get(path, options);
   return response.data;
 }

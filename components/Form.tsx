@@ -1,16 +1,17 @@
+import { cn } from "@/utils";
+import { ComponentProps } from "react";
+
 export const LABEL_TEXT =
   "block text-xs tracking-widest uppercase text-foreground/60";
 export const CONTROL =
   "mt-1 w-full rounded-sm border border-foreground/10 bg-foreground/5 px-2 py-1 text-foreground outline-0";
 
-export const Field = ({
-  label,
-  children,
-}: {
+interface FieldProps extends ComponentProps<"label"> {
   label: string;
-  children: React.ReactNode;
-}) => (
-  <label className="block min-w-0 flex-1">
+}
+
+export const Field = ({ label, children, className }: FieldProps) => (
+  <label className={cn("block min-w-0 col-span-4", className)}>
     <span className={LABEL_TEXT}>{label}</span>
     {children}
   </label>

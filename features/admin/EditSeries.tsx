@@ -1,8 +1,10 @@
 import Link from "next/link";
 
+import { getSerial } from "@/data/serial";
 import { ImageUpload } from "./ImageUpload";
 import { GenresField } from "./GenresField";
 import { SerialStatus } from "@/types/types";
+import { SubmitButton } from "@/features/client";
 import { STATUS_OPTIONS } from "@/constants/seriesStatus";
 import { CONTROL, Field, LABEL_TEXT, TextInput } from "@/components/Form";
 import {
@@ -12,14 +14,14 @@ import {
   SelectButton,
   SelectContent,
 } from "@/components/ui/Select";
-import { getSerial } from "@/data/serial";
+import { CastsField } from "./CastsField";
 
 interface EditSeriesProps {
   searchParams: Promise<{ edit?: string }>;
 }
 
 export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
-  const { edit = "" } = await searchParams;
+  const { edit } = await searchParams;
   const serial = await getSerial(edit);
 
   const currentStatus =
@@ -34,11 +36,10 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
         <p className="text-sm uppercase text-foreground/30">
           {edit || "unsaved draft"}
         </p>
-        <form key={edit} className="mt-5 flex flex-col gap-4">
+        <form key={edit} className="mt-5 grid grid-cols-4 gap-4">
           <Field label="title">
             <TextInput name="title" defaultValue={serial?.title} />
           </Field>
-
           <Field label="description">
             <textarea
               name="description"
@@ -47,54 +48,51 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
               className={`${CONTROL} resize-none text-sm font-normal`}
             />
           </Field>
-
-          <div className="flex items-center gap-4">
-            <Field label="start year">
-              <TextInput
-                name="startYear"
-                defaultValue={serial?.startYear ?? ""}
-                inputMode="numeric"
-              />
-            </Field>
-            <Field label="end year">
-              <TextInput
-                name="endYear"
-                defaultValue={serial?.endYear ?? ""}
-                placeholder="Blank if ongoing"
-                inputMode="numeric"
-              />
-            </Field>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <Field label="seasons">
-              <TextInput
-                name="seasons"
-                defaultValue={serial?.seasons ?? ""}
-                inputMode="numeric"
-              />
-            </Field>
-            <Field label="episodes">
-              <TextInput
-                name="episodes"
-                defaultValue={serial?.episodes ?? ""}
-                inputMode="numeric"
-              />
-            </Field>
-            <Field label="rating">
-              <TextInput
-                name="rating"
-                defaultValue={serial?.rating.toString() ?? ""}
-                inputMode="decimal"
-              />
-            </Field>
-          </div>
-
+          <Field label="start year" className="col-span-2">
+            <TextInput
+              name="startYear"
+              defaultValue={serial?.startYear ?? ""}
+              inputMode="numeric"
+            />
+          </Field>
+          <Field label="end year" className="col-span-2">
+            <TextInput
+              name="endYear"
+              defaultValue={serial?.endYear ?? ""}
+              placeholder="Blank if ongoing"
+              inputMode="numeric"
+            />
+          </Field>
+          <Field label="seasons" className="col-span-1">
+            <TextInput
+              name="seasons"
+              defaultValue={serial?.seasons ?? ""}
+              inputMode="numeric"
+            />
+          </Field>
+          <Field label="episodes" className="col-span-1">
+            <TextInput
+              name="episodes"
+              defaultValue={serial?.episodes ?? ""}
+              inputMode="numeric"
+            />
+          </Field>
+          <Field label="rating" className="col-span-1">
+            <TextInput
+              name="rating"
+              defaultValue={serial?.rating ?? ""}
+              inputMode="decimal"
+            />
+          </Field>
           <Field label="badge">
             <TextInput name="badge" defaultValue={serial?.badge ?? ""} />
           </Field>
 
-          <Select name="status" defaultValue={currentStatus}>
+          <Select
+            name="status"
+            defaultValue={currentStatus}
+            className="col-span-4"
+          >
             <SelectLabel className={LABEL_TEXT}>status</SelectLabel>
             <SelectButton className="mt-1 flex w-full rounded-sm border border-foreground/10 bg-foreground/5 px-2 py-2 text-sm font-normal" />
             <SelectContent className="mt-1 w-full animate-slide-down overflow-hidden rounded-lg border border-foreground/10 bg-foreground/5 text-sm font-normal backdrop-blur-2xl">
@@ -113,24 +111,29 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
           <GenresField
             name="genres"
             label="genres"
+            className="col-span-4"
             defaultValue={serial?.genres.map(({ genre }) => genre.name)}
           />
 
-          <div className="flex items-center gap-4">
-            <Field label="language">
-              <TextInput
-                name="language"
-                defaultValue={serial?.language.name ?? ""}
-              />
-            </Field>
-            <Field label="country">
-              <TextInput
-                name="country"
-                defaultValue={serial?.country?.name ?? ""}
-              />
-            </Field>
-          </div>
-
+          <Field label="language" className="col-span-2">
+            <TextInput
+              name="language"
+              defaultValue={serial?.language.name ?? ""}
+            />
+          </Field>
+          <Field label="country" className="col-span-2">
+            <TextInput
+              name="country"
+              defaultValue={serial?.country?.name ?? ""}
+            />
+          </Field>
+          <Field label="price">
+            <TextInput
+              name="purchasePrice"
+              placeholder="Blank If Free"
+              defaultValue={serial?.purchasePrice ?? ""}
+            />
+          </Field>
           <Field label="studio">
             <TextInput
               name="studio"
@@ -138,7 +141,7 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
             />
           </Field>
 
-          <fieldset className="rounded-xl border border-foreground/10 p-4">
+          <fieldset className="rounded-xl border border-foreground/10 p-4 col-span-4">
             <legend className="sr-only">Media</legend>
             <p className={LABEL_TEXT} aria-hidden="true">
               media
@@ -150,7 +153,6 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
                 hint="2:3 · JPG/PNG"
                 aspectClassName="aspect-[2/3]"
                 defaultUrl={serial?.image}
-                removable={false}
               />
               <ImageUpload
                 name="backdrop"
@@ -161,21 +163,16 @@ export const EditSeries = async ({ searchParams }: EditSeriesProps) => {
               />
             </div>
           </fieldset>
-
-          <div className="flex gap-4">
-            <div
-              //   type="submit"
-              className="flex-3 rounded-lg bg-red-600 px-4 py-3 font-semibold text-black outline-0 transition hover:bg-red-500 focus-visible:ring-2 focus-visible:ring-red-400"
-            >
-              Save changes
-            </div>
-            <Link
-              href="?"
-              className="flex-1 rounded-lg border border-foreground/10 px-4 py-3 text-center text-foreground/60 outline-0 transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground/40"
-            >
-              Cancel
-            </Link>
-          </div>
+          <CastsField defaultValue={serial?.cast} />
+          <SubmitButton className="col-span-3 rounded-lg bg-destructive/60 px-4 py-3 font-semibold text-background outline-0 transition hover:bg-destructive/50 focus-visible:ring-2 focus-visible:ring-destructive/40">
+            Save changes
+          </SubmitButton>
+          <Link
+            href="/admin/serials"
+            className="col-span-1 rounded-lg border border-foreground/10 px-4 py-3 text-center text-foreground/60 outline-0 transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground/40"
+          >
+            Cancel
+          </Link>
         </form>
       </div>
     </div>

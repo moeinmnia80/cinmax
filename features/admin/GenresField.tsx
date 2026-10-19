@@ -1,9 +1,13 @@
 "use client";
 
+import { Genre } from "@/types/types";
+import { fetchData } from "@/lib/axios";
 import { Plus, X } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ComponentProps, useEffect, useRef, useState } from "react";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
-interface GenresFieldProps {
+interface GenresFieldProps extends ComponentProps<"div"> {
   name: string;
   label: string;
   defaultValue?: readonly string[];
@@ -12,28 +16,35 @@ interface GenresFieldProps {
 export const GenresField = ({
   name,
   label,
+  className,
   defaultValue = [],
 }: GenresFieldProps) => {
-  const labelId = useId();
+  const domNode = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const skipBlurRef = useRef(false);
 
   const [genres, setGenres] = useState<string[]>(() => [...defaultValue]);
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState("");
+
+  const { data } = useQuery<{ success: boolean; genres: Genre[] }>({
+    queryKey: ["genres"],
+    queryFn: () => fetchData("/api/genres"),
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    enabled: adding,
+  });
+
+  useClickOutside({ domNode, setState: setAdding });
 
   useEffect(() => {
     if (adding) inputRef.current?.focus();
   }, [adding]);
 
   const openInput = () => {
-    skipBlurRef.current = false;
     setAdding(true);
   };
 
   const finish = (save: boolean) => {
-    skipBlurRef.current = true;
-
     const value = draft.trim();
     const exists = genres.some((g) => g.toLowerCase() === value.toLowerCase());
     if (save && value && !exists) setGenres((prev) => [...prev, value]);
@@ -46,30 +57,25 @@ export const GenresField = ({
     setGenres((prev) => prev.filter((g) => g !== genre));
 
   return (
-    <div role="group" aria-labelledby={labelId}>
-      <span
-        id={labelId}
-        className="block text-xs tracking-widest uppercase text-foreground/60"
-      >
+    <div role="group" className={className}>
+      <span className="block text-xs tracking-widest uppercase text-foreground/60">
         {label}
       </span>
-
       {genres.map((genre) => (
         <input key={genre} type="hidden" name={name} value={genre} />
       ))}
-
       <ul className="mt-2 flex flex-wrap items-center gap-2">
         {genres.map((genre) => (
           <li
             key={genre}
-            className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/10 py-1 pr-2 pl-3 text-sm text-red-500"
+            className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 bg-destructive/10 py-1 pr-2 pl-3 text-sm text-destructive"
           >
             {genre}
             <button
               type="button"
               onClick={() => remove(genre)}
               aria-label={`Remove ${genre}`}
-              className="rounded-full outline-0 transition hover:text-red-400 focus-visible:ring-1 focus-visible:ring-red-500"
+              className="rounded-full outline-0 transition hover:text-destructive/40 focus-visible:ring-1 focus-visible:ring-destructive/50"
             >
               <X className="size-3.5" aria-hidden="true" />
             </button>
@@ -78,7 +84,7 @@ export const GenresField = ({
 
         <li>
           {adding ? (
-            <div className="relative">
+            <div className="relative" ref={domNode}>
               <input
                 ref={inputRef}
                 type="text"
@@ -87,12 +93,9 @@ export const GenresField = ({
                 placeholder="Genre"
                 aria-label="New genre"
                 onChange={(e) => setDraft(e.target.value)}
-                onBlur={() => {
-                  if (!skipBlurRef.current) finish(true);
-                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // don't submit the whole form
+                    e.preventDefault();
                     finish(true);
                   } else if (e.key === "Escape") {
                     e.preventDefault();
@@ -101,12 +104,21 @@ export const GenresField = ({
                 }}
                 className="w-28 rounded-full border border-dashed border-foreground/30 bg-transparent px-3 py-1 text-sm text-foreground outline-0 placeholder:text-foreground/30 focus:border-foreground/50"
               />
-              <button type="button">
-                <Plus
-                  size={15}
-                  className="absolute right-2 top-1/2 -translate-y-1/2"
-                />
-              </button>
+              {draft && (
+                <ul className="absolute top-full left-0 w-30 max-h-24 bg-foreground/5 backdrop-blur-2xl rounded-md mt-1 overflow-auto">
+                  {data?.genres.map(
+                    (genre) =>
+                      genre.name.toLowerCase().includes(draft) && (
+                        <li
+                          key={genre.id}
+                          className="flex items-center h-8 hover:bg-foreground/15 px-3"
+                        >
+                          {genre.name}
+                        </li>
+                      ),
+                  )}
+                </ul>
+              )}
             </div>
           ) : (
             <button

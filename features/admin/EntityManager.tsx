@@ -1,18 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-// import {
-//   Table,
-//   TableRow,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-// } from "@/components/ui/Table";
 
 interface EntityItem {
   id: number;
@@ -32,15 +24,15 @@ interface EntityManagerProps {
 export const EntityManager = ({
   title,
   description,
-  items,
+  // items,
   withCode = false,
   onCreate,
-  onDelete,
+  // onDelete,
 }: EntityManagerProps) => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [isPending, startTransition] = useTransition();
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  // const [, setDeletingId] = useState<number | null>(null);
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,13 +44,13 @@ export const EntityManager = ({
     });
   };
 
-  const handleDelete = (id: number) => {
-    setDeletingId(id);
-    startTransition(async () => {
-      await onDelete(id);
-      setDeletingId(null);
-    });
-  };
+  // const handleDelete = (id: number) => {
+  //   setDeletingId(id);
+  //   startTransition(async () => {
+  //     await onDelete(id);
+  //     setDeletingId(null);
+  //   });
+  // };
 
   return (
     <div className="rounded-2xl border border-white/10 bg-card p-6 space-y-4">

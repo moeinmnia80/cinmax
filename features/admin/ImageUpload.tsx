@@ -119,6 +119,7 @@ export const ImageUpload = ({
               alt={`${label} preview`}
               width={200}
               height={200}
+              loading="eager"
               className="absolute inset-0 size-full object-cover"
             />
           ) : (
