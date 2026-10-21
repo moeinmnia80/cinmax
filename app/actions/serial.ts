@@ -129,79 +129,82 @@ export async function saveSerial(
     const poster = posterRes.value;
     const backdrop = backdropRes.value;
 
-    await db.$transaction(
-      async (tx) => {
-        const language = await tx.language.upsert({
-          where: { name: languageName },
-          update: {},
-          create: { name: languageName, code: languageCode },
-        });
-
-        let countryId: number | null = null;
-        if (countryCode) {
-          const country = await tx.country.upsert({
-            where: { code: countryCode },
-            update: {},
-            create: { code: countryCode, name: countryName },
-          });
-          countryId = country.id;
-        }
-
-        // const studioName = data.studio?.trim() ?? "";
-
-        // let studioId: number | null = null;
-        // if (studioName) {
-        //   const studio = await tx.studio.upsert({
-        //     where: { name: studioName },
-        //     update: {},
-        //     create: { name: studioName },
-        //   });
-        //   studioId = studio.id;
-        // }
-
-        const genreIds: number[] = [];
-        for (const name of genreNames) {
-          let genre = await tx.genre.findUnique({ where: { name } });
-          if (!genre) {
-            genre = await tx.genre.create({
-              data: { name, slug: generateSlug(name) },
-            });
-          }
-          genreIds.push(genre.id);
-        }
-
-        await tx.serial.create({
+    await db.$transaction(async (tx) => {
+      let language = await tx.language.findUnique({
+        where: { name: languageName },
+      });
+      if (!language) {
+        language = await tx.language.create({
           data: {
-            title: data.title,
-            slug,
-            description: data.description,
-            startYear: data.startYear,
-            endYear: data.endYear ?? null,
-            seasons: data.seasons,
-            episodes: data.episodes,
-            rating: data.rating,
-            badge: data.badge ?? null,
-            status: data.status,
-            image: poster.url,
-            backdrop: backdrop?.url ?? null,
-            purchasePrice: data.purchasePrice ?? null,
-            isPurchasable: (data.purchasePrice ?? 0) > 0,
-            durationMinutes: data.durationMinutes,
-
-            languageId: language.id,
-            countryId,
-            studioId: 1,
-
-            genres: {
-              create: genreIds.map((id) => ({
-                genre: { connect: { id } },
-              })),
-            },
+            name: languageName,
+            code: languageCode,
           },
         });
-      },
-      { maxWait: 10_000, timeout: 20_000 },
-    );
+      }
+
+      // let countryId: number | null = null;
+      // if (countryCode) {
+      //   const country = await tx.country.upsert({
+      //     where: { code: countryCode },
+      //     update: {},
+      //     create: { code: countryCode, name: countryName },
+      //   });
+      //   countryId = country.id;
+      // }
+
+      // const studioName = data.studio?.trim() ?? "";
+
+      // let studioId: number | null = null;
+      // if (studioName) {
+      //   const studio = await tx.studio.upsert({
+      //     where: { name: studioName },
+      //     update: {},
+      //     create: { name: studioName },
+      //   });
+      //   studioId = studio.id;
+      // }
+
+      const genreIds: number[] = [];
+      for (const name of genreNames) {
+        let genre = await tx.genre.findUnique({ where: { name } });
+        if (!genre) {
+          genre = await tx.genre.create({
+            data: { name, slug: generateSlug(name) },
+          });
+        }
+        genreIds.push(genre.id);
+      }
+
+      await tx.serial.create({
+        data: {
+          title: data.title,
+          slug,
+          description: data.description,
+          startYear: data.startYear,
+          endYear: data.endYear ?? null,
+          seasons: data.seasons,
+          episodes: data.episodes,
+          rating: data.rating,
+          badge: data.badge ?? null,
+          status: data.status,
+          image: poster.url,
+          backdrop: backdrop?.url ?? null,
+          purchasePrice: data.purchasePrice ?? null,
+          isPurchasable: (data.purchasePrice ?? 0) > 0,
+          durationMinutes: data.durationMinutes,
+
+          languageId: language.id,
+          countryId: 1,
+          studioId: 1,
+
+          genres: {
+            create: genreIds.map((id) => ({
+              genre: { connect: { id } },
+            })),
+          },
+        },
+      });
+    });
 
     revalidatePath("/admin/serials");
     return { success: true, message: "Serial saved successfully!" };
