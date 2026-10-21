@@ -147,7 +147,7 @@ export async function saveSerial(
           countryId = country.id;
         }
 
-        const studioName = data.studio?.trim() ?? "";
+        // const studioName = data.studio?.trim() ?? "";
 
         // let studioId: number | null = null;
         // if (studioName) {
@@ -190,7 +190,7 @@ export async function saveSerial(
 
             languageId: language.id,
             countryId,
-            studioId,
+            studioId: 1,
 
             genres: {
               create: genreIds.map((id) => ({
