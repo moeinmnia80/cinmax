@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { cookies } from "next/headers";
+import { revalidateTag } from "next/cache";
 
 import db from "@/lib/db";
 import { decrypt } from "@/lib/session";
@@ -51,6 +52,8 @@ export async function addCrew(
         create: { serialId: target.id, personId, role },
       });
     }
+    revalidateTag("serial-data", { expire: 0 });
+
     return { success: true };
   } catch (error) {
     console.error(error);
@@ -75,6 +78,8 @@ export async function removeCrew(
         where: { serialId: target.id, personId, role },
       });
     }
+
+    revalidateTag("serial-data", { expire: 0 });
     return { success: true };
   } catch (error) {
     console.error(error);

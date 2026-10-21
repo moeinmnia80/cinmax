@@ -1,5 +1,8 @@
-import { cn } from "@/utils";
+"use client";
+
 import { ComponentProps } from "react";
+
+import { cn } from "@/utils";
 
 export const LABEL_TEXT =
   "block text-xs tracking-widest uppercase text-foreground/60";

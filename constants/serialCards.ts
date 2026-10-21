@@ -24,6 +24,7 @@ export async function getSerialCards() {
     {
       label: "Ongoing",
       value: onGoingCount,
+      className: "text-destructive",
     },
     {
       label: "episodes",

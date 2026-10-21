@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { cookies } from "next/headers";
+import { revalidateTag } from "next/cache";
 
 import db from "@/lib/db";
 import { decrypt } from "@/lib/session";
@@ -59,6 +60,7 @@ export async function addCast(
         create: { serialId: target.id, personId, role },
       });
     }
+    revalidateTag("serial-data", { expire: 0 });
     return { success: true };
   } catch (error) {
     console.error(error);
@@ -82,6 +84,7 @@ export async function removeCast(
         where: { serialId: target.id, personId },
       });
     }
+    revalidateTag("serial-data", { expire: 0 });
     return { success: true };
   } catch (error) {
     console.error(error);

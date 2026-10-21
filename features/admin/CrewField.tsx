@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { ComponentProps, useId, useState, useTransition } from "react";
 import {
   X,
   Video,
@@ -11,17 +13,15 @@ import {
   UserPlus,
   Clapperboard,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { ComponentProps, useId, useState, useTransition } from "react";
 
 import { cn } from "@/utils";
 import { getData } from "@/lib/axios";
+import { Avatar } from "@/features/client";
 import useDebounce from "@/hooks/useDebounce";
-import { Person, PersonType } from "@/types/types";
+import { Person, SerialDetailCrew } from "@/types/types";
 import type { CastTarget } from "@/app/actions/cast";
 import { CREW_ROLES, CrewRole } from "@/constants/crew";
 import { addCrew, removeCrew } from "@/app/actions/crew";
-import { Avatar } from "./PersonAvatar";
 
 const ROLE_META: Record<
   CrewRole,
@@ -37,7 +37,7 @@ interface CrewFieldProps extends Omit<
   "defaultValue"
 > {
   target: CastTarget;
-  defaultValue?: { role: PersonType; person: Person }[];
+  defaultValue?: SerialDetailCrew[];
 }
 
 export const CrewField = ({
@@ -50,14 +50,14 @@ export const CrewField = ({
   const headingId = useId();
   const [isPending, startTransition] = useTransition();
 
-  const [role, setRole] = useState<CrewRole>("Director");
   const [search, setSearch] = useState("");
+  const [role, setRole] = useState<CrewRole>("Director");
   const [selected, setSelected] = useState<Person | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const debouncedSearch = useDebounce(search.trim(), 400);
 
-  const { data, isFetching } = useQuery<{
+  const { data, isFetching, refetch } = useQuery<{
     success: boolean;
     persons: Person[];
   }>({
@@ -98,6 +98,7 @@ export const CrewField = ({
       resetPerson();
       router.refresh();
     });
+    refetch();
   };
 
   const handleRemove = async (personId: number, crewRole: CrewRole) => {

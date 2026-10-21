@@ -1,10 +1,11 @@
 "use client";
 
-import { Genre } from "@/types/types";
-import { getData } from "@/lib/axios";
 import { Plus, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ComponentProps, useEffect, useRef, useState } from "react";
+
+import { Genre } from "@/types/types";
+import { getData } from "@/lib/axios";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
 interface GenresFieldProps extends ComponentProps<"div"> {

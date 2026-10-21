@@ -2,6 +2,7 @@ import "server-only";
 export interface AdminCardItem {
   label: string;
   value: PromiseSettledResult<number | string>;
+  className?: string;
 }
 
 interface AdminCardProps {
@@ -17,15 +18,19 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
           key={card.label}
           className="relative rounded-md border border-white/10 bg-card p-5 hover:border-foreground/40 transition-colors overflow-hidden group *:cursor-default"
         >
-          <p className="text-foreground/30 tracking-widest uppercase">
+          <p className="tracking-widest uppercase text-foreground/30">
             {card.label}
           </p>
           {card.value.status === "fulfilled" ? (
-            <p className="text-3xl font-black text-white">{card.value.value}</p>
+            <p
+              className={`relative text-3xl font-black z-10 ${card?.className ? card.className : "text-foreground"}`}
+            >
+              {card.value.value}
+            </p>
           ) : (
             "?"
           )}
-          <p className="absolute -right-3 -bottom-3 text-white/5 text-7xl font-bold group-hover:text-foreground/40 transition-all duration-200">
+          <p className="absolute -right-3 -bottom-3 text-foreground/5 text-7xl font-bold group-hover:text-foreground/15 transition-all duration-200">
             {card.label}
           </p>
         </div>

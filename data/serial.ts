@@ -1,8 +1,17 @@
 import { cacheLife, cacheTag } from "next/cache";
 
 import db from "@/lib/db";
+import { SerialDetail } from "@/types/types";
 
-export const getSerial = async (slug?: string) => {
+export interface SerialType extends Omit<
+  SerialDetail,
+  "rating" | "purchasePrice"
+> {
+  rating: number;
+  purchasePrice: string | null;
+}
+
+export const getSerial = async (slug?: string): Promise<SerialType | null> => {
   "use cache";
   cacheTag("serial-data");
   cacheLife("minutes");
@@ -16,7 +25,7 @@ export const getSerial = async (slug?: string) => {
       country: { select: { name: true } },
       genres: {
         select: {
-          genre: { select: { name: true, slug: true } },
+          genre: true,
         },
       },
       crew: {

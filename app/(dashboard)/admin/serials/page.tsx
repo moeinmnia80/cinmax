@@ -14,7 +14,7 @@ interface SerialPageProps {
   searchParams: Promise<{ search?: string; edit?: string }>;
 }
 
-const SerialsPage = async ({ searchParams }: SerialPageProps) => {
+const SerialsPage = ({ searchParams }: SerialPageProps) => {
   return (
     <div>
       <AdminHeader

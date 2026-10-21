@@ -1,48 +1,17 @@
 import Image from "next/image";
+import { connection } from "next/server";
 
 import db from "@/lib/db";
 
 import { SerialActions } from "./SerialAction";
 import { Row, Table, TBody, TD, THead } from "@/components/ui/Table";
 
-const getData = async (query: string) =>
-  db.serial.findMany({
-    where: {
-      title: { contains: query, mode: "insensitive" },
-    },
-    include: {
-      genres: {
-        include: {
-          genre: true,
-        },
-      },
-      country: true,
-      studio: true,
-      language: true,
-      images: true,
-      cast: {
-        include: {
-          person: true,
-        },
-      },
-      crew: {
-        include: {
-          person: true,
-        },
-      },
-      relatedMovies: {
-        include: {
-          movie: true,
-        },
-      },
-    },
-  });
-
 export const SerialTable = async ({
   searchParams,
 }: {
   searchParams: Promise<{ search?: string }>;
 }) => {
+  await connection();
   const resolvedSearchParams = await searchParams;
   const query = resolvedSearchParams?.search || "";
   const serials = await getData(query);
@@ -141,3 +110,21 @@ export const SerialTable = async ({
     </>
   );
 };
+
+async function getData(query: string) {
+  return db.serial.findMany({
+    where: {
+      title: { contains: query, mode: "insensitive" },
+    },
+    include: {
+      genres: {
+        include: {
+          genre: true,
+        },
+      },
+      country: true,
+      studio: true,
+      language: true,
+    },
+  });
+}

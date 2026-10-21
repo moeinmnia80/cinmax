@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
 export const s3 = new S3Client({
   forcePathStyle: true,
@@ -9,6 +13,8 @@ export const s3 = new S3Client({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
   },
+  maxAttempts: 3,
+  requestHandler: { requestTimeout: 15_000, connectionTimeout: 5_000 },
 });
 
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -34,4 +40,8 @@ export async function uploadPublicFile(
     url: publicUrl,
     key: key,
   };
+}
+
+export async function deleteFile(key: string) {
+  await s3.send(new DeleteObjectCommand({ Bucket: BUCKET_NAME, Key: key }));
 }

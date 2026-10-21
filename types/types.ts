@@ -438,31 +438,31 @@ export interface MovieDetail extends Movie {
 }
 
 /** Full serial details page */
-export interface SerialDetailGenre extends SerialGenre {
+export interface SerialDetailGenre extends Partial<SerialGenre> {
   genre: Genre;
 }
 
-export interface SerialDetailCast extends SerialCast {
+export interface SerialDetailCast extends Partial<SerialCast> {
   person: Person;
 }
 
-export interface SerialDetailCrew extends SerialCrew {
+export interface SerialDetailCrew extends Partial<SerialCrew> {
   person: Person;
 }
 
-export interface SerialDetailRelatedMovie extends SerialRelatedMovie {
-  movie: Movie;
+export interface SerialDetailRelatedMovie extends Partial<SerialRelatedMovie> {
+  movie: Partial<Movie>;
 }
 
 export interface SerialDetail extends Serial {
-  language: Language;
-  country: Country | null;
-  studio: Studio | null;
-  genres: SerialDetailGenre[];
-  cast: SerialDetailCast[];
-  crew: SerialDetailCrew[];
-  images: SerialImage[];
-  relatedMovies: SerialDetailRelatedMovie[];
+  language?: Partial<Language>;
+  country?: Partial<Country> | null;
+  studio?: Partial<Studio> | null;
+  genres?: SerialDetailGenre[];
+  cast?: SerialDetailCast[];
+  crew?: SerialDetailCrew[];
+  images?: SerialImage[];
+  relatedMovies?: SerialDetailRelatedMovie[];
 }
 
 /** Person page with filmography */

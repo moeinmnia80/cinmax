@@ -7,33 +7,25 @@ import { ComponentProps, useId, useState, useTransition } from "react";
 
 import { cn } from "@/utils";
 import { getData } from "@/lib/axios";
-import { Person } from "@/types/types";
+import { Person, SerialDetailCast } from "@/types/types";
 import useDebounce from "@/hooks/useDebounce";
-import { Avatar } from "./PersonAvatar";
+import { CastRole, Avatar } from "@/features/client";
 import { addCast, removeCast, CastTarget } from "@/app/actions/cast";
 
-const ROLE_SUGGESTIONS = [
-  "Lead Actor",
-  "Lead Actress",
-  "Supporting Actor",
-  "Supporting Actress",
-  "Cameo",
-];
-
-interface CastsFieldProps extends Omit<
+interface CastFieldProps extends Omit<
   ComponentProps<"section">,
   "defaultValue"
 > {
   target: CastTarget;
-  defaultValue?: { role: string; person: Person }[];
+  defaultValue?: SerialDetailCast[];
 }
 
-export const CastsField = ({
+export const CastField = ({
   target,
   defaultValue = [],
   className,
   ...props
-}: CastsFieldProps) => {
+}: CastFieldProps) => {
   const router = useRouter();
   const headingId = useId();
   const [isPending, startTransition] = useTransition();
@@ -41,7 +33,6 @@ export const CastsField = ({
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Person | null>(null);
   const [role, setRole] = useState("");
-  const [error, setError] = useState<string | null>(null);
 
   const debouncedSearch = useDebounce(search.trim(), 400);
 
@@ -64,31 +55,39 @@ export const CastsField = ({
     setSearch("");
     setSelected(null);
     setRole("");
-    setError(null);
   };
 
-  const handleAdd = async () => {
-    if (!selected) return setError("Select a person first");
-    if (role.trim().length < 2)
-      return setError("Write the role (e.g. Lead Actor)");
+  const handleAdd = () => {
+    if (!selected) return;
+    // TODO: Add toast
+    if (role.trim().length < 2) return;
 
-    console.log(target, selected.id, role);
-
-    setError(null);
     startTransition(async () => {
       const res = await addCast({ target, personId: selected.id, role });
-      if (!res.success) return setError(res.error);
+      // TODO: Add Toast
+      if (!res.success) return;
       reset();
       router.refresh();
     });
   };
 
-  const handleRemove = async (personId: number) => {
+  const handleRemove = (personId: number) => {
     startTransition(async () => {
       const res = await removeCast(target, personId);
-      if (!res.success) return setError(res.error);
+      // TODO: Add Toast
+      if (!res.success) return;
       router.refresh();
     });
+  };
+
+  const handleRoleChange = (
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) => {
+    const value = e.target.value;
+    setRole(value);
+  };
+  const handleRoleClick = (suggestion: string) => {
+    setRole(suggestion);
   };
 
   return (
@@ -198,42 +197,11 @@ export const CastsField = ({
           )}
         </div>
 
-        {/* Role */}
-        <div className="space-y-2">
-          <input
-            type="text"
-            name="cast-role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            maxLength={50}
-            placeholder="Role (e.g. Lead Actor)"
-            className="w-full rounded-md border border-foreground/10 bg-transparent px-3 py-2 text-sm outline-none transition focus:border-foreground/30"
-          />
-          <div className="flex flex-wrap gap-1.5">
-            {ROLE_SUGGESTIONS.map((suggestion) => (
-              <button
-                key={suggestion}
-                type="button"
-                onClick={() => setRole(suggestion)}
-                className={cn(
-                  "rounded-full border px-2.5 py-0.5 text-xs transition-colors",
-                  role === suggestion
-                    ? "border-foreground/40 bg-foreground/10"
-                    : "border-foreground/10 text-foreground/60 hover:bg-foreground/5",
-                )}
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {error && (
-          <p role="alert" className="text-xs text-red-400">
-            {error}
-          </p>
-        )}
-
+        <CastRole
+          role={role}
+          onRoleChange={handleRoleChange}
+          onRoleClick={handleRoleClick}
+        />
         <button
           type="button"
           onClick={handleAdd}

@@ -21,3 +21,10 @@ export { RegisterPlans } from "@/features/auth/RegisterPlans";
 export { PlanOption } from "@/features/auth/RegisterPlanOption";
 export { RegisterAccount } from "@/features/auth/RegisterAccount";
 export { RegisterStepIndicator } from "@/features/auth/RegisterStepIndicator";
+
+export { CastRole } from "@/features/admin/CastRole";
+export { CastField } from "@/features/admin/CastField";
+export { CrewField } from "@/features/admin/CrewField";
+export { Avatar } from "@/features/admin/PersonAvatar";
+export { ImageUpload } from "@/features/admin/ImageUpload";
+export { GenresField } from "@/features/admin/GenresField";

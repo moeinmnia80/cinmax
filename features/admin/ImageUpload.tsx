@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Plus, X } from "lucide-react";
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
-const ACCEPTED_TYPES = ["image/jpeg", "image/png"];
+const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_MB = 5;
 
 interface ImageUploadProps {
