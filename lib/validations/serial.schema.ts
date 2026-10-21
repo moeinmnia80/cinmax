@@ -66,7 +66,7 @@ export const serialSchema = z
       )
       .min(1, "Select at least one genre"),
 
-    durationMinutes: optionalNum,
+    durationMinutes: num.int(),
     purchasePrice: optionalNum,
   })
   .refine(
