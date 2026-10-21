@@ -99,7 +99,6 @@ export async function saveSerial(
     };
   }
 
-  const studioName = data.studio?.trim().toLowerCase() ?? "";
   const genreNames = [
     ...new Set(data.genres.map((g) => g.trim().toLowerCase()).filter(Boolean)),
   ];
@@ -148,16 +147,15 @@ export async function saveSerial(
           countryId = country.id;
         }
 
-        const studioName = data.studio?.trim() ?? ""; // keep casing, e.g. "SBS"
+        const studioName = data.studio?.trim() ?? "";
 
         let studioId: number | null = null;
         if (studioName) {
-          let studio = await tx.studio.findFirst({
-            where: { name: { equals: studioName, mode: "insensitive" } },
+          const studio = await tx.studio.upsert({
+            where: { name: studioName },
+            update: {},
+            create: { name: studioName },
           });
-          if (!studio) {
-            studio = await tx.studio.create({ data: { name: studioName } });
-          }
           studioId = studio.id;
         }
 
