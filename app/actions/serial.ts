@@ -9,6 +9,7 @@ import db from "@/lib/db";
 import { uploadPublicFile, deleteFile } from "@/lib/s3";
 import { serialSchema } from "@/lib/validations/serial.schema";
 import type { SerialField } from "@/constants/serialFields";
+import { getCountryCode, getLanguageCode } from "@/lib/codeGenerator";
 
 type FieldErrors = Partial<Record<SerialField, string[]>>;
 
@@ -65,7 +66,6 @@ export async function saveSerial(
   }
   const slug = `${baseSlug}-${data.startYear}`;
 
-  // check BEFORE uploading, otherwise we would overwrite another serial's images
   const exists = await db.serial.findUnique({ where: { slug } });
   if (exists) {
     return {
@@ -75,6 +75,34 @@ export async function saveSerial(
     };
   }
 
+  const languageName = data.language.trim().toLowerCase();
+  const languageCode = getLanguageCode(languageName);
+  if (!languageCode) {
+    return {
+      success: false,
+      errors: {
+        language: ["Unknown language. Use the English name, e.g. korean."],
+      },
+      message: "Invalid language.",
+    };
+  }
+
+  const countryName = data.country?.trim().toLowerCase() ?? "";
+  const countryCode = countryName ? getCountryCode(countryName) : null;
+  if (countryName && !countryCode) {
+    return {
+      success: false,
+      errors: {
+        country: ["Unknown country. Use the English name, e.g. south korea."],
+      },
+      message: "Invalid country.",
+    };
+  }
+
+  const studioName = data.studio?.trim().toLowerCase() ?? "";
+  const genreNames = [
+    ...new Set(data.genres.map((g) => g.trim().toLowerCase()).filter(Boolean)),
+  ];
   const uploadedKeys: string[] = [];
 
   const upload = async (file: File, name: string, width: number) => {
@@ -84,7 +112,7 @@ export async function saveSerial(
       `serials/${slug}/${name}.webp`,
       "image/webp",
     );
-    uploadedKeys.push(result.key); // tracked the moment it succeeds
+    uploadedKeys.push(result.key);
     return result;
   };
 
@@ -104,47 +132,38 @@ export async function saveSerial(
 
     await db.$transaction(
       async (tx) => {
-        const languageName = data.language.trim().toLowerCase();
         const language = await tx.language.upsert({
           where: { name: languageName },
           update: {},
-          create: { name: languageName, code: languageName.slice(0, 2) },
+          create: { name: languageName, code: languageCode },
         });
 
         let countryId: number | null = null;
-        if (data.country) {
-          const countryName = data.country.trim();
+        if (countryCode) {
           const country = await tx.country.upsert({
-            where: { code: countryName.toUpperCase() },
+            where: { code: countryCode },
             update: {},
-            create: { code: countryName.toUpperCase(), name: countryName },
+            create: { code: countryCode, name: countryName },
           });
           countryId = country.id;
         }
 
         let studioId: number | null = null;
-        if (data.studio) {
+        if (studioName) {
           const studio = await tx.studio.upsert({
-            where: { name: data.studio },
+            where: { name: studioName },
             update: {},
-            create: { name: data.studio },
+            create: { name: studioName },
           });
           studioId = studio.id;
         }
 
-        // sequential on purpose: same transaction, and avoids duplicate-genre races
         const genreIds: number[] = [];
-        for (const rawName of new Set(
-          data.genres.map((g) => g.trim().toLowerCase()),
-        )) {
-          let genre = await tx.genre.findUnique({ where: { name: rawName } });
-
+        for (const name of genreNames) {
+          let genre = await tx.genre.findUnique({ where: { name } });
           if (!genre) {
             genre = await tx.genre.create({
-              data: {
-                name: rawName,
-                slug: `${generateSlug(rawName)}-${Date.now()}`,
-              },
+              data: { name, slug: generateSlug(name) },
             });
           }
           genreIds.push(genre.id);
