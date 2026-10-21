@@ -149,15 +149,15 @@ export async function saveSerial(
 
         const studioName = data.studio?.trim() ?? "";
 
-        let studioId: number | null = null;
-        if (studioName) {
-          const studio = await tx.studio.upsert({
-            where: { name: studioName },
-            update: {},
-            create: { name: studioName },
-          });
-          studioId = studio.id;
-        }
+        // let studioId: number | null = null;
+        // if (studioName) {
+        //   const studio = await tx.studio.upsert({
+        //     where: { name: studioName },
+        //     update: {},
+        //     create: { name: studioName },
+        //   });
+        //   studioId = studio.id;
+        // }
 
         const genreIds: number[] = [];
         for (const name of genreNames) {
