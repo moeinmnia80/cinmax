@@ -148,13 +148,16 @@ export async function saveSerial(
           countryId = country.id;
         }
 
+        const studioName = data.studio?.trim() ?? ""; // keep casing, e.g. "SBS"
+
         let studioId: number | null = null;
         if (studioName) {
-          const studio = await tx.studio.upsert({
-            where: { name: studioName },
-            update: {},
-            create: { name: studioName },
+          let studio = await tx.studio.findFirst({
+            where: { name: { equals: studioName, mode: "insensitive" } },
           });
+          if (!studio) {
+            studio = await tx.studio.create({ data: { name: studioName } });
+          }
           studioId = studio.id;
         }
 
