@@ -61,7 +61,6 @@ export const SerialTableSkeleton = async () => {
               </TD>
               <TD className="flex-1 flex items-center gap-1">
                 <span className="w-8.5 h-5 bg-gray-200/20 animate-pulse rounded-sm" />
-                <span className="w-7.5 h-5 bg-gray-200/20 animate-pulse rounded-sm" />
               </TD>
             </Row>
           ))}

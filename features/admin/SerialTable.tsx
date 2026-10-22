@@ -3,7 +3,7 @@ import { connection } from "next/server";
 
 import { formatYears } from "@/utils";
 import { SerialStatus } from "@/types/types";
-import { SerialActions } from "./SerialAction";
+import { SerialEditButton } from "@/features/server";
 import { getSerialWithQuery } from "@/data/serial";
 import { COLUMNS, STATUS_STYLES } from "@/constants/serials";
 import { Row, Table, TBody, TD, THead } from "@/components/ui/Table";
@@ -111,7 +111,7 @@ export const SerialTable = async ({
               </TD>
 
               <TD className="flex flex-1 items-center">
-                <SerialActions serialId={serial.id} slug={serial.slug} />
+                <SerialEditButton slug={serial.slug} />
               </TD>
             </Row>
           ))
