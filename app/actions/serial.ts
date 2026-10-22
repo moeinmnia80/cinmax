@@ -142,27 +142,27 @@ export async function saveSerial(
         });
       }
 
-      // let countryId: number | null = null;
-      // if (countryCode) {
-      //   const country = await tx.country.upsert({
-      //     where: { code: countryCode },
-      //     update: {},
-      //     create: { code: countryCode, name: countryName },
-      //   });
-      //   countryId = country.id;
-      // }
+      let countryId: number | null = null;
+      if (countryCode) {
+        const country = await tx.country.upsert({
+          where: { code: countryCode },
+          update: {},
+          create: { code: countryCode, name: countryName },
+        });
+        countryId = country.id;
+      }
 
-      // const studioName = data.studio?.trim() ?? "";
+      const studioName = data.studio?.trim() ?? "";
 
-      // let studioId: number | null = null;
-      // if (studioName) {
-      //   const studio = await tx.studio.upsert({
-      //     where: { name: studioName },
-      //     update: {},
-      //     create: { name: studioName },
-      //   });
-      //   studioId = studio.id;
-      // }
+      let studioId: number | null = null;
+      if (studioName) {
+        const studio = await tx.studio.upsert({
+          where: { name: studioName },
+          update: {},
+          create: { name: studioName },
+        });
+        studioId = studio.id;
+      }
 
       const genreIds: number[] = [];
       for (const name of genreNames) {
@@ -194,8 +194,8 @@ export async function saveSerial(
           durationMinutes: data.durationMinutes,
 
           languageId: language.id,
-          countryId: 1,
-          studioId: 1,
+          countryId,
+          studioId,
 
           genres: {
             create: genreIds.map((id) => ({
