@@ -2,9 +2,9 @@ import { use } from "react";
 import Image from "next/image";
 import { Star } from "lucide-react";
 
-import { Serial } from "@/types/types";
+import { DashboardSerial } from "@/data/dashboard";
 
-export const SerialList = ({ data }: { data: Promise<Serial[]> }) => {
+export const SerialList = ({ data }: { data: Promise<DashboardSerial[]> }) => {
   const serials = use(data);
   return (
     <section

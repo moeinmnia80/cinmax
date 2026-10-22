@@ -1,44 +1,32 @@
 import "server-only";
 import { Suspense } from "react";
 
-import db from "@/lib/db";
-import { MovieList } from "./MovieList";
-import { SerialList } from "./SerialList";
-import { cacheLife, cacheTag } from "next/cache";
-import { AdminBoxSkeleton } from "./AdminBoxSkeleton";
-import { FeaturedItemsList } from "./FeaturedItemsList";
+import {
+  MovieList,
+  SerialList,
+  AdminBoxSkeleton,
+  FeaturedItemsList,
+} from "@/features/server";
+import {
+  getLastMovies,
+  getLastSerials,
+  getFeaturedItems,
+} from "@/data/dashboard";
 
-export const AdminBox = async () => {
-  "use cache";
-  cacheTag("dashboard-boxes");
-  cacheLife("hours");
-
-  const moviesPromise = db.movie.findMany({
-    orderBy: { createdAt: "asc" },
-    take: 5,
-    skip: 0,
-  });
-
-  const serialsPromise = db.serial.findMany({
-    orderBy: { createdAt: "asc" },
-    take: 5,
-    skip: 0,
-  });
-
-  const featuredItemsPromise = db.featuredItem.findMany({
-    include: { movie: true, serial: true },
-  });
-
+export const AdminBox = () => {
+  const movies = getLastMovies();
+  const serials = getLastSerials();
+  const featuredItems = getFeaturedItems();
   return (
     <>
       <Suspense fallback={<AdminBoxSkeleton />}>
-        <MovieList data={moviesPromise} />
+        <MovieList data={movies} />
       </Suspense>
       <Suspense fallback={<AdminBoxSkeleton />}>
-        <SerialList data={serialsPromise} />
+        <SerialList data={serials} />
       </Suspense>
       <Suspense fallback={<AdminBoxSkeleton />}>
-        <FeaturedItemsList data={featuredItemsPromise} />
+        <FeaturedItemsList data={featuredItems} />
       </Suspense>
     </>
   );

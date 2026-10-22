@@ -28,3 +28,7 @@ export { CrewField } from "@/features/admin/CrewField";
 export { Avatar } from "@/features/admin/PersonAvatar";
 export { ImageUpload } from "@/features/admin/ImageUpload";
 export { GenresField } from "@/features/admin/GenresField";
+
+export { EditForm } from "@/features/admin/EditForm";
+export { EditFormActions } from "@/features/admin/EditFormAction";
+export { DeleteSerialDialog } from "@/features/admin/DeleteSerialDialog";

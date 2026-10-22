@@ -6,7 +6,7 @@ import { useFormStatus } from "react-dom";
 import { CheckCircle2, CircleAlert, Loader2, Save } from "lucide-react";
 
 import { deleteSerial } from "@/app/actions/serial";
-import { DeleteSerialDialog } from "./DeleteSerialDialog";
+import { DeleteSerialDialog } from "@/features/client";
 
 interface EditFormActionsProps {
   serialId?: string | number;

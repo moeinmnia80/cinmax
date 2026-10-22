@@ -1,11 +1,11 @@
 import { use } from "react";
 import Image from "next/image";
-
-import { type FeaturedItem } from "@/types/types";
 import { Star } from "lucide-react";
 
+import { DashboardFeatured } from "@/data/dashboard";
+
 interface FeaturedItemsListProps {
-  data: Promise<FeaturedItem[]>;
+  data: Promise<DashboardFeatured[]>;
 }
 
 export const FeaturedItemsList = ({ data }: FeaturedItemsListProps) => {

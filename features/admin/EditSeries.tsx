@@ -1,5 +1,5 @@
 import { getSerial } from "@/data/serial";
-import { EditForm } from "./EditForm";
+import { EditForm } from "@/features/client";
 
 interface EditSeriesProps {
   searchParams: Promise<{ edit?: string }>;

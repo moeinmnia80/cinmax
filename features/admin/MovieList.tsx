@@ -2,19 +2,15 @@ import { use } from "react";
 import Image from "next/image";
 import { Star } from "lucide-react";
 
-import { Movie } from "@/types/types";
+import { DashboardMovie } from "@/data/dashboard";
 
-export const MovieList = ({ data }: { data: Promise<Movie[]> }) => {
+export const MovieList = ({ data }: { data: Promise<DashboardMovie[]> }) => {
   const movies = use(data);
+
   return (
-    <section
-      className="bg-foreground/5 rounded-md border border-foreground/10 animate-scale-in"
-      aria-labelledby="serials"
-    >
+    <section className="bg-foreground/5 rounded-md border border-foreground/10 animate-scale-in">
       <div className="flex items-center justify-between px-4 py-5 border-b border-foreground/10">
-        <h2 id="serials" className="uppercase">
-          movies
-        </h2>
+        <h2 className="uppercase">movies</h2>
         <p className="text-foreground/20 tracking-widest">Last 5 movies</p>
       </div>
       <div className="flex flex-col gap-4 px-4 py-5">

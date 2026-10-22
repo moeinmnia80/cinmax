@@ -12,6 +12,7 @@ import {
   CrewField,
   ImageUpload,
   GenresField,
+  EditFormActions,
 } from "@/features/client";
 import {
   Select,
@@ -20,7 +21,6 @@ import {
   SelectButton,
   SelectContent,
 } from "@/components/ui/Select";
-import { EditFormActions } from "./EditFormAction";
 
 const initialState = {
   errors: {},
