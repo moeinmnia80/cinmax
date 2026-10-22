@@ -1,19 +1,17 @@
 "use client";
 
-import { Link } from "lucide-react";
 import { useActionState } from "react";
 
 import { SerialType } from "@/data/serial";
 import { SerialStatus } from "@/types/types";
-import { STATUS_OPTIONS } from "@/constants/seriesStatus";
-import { deleteSerial, saveSerial } from "@/app/actions/serial";
+import { saveSerial } from "@/app/actions/serial";
+import { STATUS_OPTIONS } from "@/constants/serials";
 import { CONTROL, Field, LABEL_TEXT, TextInput } from "@/components/Form";
 import {
   CastField,
   CrewField,
   ImageUpload,
   GenresField,
-  SubmitButton,
 } from "@/features/client";
 import {
   Select,
@@ -22,6 +20,7 @@ import {
   SelectButton,
   SelectContent,
 } from "@/components/ui/Select";
+import { EditFormActions } from "./EditFormAction";
 
 const initialState = {
   errors: {},
@@ -37,7 +36,6 @@ export const EditForm = ({
   serial: SerialType | null;
 }) => {
   const [state, formAction] = useActionState(saveSerial, initialState);
-  console.log(state);
 
   const currentStatus =
     STATUS_OPTIONS.find(
@@ -50,10 +48,11 @@ export const EditForm = ({
       action={formAction}
       className="mt-5 grid grid-cols-4 gap-4"
     >
-      <Field label="title">
+      <Field label="title" error={state.errors?.title}>
         <TextInput name="title" defaultValue={serial?.title} />
       </Field>
-      <Field label="description">
+
+      <Field label="description" error={state.errors?.description}>
         <textarea
           name="description"
           rows={3}
@@ -61,14 +60,22 @@ export const EditForm = ({
           className={`${CONTROL} resize-none text-sm font-normal`}
         />
       </Field>
-      <Field label="start year" className="col-span-2">
+      <Field
+        label="start year"
+        className="col-span-2"
+        error={state.errors?.startYear}
+      >
         <TextInput
           name="startYear"
           defaultValue={serial?.startYear ?? ""}
           inputMode="numeric"
         />
       </Field>
-      <Field label="end year" className="col-span-2">
+      <Field
+        label="end year"
+        className="col-span-2"
+        error={state.errors?.endYear}
+      >
         <TextInput
           name="endYear"
           defaultValue={serial?.endYear ?? ""}
@@ -76,21 +83,29 @@ export const EditForm = ({
           inputMode="numeric"
         />
       </Field>
-      <Field label="seasons" className="col-span-1">
+      <Field
+        label="seasons"
+        className="col-span-1"
+        error={state.errors?.seasons}
+      >
         <TextInput
           name="seasons"
           defaultValue={serial?.seasons ?? ""}
           inputMode="numeric"
         />
       </Field>
-      <Field label="episodes" className="col-span-1">
+      <Field
+        label="episodes"
+        className="col-span-1"
+        error={state.errors?.episodes}
+      >
         <TextInput
           name="episodes"
           defaultValue={serial?.episodes ?? ""}
           inputMode="numeric"
         />
       </Field>
-      <Field label="rating" className="col-span-1">
+      <Field label="rating" className="col-span-1" error={state.errors?.rating}>
         <TextInput
           name="rating"
           defaultValue={serial?.rating ?? ""}
@@ -104,7 +119,7 @@ export const EditForm = ({
           inputMode="numeric"
         />
       </Field>
-      <Field label="badge">
+      <Field label="badge" error={state.errors?.badge}>
         <TextInput name="badge" defaultValue={serial?.badge ?? ""} />
       </Field>
 
@@ -131,23 +146,31 @@ export const EditForm = ({
         defaultValue={(serial?.genres || []).map(({ genre }) => genre.name)}
       />
 
-      <Field label="language" className="col-span-2">
+      <Field
+        label="language"
+        className="col-span-2"
+        error={state.errors?.language}
+      >
         <TextInput
           name="language"
           defaultValue={serial?.language?.name ?? ""}
         />
       </Field>
-      <Field label="country" className="col-span-2">
+      <Field
+        label="country"
+        className="col-span-2"
+        error={state.errors?.country}
+      >
         <TextInput name="country" defaultValue={serial?.country?.name ?? ""} />
       </Field>
-      <Field label="price">
+      <Field label="price" error={state.errors?.purchasePrice}>
         <TextInput
           name="purchasePrice"
           placeholder="Blank If Free"
           defaultValue={serial?.purchasePrice ?? ""}
         />
       </Field>
-      <Field label="studio">
+      <Field label="studio" error={state.errors?.studio}>
         <TextInput name="studio" defaultValue={serial?.studio?.name ?? ""} />
       </Field>
 
@@ -185,24 +208,12 @@ export const EditForm = ({
           />
         </>
       )}
-      <SubmitButton className="col-span-3 rounded-lg bg-destructive/60 px-4 py-3 font-semibold text-background outline-0 transition hover:bg-destructive/50 focus-visible:ring-2 focus-visible:ring-destructive/40">
-        Save changes
-      </SubmitButton>
-      {serial?.id && (
-        <SubmitButton
-          formAction={deleteSerial}
-          formNoValidate
-          className="col-span-1 ... bg-red-600/60"
-        >
-          Delete
-        </SubmitButton>
-      )}
-      <Link
-        href="/admin/serials"
-        className="col-span-1 rounded-lg border border-foreground/10 px-4 py-3 text-center text-foreground/60 outline-0 transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-foreground/40"
-      >
-        Cancel
-      </Link>
+      <EditFormActions
+        serialId={serial?.id}
+        title={serial?.title}
+        message={state.message}
+        success={state.success}
+      />
     </form>
   );
 };

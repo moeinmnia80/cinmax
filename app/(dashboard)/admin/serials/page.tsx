@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
+import { getSerialCards } from "@/data/serial";
 import { AdminCard } from "@/features/admin/AdminCard";
-import { getSerialCards } from "@/constants/serialCards";
 import { EditSeries } from "@/features/admin/EditSeries";
 import { SerialTable } from "@/features/admin/SerialTable";
 import { AdminHeader } from "@/features/admin/AdminHeader";

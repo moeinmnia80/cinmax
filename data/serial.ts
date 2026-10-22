@@ -53,3 +53,60 @@ export const getSerial = async (slug?: string): Promise<SerialType | null> => {
     purchasePrice: serial.purchasePrice?.toString() ?? null,
   };
 };
+
+export async function getSerialWithQuery(query: string) {
+  return db.serial.findMany({
+    where: query
+      ? { title: { contains: query, mode: "insensitive" } }
+      : undefined,
+    orderBy: { updatedAt: "desc" },
+    include: {
+      genres: {
+        include: {
+          genre: true,
+        },
+      },
+      country: true,
+      studio: true,
+      language: true,
+    },
+  });
+}
+
+export async function getSerialCards() {
+  "use cache";
+  cacheTag("serial-cards");
+  cacheLife("hours");
+
+  const [serialCount, onGoingCount, episodeCount] = await Promise.allSettled([
+    db.serial.count(),
+    db.serial.count({ where: { status: "Ongoing" } }),
+    db.serial.aggregate({
+      _sum: {
+        episodes: true,
+      },
+    }),
+  ]);
+
+  return [
+    {
+      label: "Total",
+      value: serialCount,
+    },
+    {
+      label: "Ongoing",
+      value: onGoingCount,
+      className: "text-destructive",
+    },
+    {
+      label: "episodes",
+      value:
+        episodeCount.status === "fulfilled"
+          ? {
+              status: "fulfilled" as const,
+              value: episodeCount.value._sum.episodes ?? 0,
+            }
+          : episodeCount,
+    },
+  ];
+}

@@ -1,10 +1,24 @@
 import Image from "next/image";
 import { connection } from "next/server";
 
-import db from "@/lib/db";
-
+import { formatYears } from "@/utils";
+import { SerialStatus } from "@/types/types";
 import { SerialActions } from "./SerialAction";
+import { getSerialWithQuery } from "@/data/serial";
+import { COLUMNS, STATUS_STYLES } from "@/constants/serials";
 import { Row, Table, TBody, TD, THead } from "@/components/ui/Table";
+
+const StatusBadge = ({ status }: { status: SerialStatus }) => {
+  const { badge, dot } = STATUS_STYLES[status];
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium ${badge}`}
+    >
+      <span className={`size-1.5 rounded-full ${dot}`} aria-hidden="true" />
+      {status}
+    </span>
+  );
+};
 
 export const SerialTable = async ({
   searchParams,
@@ -12,119 +26,103 @@ export const SerialTable = async ({
   searchParams: Promise<{ search?: string }>;
 }) => {
   await connection();
-  const resolvedSearchParams = await searchParams;
-  const query = resolvedSearchParams?.search || "";
-  const serials = await getData(query);
+  const { search } = await searchParams;
+  const query = search?.trim() ?? "";
+  const serials = await getSerialWithQuery(query);
 
   return (
-    <>
-      <Table className="animate-slide-up">
-        <THead className="text-sm border-b border-foreground/10">
-          <Row className="flex py-2">
-            <TD className="flex-2 ps-3">TITLE</TD>
-            <TD className="flex-1">YEARS</TD>
-            <TD className="flex-1">SEASONS</TD>
-            <TD className="flex-1">EPISODES</TD>
-            <TD className="flex-2">GENRES</TD>
-            <TD className="flex-1">IMDB</TD>
-            <TD className="flex-1">STATUS</TD>
-            <TD className="flex-1">ACTIONS</TD>
-          </Row>
-        </THead>
-        <TBody>
-          {serials.length ? (
-            serials.map((serial) => (
-              <Row
-                key={serial.id}
-                className="flex text-foreground/20 text-sm border-b border-foreground/10 last:border-0 py-2"
-              >
-                <TD className="ps-3 flex-2 flex items-center gap-2">
-                  <Image
-                    src={serial.image}
-                    alt={serial.title}
-                    width={200}
-                    height={200}
-                    loading="eager"
-                    className="max-w-14 aspect-3/4 rounded-xs"
-                  />
-                  <div>
-                    <p className="text-foreground">{serial.title}</p>
-                    <p>{serial.language.name}</p>
-                    <div className="flex items-center gap-1 text-xs">
-                      <span className="capitalize">
-                        {serial.studio?.name.split(" ")[0]}
-                      </span>
-                      <span className="mx-1">|</span>
-                      <span className="capitalize">{serial.country?.name}</span>
-                    </div>
-                  </div>
-                </TD>
-                <TD className="flex-1 flex items-center text-sm">
-                  {serial.startYear}
-                  {serial.endYear ? ` - ${serial.endYear}` : "- Present"}
-                </TD>
-                <TD className="flex-1 flex items-center text-foreground">
-                  {serial.seasons}
-                </TD>
-                <TD className="flex-1 flex items-center text-foreground">
-                  {serial.episodes}
-                </TD>
-                <TD className="flex-2 flex items-center gap-1">
-                  {serial.genres.map((genre) => (
-                    <span
-                      key={genre.genreId}
-                      className="bg-foreground/5 px-1 rounded-sm"
-                    >
-                      {genre.genre.name}
+    <Table className="animate-slide-up">
+      <THead className="border-b border-foreground/10 text-xs tracking-wider uppercase text-foreground/60">
+        <Row className="flex py-2">
+          {COLUMNS.map(({ label, className }) => (
+            <TD key={label} className={className}>
+              {label}
+            </TD>
+          ))}
+        </Row>
+      </THead>
+
+      <TBody>
+        {serials.length ? (
+          serials.map((serial) => (
+            <Row
+              key={serial.id}
+              className="flex border-b border-foreground/10 py-2 text-sm text-foreground/50 last:border-0"
+            >
+              <TD className="flex flex-2 items-center gap-3 ps-3">
+                <Image
+                  src={serial.image}
+                  alt={`${serial.title} poster`}
+                  width={56}
+                  height={75}
+                  sizes="56px"
+                  className="aspect-3/4 w-14 shrink-0 rounded-xs object-cover"
+                />
+                <div className="min-w-0">
+                  <p className="truncate font-medium text-foreground">
+                    {serial.title}
+                  </p>
+                  <p>{serial.language.name}</p>
+                  <p className="flex items-center gap-1.5 text-xs">
+                    {serial.studio && (
+                      <>
+                        <span className="max-w-28 truncate">
+                          {serial.studio.name}
+                        </span>
+                        <span aria-hidden="true">·</span>
+                      </>
+                    )}
+                    <span className="truncate">
+                      {serial.country?.name ?? "—"}
                     </span>
-                  ))}
-                </TD>
-                <TD className="flex-1 flex items-center text-foreground">
-                  {serial.rating.toFixed(1)}
-                </TD>
-                <TD className="flex-1 flex items-center">
+                  </p>
+                </div>
+              </TD>
+
+              <TD className="flex flex-1 items-center">
+                {formatYears(serial.startYear, serial.endYear, serial.status)}
+              </TD>
+
+              <TD className="flex flex-1 items-center text-foreground">
+                {serial.seasons}
+              </TD>
+
+              <TD className="flex flex-1 items-center text-foreground">
+                {serial.episodes}
+              </TD>
+
+              <TD className="flex flex-2 flex-wrap content-center items-center gap-1">
+                {serial.genres.map(({ genreId, genre }) => (
                   <span
-                    className={`flex items-center gap-1.5 rounded-md ${
-                      serial.status === "Ongoing"
-                        ? "text-green-400 bg-green-400/30 px-2 before:size-1.5 before:bg-green-400 before:rounded-full"
-                        : serial.status === "Ended"
-                          ? "text-foreground/60 bg-foreground/5 px-2 before:size-1.5 before:bg-foreground/60 before:rounded-full"
-                          : ""
-                    }`}
+                    key={genreId}
+                    className="rounded-sm bg-foreground/5 px-1.5 py-0.5 text-xs"
                   >
-                    {serial.status}
+                    {genre.name}
                   </span>
-                </TD>
-                <TD className="flex-1 flex items-center">
-                  <SerialActions serialId={serial.id} slug={serial.slug} />
-                </TD>
-              </Row>
-            ))
-          ) : (
-            <Row className="flex py-6 justify-center text-foreground/40 text-sm">
-              <TD className="w-full text-center">No serials found</TD>
+                ))}
+              </TD>
+
+              <TD className="flex flex-1 items-center text-foreground">
+                {serial.rating.toFixed(1)}
+              </TD>
+
+              <TD className="flex flex-1 items-center">
+                <StatusBadge status={serial.status} />
+              </TD>
+
+              <TD className="flex flex-1 items-center">
+                <SerialActions serialId={serial.id} slug={serial.slug} />
+              </TD>
             </Row>
-          )}
-        </TBody>
-      </Table>
-    </>
+          ))
+        ) : (
+          <Row className="flex justify-center py-10 text-sm text-foreground/40">
+            <TD className="w-full text-center">
+              {query ? `No serials match “${query}”` : "No serials yet"}
+            </TD>
+          </Row>
+        )}
+      </TBody>
+    </Table>
   );
 };
-
-async function getData(query: string) {
-  return db.serial.findMany({
-    where: {
-      title: { contains: query, mode: "insensitive" },
-    },
-    include: {
-      genres: {
-        include: {
-          genre: true,
-        },
-      },
-      country: true,
-      studio: true,
-      language: true,
-    },
-  });
-}

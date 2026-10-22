@@ -11,12 +11,16 @@ export const CONTROL =
 
 interface FieldProps extends ComponentProps<"label"> {
   label: string;
+  error?: string[];
 }
 
-export const Field = ({ label, children, className }: FieldProps) => (
+export const Field = ({ label, children, className, error }: FieldProps) => (
   <label className={cn("block min-w-0 col-span-4", className)}>
     <span className={LABEL_TEXT}>{label}</span>
     {children}
+    {error?.length && (
+      <div className="text-xs font-normal text-destructive">{error[0]}</div>
+    )}
   </label>
 );
 
