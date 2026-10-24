@@ -5,3 +5,10 @@ export const ROLE_SUGGESTIONS = [
   "Supporting Actress",
   "Cameo",
 ];
+
+export const ROLE_PEOPLE = [
+  { id: "Actor", label: "actor" },
+  { id: "Director", label: "director" },
+  { id: "Writer", label: "writer" },
+  { id: "Producer", label: "producer" },
+];

@@ -13,7 +13,7 @@ export const FeaturedItemsList = ({ data }: FeaturedItemsListProps) => {
 
   return (
     <section
-      className="bg-foreground/5 rounded-md border border-foreground/10 animate-scale-in"
+      className="col-span-1 bg-foreground/5 rounded-md border border-foreground/10 animate-scale-in"
       aria-labelledby="featured-items"
     >
       <div className="flex items-center justify-between px-4 py-5 border-b border-foreground/10">
@@ -25,11 +25,11 @@ export const FeaturedItemsList = ({ data }: FeaturedItemsListProps) => {
       <div className="flex flex-col gap-4 px-4 py-5">
         {featuredItems.length ? (
           featuredItems.map((item) => {
-            const media = item.movie || item.serial;
+            const media = item?.movie || item?.serial;
             if (!media) return null;
 
             return (
-              <div key={item.id} className="flex gap-4">
+              <div key={item?.id} className="flex gap-4">
                 <div className="max-w-16 aspect-3/4 rounded-sm overflow-hidden">
                   <Image
                     src={media.image}
@@ -54,7 +54,7 @@ export const FeaturedItemsList = ({ data }: FeaturedItemsListProps) => {
                         size={15}
                         className="text-yellow-500 fill-yellow-500"
                       />
-                      {Number(media.rating).toFixed(1)}
+                      {media.rating}
                     </span>
                     <span className="text-foreground/25">
                       {"votesCount" in media ? media.votesCount : ""}

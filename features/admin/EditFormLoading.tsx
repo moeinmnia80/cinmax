@@ -1,13 +1,32 @@
-import { getSerial } from "@/data/serial";
-import { EditForm } from "@/features/client";
+import type { ComponentType } from "react";
 
-export const EditFormLoading = async ({
-  searchParams,
-}: {
+type EditFormLoaderProps<K extends string, TData> = {
   searchParams: Promise<{ edit?: string }>;
-}) => {
-  const { edit } = await searchParams;
-  const serial = await getSerial(edit);
-
-  return <EditForm edit={edit} serial={serial} />;
+  fetcher: (edit?: string) => Promise<TData>;
+  dataProp: K;
+  Form: ComponentType<{ edit?: string } & Record<K, TData>>;
 };
+
+export async function EditFormLoader<K extends string, TData>({
+  searchParams,
+  fetcher,
+  dataProp,
+  Form,
+}: EditFormLoaderProps<K, TData>) {
+  const { edit } = await searchParams;
+  const data = await fetcher(edit);
+
+  const formProps = { edit, [dataProp]: data } as { edit?: string } & Record<
+    K,
+    TData
+  >;
+
+  return (
+    <>
+      <p className="text-sm uppercase text-foreground/30">
+        {edit || "unsaved draft"}
+      </p>
+      <Form {...formProps} />
+    </>
+  );
+}

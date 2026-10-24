@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 import { SerialType } from "@/data/serial";
 import { SerialStatus } from "@/types/types";
-import { saveSerial } from "@/app/actions/serial";
+import { deleteSerial, saveSerial } from "@/app/actions/serial";
 import { STATUS_OPTIONS } from "@/constants/serials";
+import { useFormChanges } from "@/hooks/useFormChanges";
 import { CONTROL, Field, LABEL_TEXT, TextInput } from "@/components/Form";
 import {
   CastField,
@@ -28,6 +29,16 @@ const initialState = {
   success: false,
 };
 
+const REQUIRED_FIELDS = [
+  "title",
+  "description",
+  "startYear",
+  "language",
+  "country",
+  "studio",
+  "rating",
+] as const;
+
 export const EditForm = ({
   edit,
   serial,
@@ -35,7 +46,19 @@ export const EditForm = ({
   edit?: string;
   serial: SerialType | null;
 }) => {
-  const [state, formAction] = useActionState(saveSerial, initialState);
+  const [state, formAction, isPending] = useActionState(
+    saveSerial,
+    initialState,
+  );
+  const { formRef, dirty, valid, resetBaseline } =
+    useFormChanges(REQUIRED_FIELDS);
+
+  const isEdit = Boolean(serial?.id);
+  const canSave = valid && (!isEdit || dirty) && !isPending;
+
+  useEffect(() => {
+    if (state.success) resetBaseline();
+  }, [state, resetBaseline]);
 
   const currentStatus =
     STATUS_OPTIONS.find(
@@ -45,13 +68,13 @@ export const EditForm = ({
   return (
     <form
       key={edit}
+      ref={formRef}
       action={formAction}
       className="mt-5 grid grid-cols-4 gap-4"
     >
       <Field label="title" error={state.errors?.title}>
         <TextInput name="title" defaultValue={serial?.title} />
       </Field>
-
       <Field label="description" error={state.errors?.description}>
         <textarea
           name="description"
@@ -209,10 +232,12 @@ export const EditForm = ({
         </>
       )}
       <EditFormActions
-        serialId={serial?.id}
+        id={serial?.id}
         title={serial?.title}
+        deleteAction={deleteSerial}
         message={state.message}
         success={state.success}
+        canSave={canSave}
       />
     </form>
   );

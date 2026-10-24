@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export const SerialEditButton = ({ slug }: { slug: string }) => {
+export const EditButton = ({ slug }: { slug: string }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -21,7 +21,7 @@ export const SerialEditButton = ({ slug }: { slug: string }) => {
       href={query ? `${pathname}?${query}` : pathname}
       replace
       scroll={false}
-      aria-label={isEdit ? "Close editor" : "Edit serial"}
+      aria-label={isEdit ? "Close editor" : "Edit"}
       aria-pressed={isEdit}
       className="rounded bg-foreground/5 px-2 py-1 text-xs uppercase text-foreground/60 outline-0 transition hover:bg-foreground/10 focus-visible:ring-2 focus-visible:ring-foreground/40"
     >

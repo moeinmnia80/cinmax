@@ -215,6 +215,7 @@
     transition: background-color 5000s ease-in-out 0s;
   }
 }
+
 @keyframes fade-in {
   from {
     opacity: 0;

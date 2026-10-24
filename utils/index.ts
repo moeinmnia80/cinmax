@@ -28,3 +28,19 @@ export const formatYears = (
   if (end) return end === start ? `${start}` : `${start} – ${end}`;
   return status === "Ongoing" ? `${start} – Present` : `${start}`;
 };
+
+export const getInitialsName = (name: string) =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+export function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
+}

@@ -28,6 +28,7 @@ export const EditFormSkeleton = () => (
     aria-busy="true"
     aria-label="Loading form"
   >
+    <Bone className="h-3 w-32" />
     <FieldSkeleton className="col-span-4" />
     <FieldSkeleton className="col-span-4" controlClassName="h-20" />
 

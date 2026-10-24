@@ -43,7 +43,7 @@ export async function getFeaturedItems() {
   cacheTag("dashboard-boxes", "dashboard-featured");
   cacheLife("hours");
 
-  return db.featuredItem.findMany({
+  const featuredItems = await db.featuredItem.findMany({
     orderBy: [{ order: "asc" }],
     select: {
       id: true,
@@ -53,6 +53,31 @@ export async function getFeaturedItems() {
       movie: true,
       serial: true,
     },
+  });
+
+  return featuredItems.map((item) => {
+    const isMovie = item.type === "Movie" && item.movie;
+    const target = isMovie ? item.movie : item.serial;
+
+    if (!target) return null;
+
+    return {
+      ...item,
+      movie: item.movie
+        ? {
+            ...item.movie,
+            rating: Number(item.movie?.rating).toFixed(1),
+            purchasePrice: Number(item.movie?.purchasePrice),
+          }
+        : null,
+      serial: item.serial
+        ? {
+            ...item.serial,
+            rating: Number(item.serial?.rating).toFixed(1),
+            purchasePrice: Number(item.movie?.purchasePrice),
+          }
+        : null,
+    };
   });
 }
 

@@ -12,13 +12,13 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
   const cards = await fetchCards();
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-5 px-4 animate-slide-down">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 animate-slide-down">
       {cards.map((card) => (
         <div
           key={card.label}
-          className="relative rounded-md border border-white/10 bg-card p-5 hover:border-foreground/40 transition-colors overflow-hidden group *:cursor-default"
+          className="relative rounded-md border border-foreground/10 bg-card p-5 hover:border-foreground/40 transition-colors overflow-hidden group *:cursor-default"
         >
-          <p className="tracking-widest uppercase text-foreground/30">
+          <p className="text-xs tracking-widest uppercase text-foreground/30">
             {card.label}
           </p>
           {card.value.status === "fulfilled" ? (

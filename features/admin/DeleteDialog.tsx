@@ -6,12 +6,15 @@ import { Loader2, Trash2, TriangleAlert, X } from "lucide-react";
 
 import { deleteSerial } from "@/app/actions/serial";
 
+type FormAction = string | ((formData: FormData) => void | Promise<void>);
+
 interface DeleteSerialDialogProps {
   title?: string;
   triggerClassName?: string;
+  deleteAction: FormAction | undefined;
 }
 
-export const DeleteSerialDialog = ({
+export const DeleteDialog = ({
   title,
   triggerClassName,
 }: DeleteSerialDialogProps) => {

@@ -10,11 +10,13 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <AdminHeader title="Dashboard" desc="Overview of the Cinemax catalog." />
-      <Suspense fallback={<AdminCardSkeleton />}>
-        <AdminCard fetchCards={getCards} />
-      </Suspense>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-5 px-4">
-        <AdminBox />
+      <div className="flex flex-col gap-4 py-5 px-4">
+        <Suspense fallback={<AdminCardSkeleton />}>
+          <AdminCard fetchCards={getCards} />
+        </Suspense>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <AdminBox />
+        </div>
       </div>
     </div>
   );

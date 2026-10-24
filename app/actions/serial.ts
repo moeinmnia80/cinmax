@@ -8,6 +8,7 @@ import db from "@/lib/db";
 import sharp from "sharp";
 import { uploadPublicFile, deleteFile } from "@/lib/s3";
 
+import { generateSlug } from "@/utils";
 import type { SerialField } from "@/constants/serials";
 import { serialSchema } from "@/lib/validations/serial.schema";
 import { getCountryCode, getLanguageCode } from "@/lib/codeGenerator";
@@ -16,19 +17,10 @@ type FieldErrors = Partial<Record<SerialField, string[]>>;
 
 export type EditSerialForm = {
   errors?: FieldErrors;
-  message?: string;
-  success?: boolean;
+  message: string;
+  success: boolean;
 };
 
-function generateSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-");
-}
-
-// every image is resized and converted to real webp
 async function toWebp(file: File, maxWidth: number) {
   const input = Buffer.from(await file.arrayBuffer());
 
