@@ -31,4 +31,4 @@ export { GenresField } from "@/features/admin/GenresField";
 
 export { EditForm } from "@/features/admin/EditSerialForm";
 export { EditFormActions } from "@/features/admin/EditFormAction";
-export { DeleteSerialDialog } from "@/features/admin/DeleteDialog";
+export { DeleteDialog } from "@/features/admin/DeleteDialog";
