@@ -147,7 +147,6 @@ export const EditMovieForm = ({
           inputMode="decimal"
         />
       </Field>
-
       <Select
         name="category"
         defaultValue={currentCategory}
@@ -167,14 +166,12 @@ export const EditMovieForm = ({
           ))}
         </SelectContent>
       </Select>
-
       <GenresField
         name="genres"
         label="genres"
         className="col-span-4"
         defaultValue={(movie?.genres || []).map(({ genre }) => genre.name)}
       />
-
       <Field
         label="language"
         className="col-span-2"
@@ -204,7 +201,6 @@ export const EditMovieForm = ({
           defaultValue={movie?.recognition ?? ""}
         />
       </Field>
-
       <Field label="budget" className="col-span-2" error={state.errors?.budget}>
         <TextInput
           name="budget"
@@ -237,7 +233,6 @@ export const EditMovieForm = ({
           defaultValue={movie?.trailer ?? ""}
         />
       </Field>
-
       <fieldset className="bg-foreground/5 rounded-xl border border-foreground/10 p-4 col-span-4">
         <legend className="sr-only">Media</legend>
         <p className={LABEL_TEXT} aria-hidden="true">
@@ -260,7 +255,6 @@ export const EditMovieForm = ({
           />
         </div>
       </fieldset>
-
       {movie?.id && (
         <>
           <CastField
@@ -273,7 +267,6 @@ export const EditMovieForm = ({
           />
         </>
       )}
-
       <EditFormActions
         id={movie?.id}
         title={movie?.title}

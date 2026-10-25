@@ -9,6 +9,7 @@ export { HeroBackgroundSkeleton } from "@/features/hero/HeroBackgroundSkeleton";
 
 export { MovieList } from "@/features/admin/MovieList";
 export { SerialList } from "@/features/admin/SerialList";
+export { SerialTableSkeleton } from "@/features/admin/SerialTableSkeleton";
 
 export { EditButton } from "@/features/admin/EditButton";
 export { EditPeople } from "@/features/admin/EditPeople";

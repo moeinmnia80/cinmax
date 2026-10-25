@@ -32,7 +32,9 @@ export const MovieList = ({ data }: { data: Promise<DashboardMovie[]> }) => {
                   <h3 className="capitalize line-clamp-1 pr-10">
                     {movie.title}
                   </h3>
-                  <p className="text-foreground/20">{movie.budget}</p>
+                  <p className="text-foreground/20">
+                    {movie.budget?.toLocaleString()}
+                  </p>
                   <p>{movie.createdAt.toLocaleDateString()}</p>
                 </div>
                 <div className="flex flex-col">

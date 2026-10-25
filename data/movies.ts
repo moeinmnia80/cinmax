@@ -8,7 +8,13 @@ export async function getMovies() {
   cacheTag("movies");
   cacheLife("hours");
 
-  return db.movie.findMany();
+  const movies = await db.movie.findMany();
+
+  return movies.map((movie) => ({
+    ...movie,
+    rating: movie.rating.toNumber(),
+    purchasePrice: movie.purchasePrice?.toString() ?? null,
+  }));
 }
 
 export async function getMovieCards() {
@@ -19,6 +25,7 @@ export async function getMovieCards() {
   const [movieCount, movieAVGRating] = await Promise.allSettled([
     db.movie.count(),
     db.movie.aggregate({
+      _count: true,
       _sum: {
         rating: true,
       },
@@ -37,7 +44,10 @@ export async function getMovieCards() {
           ? {
               status: "fulfilled" as const,
               value: movieAVGRating.value._sum.rating
-                ? Number(movieAVGRating.value._sum.rating).toFixed(1)
+                ? (
+                    Number(movieAVGRating.value._sum.rating) /
+                    movieAVGRating.value._count
+                  ).toFixed(1)
                 : 0,
             }
           : movieAVGRating,
@@ -86,3 +96,24 @@ export const getMovie = async (slug?: string): Promise<MovieType | null> => {
     purchasePrice: movie.purchasePrice?.toString() ?? null,
   };
 };
+
+export async function getMovieWithQuery(query: string) {
+  return db.movie.findMany({
+    where: query
+      ? { title: { contains: query, mode: "insensitive" } }
+      : undefined,
+    orderBy: { updatedAt: "desc" },
+    include: {
+      genres: {
+        include: {
+          genre: true,
+        },
+      },
+      crew: { select: { person: true } },
+      featuredItems: { select: { movie: true, serial: true } },
+      country: true,
+      studio: true,
+      language: true,
+    },
+  });
+}

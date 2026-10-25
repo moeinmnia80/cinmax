@@ -1,9 +1,10 @@
-import { Search } from "@/components/Search";
-import { AdminHeader } from "@/features/server";
-import { Movie } from "@/types/types";
 import { use } from "react";
 
-export const MovieHeader = ({ data }: { data: Promise<Movie[]> }) => {
+import { MovieType } from "@/data/movies";
+import { Search } from "@/components/Search";
+import { AdminHeader } from "@/features/server";
+
+export const MovieHeader = ({ data }: { data: Promise<MovieType[]> }) => {
   const movies = use(data);
   return (
     <AdminHeader
