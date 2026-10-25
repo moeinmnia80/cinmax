@@ -49,10 +49,6 @@ export async function getPeople(query: string = "") {
     orderBy: { updatedAt: "desc" },
   });
 }
-// export interface PersonType extends Person {
-//   rating: number;
-//   purchasePrice: string | null;
-// }
 
 export const getPerson = async (slug?: string): Promise<Person | null> => {
   "use cache";

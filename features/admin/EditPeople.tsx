@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { getPerson } from "@/data/people";
-import { EditPersonForm } from "./EditPersonForm";
+import { EditPersonForm } from "@/features/client";
 import { EditFormLoader } from "@/features/server";
 
 interface EditPeopleProps {

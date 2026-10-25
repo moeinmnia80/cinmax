@@ -3,6 +3,7 @@
 import { useActionState, useEffect } from "react";
 
 import { Person } from "@/types/types";
+import { ROLE_PEOPLE } from "@/constants/castRole";
 import { useFormChanges } from "@/hooks/useFormChanges";
 import { ImageUpload, EditFormActions } from "@/features/client";
 import {
@@ -24,7 +25,6 @@ import {
   SelectButton,
   SelectContent,
 } from "@/components/ui/Select";
-import { ROLE_PEOPLE } from "@/constants/castRole";
 
 const initialState: PersonFormState = {
   errors: {},

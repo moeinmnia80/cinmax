@@ -14,21 +14,28 @@ export { HeroBackground } from "@/features/hero/HeroBackground";
 export { HeroNavActions } from "@/features/hero/HeroNavActions";
 
 export { AuthField } from "@/features/auth/AuthFiled";
-export { LoginForm } from "@/features/auth/LoginForm";
 export { SubmitButton } from "@/features/auth/SubmitButton";
-export { RegisterForm } from "@/features/auth/RegisterForm";
-export { RegisterPlans } from "@/features/auth/RegisterPlans";
 export { PlanOption } from "@/features/auth/RegisterPlanOption";
+export { RegisterPlans } from "@/features/auth/RegisterPlans";
 export { RegisterAccount } from "@/features/auth/RegisterAccount";
 export { RegisterStepIndicator } from "@/features/auth/RegisterStepIndicator";
 
+export { Avatar } from "@/features/admin/PersonAvatar";
 export { CastRole } from "@/features/admin/CastRole";
+export { ImageUpload } from "@/features/admin/ImageUpload";
+
 export { CastField } from "@/features/admin/CastField";
 export { CrewField } from "@/features/admin/CrewField";
-export { Avatar } from "@/features/admin/PersonAvatar";
-export { ImageUpload } from "@/features/admin/ImageUpload";
 export { GenresField } from "@/features/admin/GenresField";
 
+export { LoginForm } from "@/features/auth/LoginForm";
+export { RegisterForm } from "@/features/auth/RegisterForm";
+
+export { EntityRow } from "@/features/admin/EntityRow";
+export { EntityManager } from "@/features/admin/EntityManager";
+
+export { EditButton } from "@/features/admin/EditButton";
 export { EditForm } from "@/features/admin/EditSerialForm";
-export { EditFormActions } from "@/features/admin/EditFormAction";
 export { DeleteDialog } from "@/features/admin/DeleteDialog";
+export { EditPersonForm } from "@/features/admin/EditPersonForm";
+export { EditFormActions } from "@/features/admin/EditFormAction";

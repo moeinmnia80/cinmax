@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 
-import { PersonRow } from "./PersonRow";
+import { PersonRow } from "@/features/server";
 import { getPersonWithQuery } from "@/data/people";
 
 interface PeopleSheetProps {

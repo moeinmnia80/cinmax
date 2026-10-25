@@ -1,8 +1,8 @@
-import React, { use } from "react";
+import { use } from "react";
 
-import { AdminHeader } from "./AdminHeader";
 import { Person } from "@/types/types";
-import { SerialSearch } from "../../components/Search";
+import { AdminHeader } from "@/features/server";
+import { SerialSearch } from "@/components/Search";
 
 export function PeopleHeader({ data }: { data: Promise<Person[]> }) {
   const people = use(data);

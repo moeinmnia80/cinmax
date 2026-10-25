@@ -1,33 +1,30 @@
-// import {
-//   getMetadata,
-//   createGenre,
-//   deleteGenre,
-//   createLanguage,
-//   deleteLanguage,
-//   createCountry,
-//   deleteCountry,
-//   createStudio,
-//   deleteStudio,
-// } from "@/app/(dashboard)/admin/genres/actions";
-// import { EntityManager } from "@/features/admin/EntityManager";
+import { getMetadata } from "@/data/metaData";
+import { AdminHeader } from "@/features/server";
+import { EntityManager } from "@/features/client";
+import {
+  createGenre,
+  deleteGenre,
+  createStudio,
+  deleteStudio,
+  createCountry,
+  deleteCountry,
+  deleteLanguage,
+  createLanguage,
+} from "@/app/actions/metadata";
 
 export default async function MetadataPage() {
-  // const { genres, languages, countries, studios } = await getMetadata();
+  const { genres, languages, countries, studios } = await getMetadata();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-black text-white uppercase tracking-wide">
-          Metadata
-        </h1>
-        <p className="text-white/40 text-sm mt-1">
-          Reference data used by the movie form — add these before creating
-          movies that need them.
-        </p>
-      </div>
+    <>
+      <AdminHeader
+        title="Metadata"
+        desc="Reference data used by the movie form — add these before creating
+          movies that need them."
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* <EntityManager
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-4 py-5">
+        <EntityManager
           title="Genres"
           description="Action, Sci-Fi, Thriller…"
           items={genres}
@@ -39,9 +36,9 @@ export default async function MetadataPage() {
             "use server";
             await deleteGenre(id);
           }}
-        /> */}
+        />
 
-        {/* <EntityManager
+        <EntityManager
           title="Languages"
           description="Primary spoken language of a movie."
           items={languages}
@@ -83,8 +80,8 @@ export default async function MetadataPage() {
             "use server";
             await deleteStudio(id);
           }}
-        /> */}
+        />
       </div>
-    </div>
+    </>
   );
 }

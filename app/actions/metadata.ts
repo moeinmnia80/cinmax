@@ -12,17 +12,6 @@ function slugify(value: string) {
     .replace(/\s+/g, "-");
 }
 
-export async function getMetadata() {
-  const [genres, languages, countries, studios] = await Promise.all([
-    db.genre.findMany({ orderBy: { name: "asc" } }),
-    db.language.findMany({ orderBy: { name: "asc" } }),
-    db.country.findMany({ orderBy: { name: "asc" } }),
-    db.studio.findMany({ orderBy: { name: "asc" } }),
-  ]);
-  return { genres, languages, countries, studios };
-}
-
-// ---------- Genre ----------
 export async function createGenre(name: string) {
   await db.genre.create({ data: { name, slug: slugify(name) } });
   revalidatePath("/admin/metadata");
@@ -32,7 +21,6 @@ export async function deleteGenre(id: number) {
   revalidatePath("/admin/metadata");
 }
 
-// ---------- Language ----------
 export async function createLanguage(name: string, code: string) {
   await db.language.create({ data: { name, code } });
   revalidatePath("/admin/metadata");
@@ -42,7 +30,6 @@ export async function deleteLanguage(id: number) {
   revalidatePath("/admin/metadata");
 }
 
-// ---------- Country ----------
 export async function createCountry(name: string, code: string) {
   await db.country.create({ data: { name, code } });
   revalidatePath("/admin/metadata");
@@ -52,7 +39,6 @@ export async function deleteCountry(id: number) {
   revalidatePath("/admin/metadata");
 }
 
-// ---------- Studio ----------
 export async function createStudio(name: string) {
   await db.studio.create({ data: { name } });
   revalidatePath("/admin/metadata");

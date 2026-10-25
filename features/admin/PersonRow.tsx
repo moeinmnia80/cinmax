@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { Person } from "@/types/types";
 import { cn, getInitialsName } from "@/utils";
-import { EditButton } from "./EditButton";
+import { EditButton } from "@/features/client";
 
 interface PersonRowProps {
   person: Person;
