@@ -6,7 +6,7 @@
  *  - BigInt    -> string  (BigInt is not JSON-serializable; convert on the server)
  */
 
-import { MovieCategory } from "@prisma/client";
+// import { MovieCategory } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/client";
 
 // ==========================================
@@ -48,14 +48,14 @@ export const PersonType = {
 } as const;
 export type PersonType = (typeof PersonType)[keyof typeof PersonType];
 
-// export const MovieCategory = {
-//   Hollywood: "Hollywood",
-//   Independent: "Independent",
-//   Bollywood: "Bollywood",
-//   Korean: "Korean",
-//   Animation: "Animation",
-// } as const;
-// export type MovieCategory = (typeof MovieCategory)[keyof typeof MovieCategory];
+export const MovieCategory = {
+  Hollywood: "Hollywood",
+  Independent: "Independent",
+  Bollywood: "Bollywood",
+  Korean: "Korean",
+  Animation: "Animation",
+} as const;
+export type MovieCategory = (typeof MovieCategory)[keyof typeof MovieCategory];
 
 export const FeaturedType = { Movie: "Movie", Serial: "Serial" } as const;
 export type FeaturedType = (typeof FeaturedType)[keyof typeof FeaturedType];
@@ -408,33 +408,33 @@ export type SerialCard = Pick<
 > & { genres: Pick<Genre, "id" | "slug" | "name">[] };
 
 /** Full movie details page */
-export interface MovieDetailGenre extends MovieGenre {
+export interface MovieDetailGenre extends Partial<MovieGenre> {
   genre: Genre;
 }
-export interface MovieDetailCast extends MovieCast {
+export interface MovieDetailCast extends Partial<MovieCast> {
   person: Person;
 }
-export interface MovieDetailCrew extends MovieCrew {
+export interface MovieDetailCrew extends Partial<MovieCrew> {
   person: Person;
 }
-export interface MovieDetailRelated extends MovieRelated {
+export interface MovieDetailRelated extends Partial<MovieRelated> {
   targetMovie: Movie;
 }
 export interface MovieDetail extends Movie {
-  language: Language;
-  country: Country | null;
-  studio: Studio | null;
-  genres: MovieDetailGenre[];
-  cast: MovieDetailCast[];
-  crew: MovieDetailCrew[];
-  awards: MovieAward[];
-  downloads: MovieDownload[];
-  subtitles: (MovieSubtitle & { language: Language })[];
-  audios: (MovieAudio & { language: Language })[];
-  streamings: MovieStreaming[];
-  images: MovieImage[];
-  reviews: Review[];
-  relatedMovies: MovieDetailRelated[];
+  language?: Language;
+  country?: Country | null;
+  studio?: Studio | null;
+  genres?: MovieDetailGenre[];
+  cast?: MovieDetailCast[];
+  crew?: MovieDetailCrew[];
+  awards?: MovieAward[];
+  downloads?: MovieDownload[];
+  subtitles?: (MovieSubtitle & { language: Language })[];
+  audios?: (MovieAudio & { language: Language })[];
+  streamings?: MovieStreaming[];
+  images?: MovieImage[];
+  reviews?: Review[];
+  relatedMovies?: MovieDetailRelated[];
 }
 
 /** Full serial details page */

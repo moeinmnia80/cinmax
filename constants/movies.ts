@@ -871,3 +871,13 @@ export const movies: Movie[] = [
     relatedSerialIds: [101, 103],
   },
 ];
+
+import type { MovieCategory } from "@/types/types";
+
+export const CATEGORY_OPTIONS: { id: MovieCategory; label: string }[] = [
+  { id: "Hollywood", label: "Hollywood" },
+  { id: "Independent", label: "Independent" },
+  { id: "Bollywood", label: "Bollywood" },
+  { id: "Korean", label: "Korean" },
+  { id: "Animation", label: "Animation" },
+];

@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 
+import { Search } from "@/components/Search";
 import { getSerialCards } from "@/data/serial";
 import { AdminCard } from "@/features/admin/AdminCard";
 import { EditSeries } from "@/features/admin/EditSeries";
 import { SerialTable } from "@/features/admin/SerialTable";
 import { AdminHeader } from "@/features/admin/AdminHeader";
-import { SerialSearch } from "@/components/Search";
 import { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
 import { SerialTableSkeleton } from "@/features/admin/SerialTableSkeleton";
 
@@ -22,7 +22,7 @@ const SerialsPage = ({ searchParams }: SerialPageProps) => {
         className="flex gap-2"
       >
         <Suspense fallback={<></>}>
-          <SerialSearch />
+          <Search />
         </Suspense>
       </AdminHeader>
       <div className="flex gap-4 px-4 py-5">

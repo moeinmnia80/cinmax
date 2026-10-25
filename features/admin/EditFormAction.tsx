@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { usePathname } from "next/navigation";
 import { CheckCircle2, CircleAlert, Loader2, Save } from "lucide-react";
 
+import { toast } from "@/store";
 import { DeleteDialog } from "./DeleteDialog";
 
 type FormAction = (formData: FormData) => void | Promise<void>;
@@ -44,6 +45,24 @@ export const EditFormActions = ({
   const isDeleting =
     Boolean(deleteAction) && pending && action === deleteAction;
   const isSaving = pending && !isDeleting;
+
+  useEffect(() => {
+    if (success) {
+      toast.success("movie uploaded successfully", {
+        description: message,
+        actions: [{ label: "Dismiss" }],
+      });
+    } else if (canSave) {
+      toast.error("Something went wrong", {
+        description: message,
+        actions: [
+          { label: "Retry", variant: "primary", onClick: () => {} },
+          { label: "Dismiss" },
+        ],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success]);
 
   return (
     <div

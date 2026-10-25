@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Search, X } from "lucide-react";
+import { Loader2, Search as SearchIcon, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
@@ -9,7 +9,7 @@ import { useFocusShortcut } from "@/hooks/useFocusShortcut";
 const PARAM = "search";
 const DEBOUNCE_MS = 400;
 
-export function SerialSearch() {
+export function Search() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -75,7 +75,7 @@ export function SerialSearch() {
       </label>
 
       <div className="group relative flex items-center rounded-full border border-foreground/15 bg-foreground/3 transition-all duration-200 hover:border-foreground/30 focus-within:border-foreground/60 focus-within:bg-background focus-within:shadow-[0_0_0_4px_--theme(--color-foreground/8%)]">
-        <Search
+        <SearchIcon
           aria-hidden
           className="pointer-events-none absolute left-4 size-4 text-foreground/40 transition-colors group-focus-within:text-foreground/80"
         />

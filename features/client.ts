@@ -37,5 +37,6 @@ export { EntityManager } from "@/features/admin/EntityManager";
 export { EditButton } from "@/features/admin/EditButton";
 export { EditForm } from "@/features/admin/EditSerialForm";
 export { DeleteDialog } from "@/features/admin/DeleteDialog";
+export { EditMovieForm } from "@/features/admin/EditMovieForm";
 export { EditPersonForm } from "@/features/admin/EditPersonForm";
 export { EditFormActions } from "@/features/admin/EditFormAction";

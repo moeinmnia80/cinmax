@@ -17,6 +17,7 @@ export { PeopleSheet } from "@/features/admin/PeopleSheet";
 export { PeopleSheetSkeleton } from "@/features/admin/PeopleSheetSkeleton";
 export { PeopleHeader } from "@/features/admin/PeopleHeader";
 export { PeopleHeaderSkeleton } from "@/features/admin/PeopleHeaderSkeleton";
+export { EditMovies } from "@/features/admin/EditMovies";
 export { EditFormLoader } from "@/features/admin/EditFormLoading";
 export { EditFormSkeleton } from "@/features/admin/EditFormSkeleton";
 
