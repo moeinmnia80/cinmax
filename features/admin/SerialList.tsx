@@ -20,7 +20,7 @@ export const SerialList = ({ data }: { data: Promise<DashboardSerial[]> }) => {
       <div className="flex flex-col gap-4 px-4 py-5">
         {serials.length ? (
           serials.map((serial) => (
-            <div key={serial.id} className="flex gap-4">
+            <div key={serial.id} className="flex items-center gap-4">
               <div className="max-w-16 aspect-3/4 rounded-sm overflow-hidden">
                 <Image
                   src={serial.image}
@@ -33,7 +33,7 @@ export const SerialList = ({ data }: { data: Promise<DashboardSerial[]> }) => {
               </div>
               <div className="flex justify-between w-full">
                 <div>
-                  <h3>{serial.title}</h3>
+                  <h3 className="capitalize">{serial.title}</h3>
                   <p className="text-foreground/20">{serial.badge}</p>
                   <p>{serial.createdAt.toLocaleDateString()}</p>
                 </div>

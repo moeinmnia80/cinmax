@@ -16,7 +16,7 @@ export const MovieList = ({ data }: { data: Promise<DashboardMovie[]> }) => {
       <div className="flex flex-col gap-4 px-4 py-5">
         {movies.length ? (
           movies.map((movie) => (
-            <div key={movie.id} className="flex gap-4">
+            <div key={movie.id} className="flex items-center gap-4">
               <div className="max-w-16 aspect-3/4 rounded-sm overflow-hidden">
                 <Image
                   src={movie.image}
@@ -29,7 +29,9 @@ export const MovieList = ({ data }: { data: Promise<DashboardMovie[]> }) => {
               </div>
               <div className="flex justify-between w-full">
                 <div>
-                  <h3>{movie.title}</h3>
+                  <h3 className="capitalize line-clamp-1 pr-10">
+                    {movie.title}
+                  </h3>
                   <p className="text-foreground/20">{movie.budget}</p>
                   <p>{movie.createdAt.toLocaleDateString()}</p>
                 </div>

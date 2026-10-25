@@ -4,7 +4,7 @@ import db from "@/lib/db";
 
 export async function getLastMovies() {
   "use cache";
-  cacheTag("dashboard-boxes");
+  cacheTag("dashboard-movie-boxes");
   cacheLife("hours");
 
   const movies = await db.movie.findMany({
@@ -23,7 +23,7 @@ export type DashboardMovie = Awaited<ReturnType<typeof getLastMovies>>[number];
 
 export async function getLastSerials() {
   "use cache";
-  cacheTag("dashboard-boxes");
+  cacheTag("dashboard-serial-boxes");
   cacheLife("hours");
 
   const serials = await db.serial.findMany({
