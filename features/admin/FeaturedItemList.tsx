@@ -19,12 +19,13 @@ export function FeaturedItemList({ data }: FeaturedItemsListProps) {
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
 
+  // TODO: write route
   const { data: content, isFetching } = useQuery<{
     success: boolean;
     persons: Movie | Serial;
   }>({
     queryKey: ["persons", search],
-    queryFn: () => getData("/api/all", { params: { search } }),
+    queryFn: () => getData("/api", { params: { search } }),
     enabled: !!search,
     refetchOnWindowFocus: false,
   });

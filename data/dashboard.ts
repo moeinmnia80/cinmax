@@ -85,6 +85,8 @@ export type DashboardFeatured = Awaited<
   ReturnType<typeof getFeaturedItems>
 >[number];
 
+export type FeaturedKind = "Movie" | "Serial";
+
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_NAMES = 6;
 
