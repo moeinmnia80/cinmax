@@ -38,13 +38,13 @@ export const MobileSidebar = () => {
               setActiveNavItem(label);
               setMobileNavOpen(false);
             }}
-            className={`gap-3 px-4 py-3 rounded-xl text-left transition-all group border ${activeNavItem === label ? "bg-primary/12 text-foreground border-destructive/20" : "text-foreground/45 hover:text-foreground hover:bg-foreground/4 border-transparent"}`}
+            className={`gap-3 px-4 py-3 rounded-xl text-left transition-all group border ${activeNavItem === label ? "bg-destructive/12 text-foreground border-destructive/20" : "text-foreground/45 hover:text-foreground hover:bg-foreground/4 border-transparent"}`}
           >
             <Icon
               size={17}
               className={
                 activeNavItem === label
-                  ? "text-primary"
+                  ? "text-destructive"
                   : "text-foreground/30 group-hover:text-foreground/60 transition-colors"
               }
             />
@@ -60,7 +60,7 @@ export const MobileSidebar = () => {
       <div className="px-5 py-5 border-t border-foreground/8 flex flex-col gap-2">
         <Link
           href="/login"
-          className="w-full bg-primary hover:bg-destructive/60 text-foreground font-bold text-sm py-2.5 rounded-xl transition-all flex items-center justify-center gap-2"
+          className="w-full bg-destructive hover:bg-destructive/60 text-foreground font-bold text-sm py-2.5 rounded-xl transition-all flex items-center justify-center gap-2"
         >
           <LogIn size={14} /> Sign In
         </Link>

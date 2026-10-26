@@ -27,7 +27,7 @@ export { AdminHeader } from "@/features/admin/AdminHeader";
 export { AdminBoxSkeleton } from "@/features/admin/AdminBoxSkeleton";
 export { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
 
-export { FeaturedItemsList } from "@/features/admin/FeaturedItemsList";
+export { FeaturedSummary } from "@/features/admin/FeaturedSummary";
 
 export { LoginStats } from "@/features/auth/LoginStats";
 export { LoginShowCase } from "@/features/auth/LoginShowCase";

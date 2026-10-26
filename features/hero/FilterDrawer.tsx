@@ -30,7 +30,7 @@ export const FilterDrawer = () => {
         <div className="relative z-20 mb-2 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-2xl animate-fade-in">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
-              <Filter size={14} className="text-primary" />
+              <Filter size={14} className="text-destructive" />
               <span className="text-white font-bold text-sm uppercase tracking-wider">
                 Filter Results
               </span>
@@ -38,7 +38,7 @@ export const FilterDrawer = () => {
             {activeFilterCount > 0 && (
               <button
                 onClick={() => resetFilters()}
-                className="text-primary text-sm hover:underline"
+                className="text-destructive text-sm hover:underline"
               >
                 Clear all
               </button>

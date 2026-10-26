@@ -21,7 +21,7 @@ export const FilterGenre = () => {
               onClick={() => setSelectedGenre(g)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                 isSelected
-                  ? "bg-primary border-primary text-white"
+                  ? "bg-destructive border-destructive text-white"
                   : "border-white/12 text-white/45 hover:border-white/30 hover:text-white/70"
               }`}
             >

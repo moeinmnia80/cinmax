@@ -17,7 +17,7 @@ export const SearchInput = () => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search movies…"
-        className="w-full bg-white/8 border border-white/12 rounded-full pl-10 pr-10 py-2.5 text-sm text-white placeholder-white/30 outline-none focus:border-primary/60 transition-all"
+        className="w-full bg-white/8 border border-white/12 rounded-full pl-10 pr-10 py-2.5 text-sm text-white placeholder-white/30 outline-none focus:border-destructive/60 transition-all"
       />
       {searchQuery && (
         <button

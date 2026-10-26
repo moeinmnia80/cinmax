@@ -7,7 +7,7 @@ export const Logo = ({ className, ...props }: ComponentProps<"a">) => {
     <Link
       href="/"
       className={cn(
-        "text-primary font-black tracking-widest text-4xl select-none shrink-0",
+        "text-destructive font-black tracking-widest text-4xl select-none shrink-0",
         className,
       )}
       {...props}

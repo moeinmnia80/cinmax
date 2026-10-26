@@ -46,7 +46,7 @@ export async function CrewStripSkeleton() {
           {(Array.from({ length: 3 }) || []).map((_, i) => (
             <span
               key={i}
-              className={`h-0.5 rounded-full cursor-pointer transition-all ${i === 0 ? "bg-primary w-8" : "bg-white/25 hover:bg-white/50 w-5"}`}
+              className={`h-0.5 rounded-full cursor-pointer transition-all ${i === 0 ? "bg-destructive w-8" : "bg-white/25 hover:bg-white/50 w-5"}`}
             />
           ))}
         </div>

@@ -3,7 +3,14 @@ export interface AdminCardItem {
   label: string;
   value: PromiseSettledResult<number | string>;
   className?: string;
+  addedThisWeek?: number;
+  lastChange?: Date | null;
 }
+
+const formatter = new Intl.DateTimeFormat("en", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
 
 interface AdminCardProps {
   fetchCards: () => Promise<AdminCardItem[]>;
@@ -12,11 +19,11 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
   const cards = await fetchCards();
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 animate-slide-down">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 animate-slide-down bg-foreground/5 p-1 rounded-2xl border border-foreground/20">
       {cards.map((card) => (
         <div
           key={card.label}
-          className="relative rounded-md border border-foreground/10 bg-card p-5 hover:border-foreground/40 transition-colors overflow-hidden group *:cursor-default"
+          className="relative rounded-xl border border-foreground/10 bg-background p-5 hover:border-foreground/40 transition-colors overflow-hidden group *:cursor-default"
         >
           <p className="text-xs tracking-widest uppercase text-foreground/30">
             {card.label}
@@ -30,9 +37,22 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
           ) : (
             "?"
           )}
-          <p className="absolute -right-3 -bottom-3 text-foreground/5 text-7xl font-bold group-hover:text-foreground/15 transition-all duration-200">
-            {card.label}
-          </p>
+          {card.addedThisWeek ? (
+            <p
+              className={`relative z-10 mt-1 text-xs ${card.addedThisWeek > 0 ? "text-emerald-500" : "text-foreground/30"}`}
+            >
+              +{card.addedThisWeek} this week
+            </p>
+          ) : (
+            <span className="block h-4 mt-1" />
+          )}
+          {card.lastChange !== undefined && (
+            <p className="relative z-10 mt-1 text-xs text-foreground/30">
+              {card.lastChange
+                ? `Last change: ${formatter.format(card.lastChange)}`
+                : "No changes yet"}
+            </p>
+          )}
         </div>
       ))}
     </div>

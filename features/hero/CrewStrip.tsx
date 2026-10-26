@@ -44,7 +44,7 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
                 <div className="w-9 h-9 bg-gray-200/20 rounded-full object-cover border border-white/15" />
               )}
               <div>
-                <p className="text-[10px] text-primary font-semibold uppercase tracking-wider leading-none mb-0.5">
+                <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider leading-none mb-0.5">
                   {member.role}
                 </p>
                 <p className="text-white/80 text-xs font-medium">
@@ -74,7 +74,7 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
               )}
 
               <div>
-                <p className="text-[10px] text-primary font-semibold uppercase tracking-wider leading-none mb-0.5">
+                <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider leading-none mb-0.5">
                   {member.role}
                 </p>
                 <p className="text-white/80 text-xs font-medium">
@@ -106,7 +106,7 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
             <span
               key={i}
               onClick={() => setCurrent(() => i)}
-              className={`h-0.5 rounded-full cursor-pointer transition-all ${i === current ? "bg-primary w-8" : "bg-white/25 hover:bg-white/50 w-5"}`}
+              className={`h-0.5 rounded-full cursor-pointer transition-all ${i === current ? "bg-destructive w-8" : "bg-white/25 hover:bg-white/50 w-5"}`}
             />
           ))}
         </div>

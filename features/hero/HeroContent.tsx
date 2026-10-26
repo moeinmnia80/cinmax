@@ -39,7 +39,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
         </div>
         <h1 className="text-[clamp(3rem,7vw,7rem)] font-black leading-none uppercase text-foreground mb-6">
           {movie.title}
-          <span className="text-primary text-5xl">.</span>
+          <span className="text-destructive text-5xl">.</span>
         </h1>
         <p className="text-foreground/55 text-[0.85rem] max-w-130 mb-8 font-light line-clamp-3">
           {movie.description}
@@ -47,7 +47,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
         <div className="flex items-center gap-4 flex-wrap">
           <Link
             href={`/${movie.type.toLowerCase()}/${movie.slug}`}
-            className="flex items-center gap-2.5 bg-primary hover:bg-red-600 text-foreground font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-95 shadow-lg shadow-red-900/40 text-sm tracking-wide uppercase hover:opacity-50"
+            className="flex items-center gap-2.5 bg-destructive hover:bg-red-600 text-foreground font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-95 shadow-lg shadow-red-900/40 text-sm tracking-wide uppercase hover:opacity-50"
           >
             <Play size={16} fill="white" /> Watch Now
           </Link>

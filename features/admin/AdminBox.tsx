@@ -1,32 +1,24 @@
 import "server-only";
 import { Suspense } from "react";
 
-import {
-  MovieList,
-  SerialList,
-  AdminBoxSkeleton,
-  FeaturedItemsList,
-} from "@/features/server";
-import {
-  getLastMovies,
-  getLastSerials,
-  getFeaturedItems,
-} from "@/data/dashboard";
+import { GenreChart } from "./GenreChart";
+import { FeaturedSummary } from "@/features/server";
+import { FeaturedItemList } from "./FeaturedItemList";
+import { getFeaturedItems, getGenreStats } from "@/data/dashboard";
 
 export const AdminBox = () => {
-  const movies = getLastMovies();
-  const serials = getLastSerials();
-  const featuredItems = getFeaturedItems();
+  const genreStats = getGenreStats();
+  const featureItems = getFeaturedItems();
   return (
     <>
-      <Suspense fallback={<AdminBoxSkeleton />}>
-        <MovieList data={movies} />
+      <Suspense fallback={<>Loading</>}>
+        <FeaturedSummary />
       </Suspense>
-      <Suspense fallback={<AdminBoxSkeleton />}>
-        <SerialList data={serials} />
+      <Suspense fallback={<>Loading</>}>
+        <GenreChart data={genreStats} size={230} />
       </Suspense>
-      <Suspense fallback={<AdminBoxSkeleton />}>
-        <FeaturedItemsList data={featuredItems} />
+      <Suspense fallback={<></>}>
+        <FeaturedItemList data={featureItems} />
       </Suspense>
     </>
   );
