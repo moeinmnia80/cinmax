@@ -1,4 +1,4 @@
-import { getMetadata } from "@/data/metadata";
+import { getMetadata } from "@/data/metaData";
 import { AdminHeader } from "@/features/server";
 import { EntityManager } from "@/features/client";
 import {
