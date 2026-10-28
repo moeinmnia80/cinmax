@@ -11,6 +11,7 @@ export const HeroContentSkeleton = () => {
             </span>
             <div className="flex items-center text-yellow-400 font-bold text-sm">
               <span className="inline-block w-4 h-4 rounded-sm bg-gray-200/20 animate-pulse mr-1" />
+              <span className="text-foreground/40 font-normal mx-1">/</span>
               <span className="text-white/40 font-normal">/ 10</span>
             </div>
             <span className="text-white/25">|</span>

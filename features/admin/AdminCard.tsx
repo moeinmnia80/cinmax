@@ -23,7 +23,7 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
       {cards.map((card) => (
         <div
           key={card.label}
-          className="relative rounded-xl border border-foreground/10 bg-background p-5 hover:border-foreground/40 transition-colors overflow-hidden group *:cursor-default"
+          className="relative rounded-xl border border-foreground/10 bg-background p-5 overflow-hidden group *:cursor-default"
         >
           <p className="text-xs tracking-widest uppercase text-foreground/30">
             {card.label}

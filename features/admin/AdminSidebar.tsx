@@ -9,7 +9,7 @@ import { navItems } from "@/constants/mobileSidebarNavItems";
 export const AdminSidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="flex-1 border-r border-foreground/10 animate-slide-right">
+    <div className="flex-1 hidden sm:flex sm:flex-col border-r border-foreground/10 animate-slide-right">
       <AdminSidebarHeader />
       <nav className="flex flex-col gap-2 p-4">
         {navItems.map((item) => {

@@ -86,7 +86,7 @@ export const HeroNavActions = () => {
               width={200}
               height={200}
               priority
-              className="size-9 rounded-full object-cover border-2 border-destructive/50"
+              className="size-9 rounded-full object-cover border-2 border-foreground/15"
             />
           ) : (
             <span className="size-9 rounded-full bg-gray-200/10 border border-destructive/50" />
@@ -120,6 +120,7 @@ export const HeroNavActions = () => {
           </Link>
         </>
       )}
+
       <button
         onClick={() => setMobileNavOpen(true)}
         className="sm:hidden size-9 rounded-full flex items-center justify-center border border-white/15 text-white/60 hover:border-white/40 hover:text-white transition-all"

@@ -1,35 +1,48 @@
 "use client";
 
-import { use } from "react";
 import Image from "next/image";
+import { use, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { FeaturedItem } from "@/features/server";
+import { getMedia } from "@/utils";
 import { useHeroSlide } from "@/store/useHeroSlide";
+import { DashboardFeatured } from "@/data/dashboard";
 
 interface CrewStripProps {
-  data: Promise<FeaturedItem[]>;
+  data: Promise<DashboardFeatured[]>;
 }
 
 export const CrewStrip = ({ data }: CrewStripProps) => {
   const featuredContent = use(data);
+  const length = featuredContent.length;
 
   const prev = () => {
-    setCurrent(
-      () => (current - 1 + featuredContent.length) % featuredContent.length,
-    );
+    setCurrent(() => (current - 1 + length) % length);
   };
-  const next = () => setCurrent(() => (current + 1) % featuredContent.length);
+  const next = () => setCurrent(() => (current + 1) % length);
 
   const current = useHeroSlide((state) => state.current);
   const setCurrent = useHeroSlide((state) => state.setCurrent);
-  const movie = featuredContent[current];
+
+  useEffect(() => {
+    const autoNext = setTimeout(() => {
+      next();
+    }, 8000);
+
+    return () => clearTimeout(autoNext);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current]);
+
+  const item = featuredContent[current];
+  if (!item) return null;
+
+  const media = getMedia(item);
 
   return (
     <div className="flex flex-col md:flex-row justify-center md:justify-between relative z-10 border-t border-white/10 py-5 items-center gap-6">
       <div className="w-full">
         <div className="flex items-center gap-6 overflow-auto">
-          {movie.crew.map((member, i) => (
+          {media?.crew.map((member, i) => (
             <div key={i} className="flex items-center gap-2.5 shrink-0">
               {member.person.image ? (
                 <Image
@@ -51,14 +64,14 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
                   {member.person.name}
                 </p>
               </div>
-              {i < movie.crew.length - 1 && (
+              {i < media.crew.length - 1 && (
                 <span className="ml-4 text-white/15 text-sm hidden sm:block">
                   |
                 </span>
               )}
             </div>
           ))}
-          {movie.cast.map((member, i) => (
+          {media?.cast.map((member, i) => (
             <div key={i} className="flex items-center gap-2.5 shrink-0">
               {member.person.image ? (
                 <Image
@@ -81,7 +94,7 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
                   {member.person.name}
                 </p>
               </div>
-              {i < movie.crew.length - 1 && (
+              {i < media.crew.length - 1 && (
                 <span className="ml-4 text-white/15 text-sm hidden sm:block">
                   |
                 </span>

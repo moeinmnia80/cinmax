@@ -4,26 +4,6 @@ import { Suspense, use } from "react";
 import { AdminBoxSkeleton } from "@/features/server";
 import { getFeaturedSummary, type FeaturedSummaryData } from "@/data/dashboard";
 import { FeaturedFlow } from "./FeatureFlow";
-import Image from "next/image";
-import { Star } from "lucide-react";
-
-const formatter = new Intl.DateTimeFormat("en", {
-  dateStyle: "medium",
-  timeStyle: "short",
-});
-
-const Detail = ({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) => (
-  <div>
-    <dt className="text-sm text-foreground/50">{label}</dt>
-    <dd className="mt-0.5 font-medium">{children}</dd>
-  </div>
-);
 
 function Summary({ data }: { data: Promise<FeaturedSummaryData> }) {
   const s = use(data);
@@ -34,9 +14,9 @@ function Summary({ data }: { data: Promise<FeaturedSummaryData> }) {
       className="col-span-1 sm:col-span-1 rounded-2xl border border-foreground/20 bg-foreground/5 animate-scale-in p-1"
     >
       {s.total ? (
-        <div className="flex flex-col items-center justify-between gap-4 bg-background border border-foreground/10 hover:border-foreground/40 transition duration-200 rounded-xl p-3">
+        <div className="flex flex-col items-center justify-between rounded-xl h-full">
           <FeaturedFlow total={s.total} movies={s.movies} serials={s.serials} />
-          <div className="self-start">
+          <div className="flex flex-col justify-center w-full self-start flex-1 p-3">
             <h2 className="uppercase text-foreground/70 text-xs underline underline-offset-4">
               last item
             </h2>

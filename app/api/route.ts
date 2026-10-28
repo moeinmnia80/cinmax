@@ -1,123 +1,76 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+export type MovieDTO = Omit<Movie, "rating" | "purchasePrice"> & {
+  rating: string;
+  purchasePrice: number;
+};
+export type SerialDTO = Omit<Serial, "rating" | "purchasePrice"> & {
+  rating: string;
+  purchasePrice: number;
+};
+
+export type FeaturedMedia =
+  | { type: "Movie"; movie: MovieDTO }
+  | { type: "Serial"; serial: SerialDTO };
+
+export type DashboardFeatured = FeaturedMedia & {
+  id: number;
+  order: number;
+  active: boolean;
+};
+
+export const serializeMovie = (m: Movie): MovieDTO => ({
+  ...m,
+  rating: Number(m.rating).toFixed(1),
+  purchasePrice: Number(m.purchasePrice),
+});
+
+export const serializeSerial = (s: Serial): SerialDTO => ({
+  ...s,
+  rating: Number(s.rating).toFixed(1),
+  purchasePrice: Number(s.purchasePrice),
+});
 
 import db from "@/lib/db";
+import { Movie, Serial } from "@/types/types";
 
-export async function GET() {
+const MIN_QUERY_LENGTH = 2;
+const LIMIT = 10;
+
+export async function GET(request: NextRequest) {
   try {
-    const featuredItems = await db.featuredItem.findMany({
-      where: { active: true },
-      include: {
-        movie: {
-          select: {
-            id: true,
-            slug: true,
-            title: true,
-            rating: true,
-            year: true,
-            description: true,
-            durationMinutes: true,
-            image: true,
-            backdrop: true,
-            genres: {
-              select: {
-                genre: { select: { name: true, slug: true } },
-              },
-            },
-            crew: {
-              select: {
-                person: { select: { name: true, image: true } },
-                role: true,
-              },
-            },
-            cast: {
-              select: {
-                person: { select: { name: true, image: true } },
-                role: true,
-              },
-            },
-            language: { select: { name: true } },
-          },
-        },
-        serial: {
-          select: {
-            id: true,
-            slug: true,
-            title: true,
-            rating: true,
-            startYear: true,
-            endYear: true,
-            seasons: true,
-            episodes: true,
-            description: true,
-            durationMinutes: true,
-            image: true,
-            backdrop: true,
-            genres: {
-              select: {
-                genre: { select: { name: true, slug: true } },
-              },
-            },
-            crew: {
-              select: {
-                person: { select: { name: true, image: true } },
-                role: true,
-              },
-            },
-            cast: {
-              select: {
-                person: { select: { name: true, image: true } },
-                role: true,
-              },
-            },
-            language: { select: { name: true } },
-          },
-        },
-      },
-    });
+    const search = request.nextUrl.searchParams.get("search")?.trim() ?? "";
 
-    const formattedFeatured = featuredItems
-      .map((item) => {
-        const isMovie = item.type === "Movie" && item.movie;
-        const target = isMovie ? item.movie : item.serial;
+    if (search.length < MIN_QUERY_LENGTH) {
+      return NextResponse.json({ success: true, results: [] });
+    }
 
-        if (!target) return null;
+    const where = {
+      title: { contains: search, mode: "insensitive" as const },
+    };
 
-        return {
-          featuredId: item.id,
-          type: item.type,
-          id: target.id,
-          slug: target.slug,
-          title: target.title,
-          rating: Number(target.rating),
-          description: target.description,
-          session: !isMovie && item.serial?.seasons,
-          episodes: !isMovie && item.serial?.episodes,
-          durationMinutes: target.durationMinutes,
-          image: target.image,
-          backdrop: target.backdrop,
-          genres: target.genres.map((g) => g.genre.name),
-          year: isMovie ? item.movie?.year : item.serial?.startYear,
-          crew: target.crew,
-          cast: target.cast,
-          language: target.language,
-        };
-      })
-      .filter(Boolean);
+    const [movies, serials] = await Promise.all([
+      db.movie.findMany({ where, take: LIMIT, orderBy: { title: "asc" } }),
+      db.serial.findMany({ where, take: LIMIT, orderBy: { title: "asc" } }),
+    ]);
 
-    return NextResponse.json(
-      {
-        success: true,
-        data: formattedFeatured,
-      },
-      { status: 200 },
-    );
+    const results: FeaturedMedia[] = [
+      ...movies.map((movie) => ({
+        type: "Movie" as const,
+        movie: serializeMovie(movie),
+      })),
+      ...serials.map((serial) => ({
+        type: "Serial" as const,
+        serial: serializeSerial(serial),
+      })),
+    ];
+
+    return NextResponse.json({ success: true, results });
   } catch (error) {
-    console.error("Error fetching Hero data:", error);
+    console.error("search content error:", error);
+
     return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch Hero data",
-      },
+      { success: false, message: "Failed to search content" },
       { status: 500 },
     );
   }

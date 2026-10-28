@@ -2,6 +2,7 @@ import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
 
 import { SerialStatus } from "@/types/types";
+import { DashboardFeatured } from "@/data/dashboard";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,3 +45,12 @@ export function generateSlug(title: string): string {
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-");
 }
+
+export const getMedia = (item: DashboardFeatured) =>
+  item.type === "Movie" ? item.movie : item.serial;
+
+export const getKey = (item: DashboardFeatured) =>
+  `${item?.type}-${getMedia(item)?.id}`;
+
+export const getYear = (item: DashboardFeatured) =>
+  item?.type === "Movie" ? item?.movie?.year : item?.serial?.startYear;

@@ -1,79 +1,87 @@
 "use client";
-import Image from "next/image";
-import { use, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { use, useOptimistic, useState, useTransition } from "react";
 
-import { Navigation } from "./FeatureNavigation";
-import { DashboardFeatured } from "@/data/dashboard";
+import { getKey, getMedia } from "@/utils";
 import { Search } from "@/components/Search";
-import { getData } from "@/lib/axios";
-import { Movie, Serial } from "@/types/types";
+import { useSlider } from "@/hooks/useSlider";
+import { Navigation } from "./FeatureNavigation";
+import { FeaturedSlider } from "./FeaturedSlider";
+import { addFeaturedItem } from "@/app/actions/feature";
+import { useFeaturedSearch } from "@/hooks/useFeaturedSearch";
+import { FeaturedSearchResults } from "./FeaturedSearchResults";
+import type { DashboardFeatured } from "@/data/dashboard";
 
 interface FeaturedItemsListProps {
   data: Promise<DashboardFeatured[]>;
 }
+
 export function FeaturedItemList({ data }: FeaturedItemsListProps) {
-  const featureItems = use(data);
+  const serverItems = use(data);
 
-  const searchParams = useSearchParams();
-  const search = searchParams.get("search");
+  const [items, addOptimisticItem] = useOptimistic(
+    serverItems,
+    (state, item: DashboardFeatured) => [...state, item],
+  );
 
-  // TODO: write route
-  const { data: content, isFetching } = useQuery<{
-    success: boolean;
-    persons: Movie | Serial;
-  }>({
-    queryKey: ["persons", search],
-    queryFn: () => getData("/api", { params: { search } }),
-    enabled: !!search,
-    refetchOnWindowFocus: false,
-  });
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-  const [current, setCurrent] = useState(0);
-  const length = featureItems?.length ?? 0;
+  const { showResults, results, isFetching, clearSearch } = useFeaturedSearch();
+  const { sliderRef, current, handleScroll, scrollTo, scrollOnNextRender } =
+    useSlider(items.length);
 
-  const sliderRef = useRef<HTMLDivElement | null>(null);
-  const scrollTo = (index: number) => {
-    const container = sliderRef.current;
-    if (!container) return;
+  const addedKeys = new Set(items.map(getKey));
 
-    const itemWidth = container.scrollWidth / length;
-    container.scrollTo({ left: itemWidth * index, behavior: "smooth" });
-    setCurrent(index);
+  const handleAdd = (media: DashboardFeatured) => {
+    if (addedKeys.has(getKey(media))) return;
+
+    setError(null);
+    scrollOnNextRender(items.length);
+
+    startTransition(async () => {
+      addOptimisticItem({
+        ...media,
+        id: -1,
+        order: items.length,
+        active: true,
+      });
+
+      const result = await addFeaturedItem({
+        type: media.type,
+        id: getMedia(media).id,
+      });
+
+      if (result.success) clearSearch();
+      else setError(result.message);
+    });
   };
 
   return (
-    <div className="col-span-1 row-span-2 relative overflow-hidden bg-foreground/5 border border-foreground/20 rounded-2xl">
-      <div className="absolute top-0 left-0 right-0 z-30 px-4 py-5">
-        <Search variant="lighter" size="lg" />
-      </div>
-      <div className="flex overflow-scroll" ref={sliderRef}>
-        {featureItems.map((item) => {
-          const data = item?.type === "Movie" ? item.movie : item?.serial;
-          return (
-            <div key={data?.id} className="relative shrink-0 w-full">
-              {data?.image ? (
-                <div className="aspect-2/3">
-                  <Image
-                    src={data?.image}
-                    alt={data.title}
-                    width={200}
-                    height={200}
-                    className="size-full object-cover"
-                    loading="eager"
-                    priority
-                  />
-                </div>
-              ) : (
-                <span />
-              )}
-            </div>
-          );
-        })}
+    <div className="relative col-span-1 row-span-2 overflow-hidden rounded-2xl border border-foreground/20 bg-foreground/5">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 px-4 py-5">
+        <div className="pointer-events-auto">
+          <Search variant="lighter" size="lg" />
+
+          {showResults && (
+            <FeaturedSearchResults
+              results={results}
+              addedKeys={addedKeys}
+              isLoading={isFetching}
+              disabled={isPending}
+              error={error}
+              onAdd={handleAdd}
+            />
+          )}
+        </div>
       </div>
 
-      <Navigation length={length} current={current} onChange={scrollTo} />
+      <FeaturedSlider
+        items={items}
+        sliderRef={sliderRef}
+        onScroll={handleScroll}
+      />
+
+      <Navigation length={items.length} current={current} onChange={scrollTo} />
     </div>
   );
 }

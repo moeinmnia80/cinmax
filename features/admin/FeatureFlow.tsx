@@ -48,7 +48,10 @@ const Branch = ({
 };
 
 export const FeaturedFlow = ({ total, movies, serials }: FeaturedFlowProps) => (
-  <div className="flex items-center gap-1" style={{ height: H }}>
+  <div
+    className="flex items-center justify-center gap-1 w-full bg-background border border-foreground/10 rounded-xl"
+    style={{ height: H }}
+  >
     <div className="flex flex-col items-center min-w-16">
       <p className="text-sm text-foreground/50">Featured</p>
       <p className="mt-1 text-4xl font-black tabular-nums">{total}</p>

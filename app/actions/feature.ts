@@ -1,91 +1,57 @@
 "use server";
 
+import { z } from "zod";
 import { updateTag } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 import db from "@/lib/db";
-import type { FeaturedKind } from "@/data/dashboard";
 
-export type ActionResult = { ok: true } | { ok: false; error: string };
+const addFeaturedSchema = z.object({
+  type: z.enum(["Movie", "Serial"]),
+  id: z.number().int().positive(),
+});
 
-function refresh() {
-  updateTag("featured-admin");
-  updateTag("dashboard-featured");
-  updateTag("dashboard-boxes");
-}
-
-async function safely(fn: () => Promise<void>): Promise<ActionResult> {
-  try {
-    await fn();
-    refresh();
-    return { ok: true };
-  } catch (error) {
-    console.error(error);
-    return { ok: false, error: "Something went wrong. Please try again." };
-  }
-}
+export type AddFeaturedResult =
+  | { success: true; id: number; order: number }
+  | { success: false; message: string };
 
 export async function addFeaturedItem(
-  kind: FeaturedKind,
-  mediaId: number,
-): Promise<ActionResult> {
-  return safely(async () => {
-    const alreadyFeatured = await db.featuredItem.findFirst({
-      where: kind === "Movie" ? { movieId: mediaId } : { serialId: mediaId },
-      select: { id: true },
-    });
-    if (alreadyFeatured) return;
+  input: z.infer<typeof addFeaturedSchema>,
+): Promise<AddFeaturedResult> {
+  const parsed = addFeaturedSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, message: "Invalid data" };
+  }
 
-    const { _max } = await db.featuredItem.aggregate({ _max: { order: true } });
+  const { type, id } = parsed.data;
 
-    await db.featuredItem.create({
+  try {
+    const last = await db.featuredItem.aggregate({ _max: { order: true } });
+    const order = (last._max.order ?? -1) + 1;
+
+    const item = await db.featuredItem.create({
       data: {
-        type: kind,
-        order: (_max.order ?? 0) + 1,
-        active: true,
-        ...(kind === "Movie" ? { movieId: mediaId } : { serialId: mediaId }),
+        type,
+        order,
+        ...(type === "Movie" ? { movieId: id } : { serialId: id }),
       },
-    });
-  });
-}
-
-export async function removeFeaturedItem(id: number): Promise<ActionResult> {
-  return safely(async () => {
-    await db.featuredItem.delete({ where: { id } });
-  });
-}
-
-export async function toggleFeaturedActive(
-  id: number,
-  active: boolean,
-): Promise<ActionResult> {
-  return safely(async () => {
-    await db.featuredItem.update({ where: { id }, data: { active } });
-  });
-}
-
-export async function moveFeaturedItem(
-  id: number,
-  direction: "up" | "down",
-): Promise<ActionResult> {
-  return safely(async () => {
-    const items = await db.featuredItem.findMany({
-      orderBy: { order: "asc" },
-      select: { id: true },
+      select: { id: true, order: true },
     });
 
-    const from = items.findIndex((item) => item.id === id);
-    const to = from + (direction === "up" ? -1 : 1);
-    if (from < 0 || to < 0 || to >= items.length) return;
+    updateTag("dashboard-featured");
+    updateTag("dashboard-boxes");
 
-    [items[from], items[to]] = [items[to], items[from]];
-
-    await db.$transaction(
-      items.map((item, index) =>
-        db.featuredItem.update({
-          where: { id: item.id },
-          data: { order: index + 1 },
-        }),
-      ),
-    );
-  });
+    return { success: true, ...item };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return { success: false, message: "Already in featured items" };
+      }
+      if (error.code === "P2003") {
+        return { success: false, message: "Movie or serial not found" };
+      }
+    }
+    console.error("addFeaturedItem error:", error);
+    return { success: false, message: "Failed to add featured item" };
+  }
 }

@@ -1,7 +1,10 @@
 import { cacheLife, cacheTag } from "next/cache";
 
 import db from "@/lib/db";
+import { Prisma } from "@prisma/client";
+import { Movie, Serial } from "@/types/types";
 
+// Movies
 export async function getLastMovies() {
   "use cache";
   cacheTag("dashboard-movie-boxes");
@@ -21,6 +24,7 @@ export async function getLastMovies() {
 }
 export type DashboardMovie = Awaited<ReturnType<typeof getLastMovies>>[number];
 
+// Series
 export async function getLastSerials() {
   "use cache";
   cacheTag("dashboard-serial-boxes");
@@ -38,52 +42,94 @@ export type DashboardSerial = Awaited<
   ReturnType<typeof getLastSerials>
 >[number];
 
-export async function getFeaturedItems() {
+// Featured
+const mediaInclude = {
+  genres: { include: { genre: true } },
+  cast: { include: { person: true } },
+  crew: { include: { person: true } },
+  language: true,
+} satisfies Prisma.MovieInclude & Prisma.SerialInclude;
+
+const featuredInclude = {
+  movie: { include: mediaInclude },
+  serial: { include: mediaInclude },
+} satisfies Prisma.FeaturedItemInclude;
+
+type FeaturedRow = Prisma.FeaturedItemGetPayload<{
+  include: typeof featuredInclude;
+}>;
+type MovieRow = NonNullable<FeaturedRow["movie"]>;
+type SerialRow = NonNullable<FeaturedRow["serial"]>;
+
+export type SerializedMovie<T extends Movie = Movie> = Omit<
+  T,
+  "rating" | "purchasePrice" | "budget" | "boxOffice"
+> & {
+  rating: string;
+  purchasePrice: number | null;
+  budget: number | null;
+  boxOffice: number | null;
+};
+
+export type SerializedSerial<T extends Serial = Serial> = Omit<
+  T,
+  "rating" | "purchasePrice"
+> & {
+  rating: string;
+  purchasePrice: number | null;
+};
+
+export type FeaturedMedia =
+  | { type: "Movie"; movie: SerializedMovie }
+  | { type: "Serial"; serial: SerializedSerial };
+
+export type DashboardFeatured = {
+  id: number;
+  order: number;
+  active: boolean;
+} & (
+  | { type: "Movie"; movie: SerializedMovie<MovieRow> }
+  | { type: "Serial"; serial: SerializedSerial<SerialRow> }
+);
+
+export const serializeMovie = <T extends Movie>(m: T) =>
+  ({
+    ...m,
+    rating: Number(m.rating).toFixed(1),
+    purchasePrice: Number(m.purchasePrice),
+    budget: Number(m.budget),
+    boxOffice: Number(m.boxOffice),
+  }) as SerializedMovie<T>;
+
+export const serializeSerial = <T extends Serial>(s: T) =>
+  ({
+    ...s,
+    rating: Number(s.rating).toFixed(1),
+    purchasePrice: Number(s.purchasePrice),
+  }) as SerializedSerial<T>;
+
+export async function getFeaturedItems(): Promise<DashboardFeatured[]> {
   "use cache";
   cacheTag("dashboard-boxes", "dashboard-featured");
   cacheLife("hours");
 
-  const featuredItems = await db.featuredItem.findMany({
-    orderBy: [{ order: "asc" }],
-    select: {
-      id: true,
-      type: true,
-      order: true,
-      active: true,
-      movie: true,
-      serial: true,
-    },
+  const rows = await db.featuredItem.findMany({
+    orderBy: { order: "asc" },
+    include: featuredInclude,
   });
 
-  return featuredItems.map((item) => {
-    const isMovie = item.type === "Movie" && item.movie;
-    const target = isMovie ? item.movie : item.serial;
+  return rows.flatMap((row): DashboardFeatured[] => {
+    const base = { id: row.id, order: row.order, active: row.active };
 
-    if (!target) return null;
+    if (row.type === "Movie" && row.movie)
+      return [{ ...base, type: "Movie", movie: serializeMovie(row.movie) }];
 
-    return {
-      ...item,
-      movie: item.movie
-        ? {
-            ...item.movie,
-            rating: Number(item.movie?.rating).toFixed(1),
-            purchasePrice: Number(item.movie?.purchasePrice),
-          }
-        : null,
-      serial: item.serial
-        ? {
-            ...item.serial,
-            rating: Number(item.serial?.rating).toFixed(1),
-            purchasePrice: Number(item.movie?.purchasePrice),
-          }
-        : null,
-    };
+    if (row.type === "Serial" && row.serial)
+      return [{ ...base, type: "Serial", serial: serializeSerial(row.serial) }];
+
+    return [];
   });
 }
-
-export type DashboardFeatured = Awaited<
-  ReturnType<typeof getFeaturedItems>
->[number];
 
 export type FeaturedKind = "Movie" | "Serial";
 
@@ -203,7 +249,7 @@ export async function getGenreStats() {
   cacheLife("hours");
 
   const select = {
-    genres: { select: { genre: { select: { name: true } } } },
+    genres: { select: { genre: true } },
   } as const;
 
   const [movies, serials] = await Promise.all([
