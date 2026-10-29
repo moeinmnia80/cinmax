@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { CheckCircle2, CircleAlert, Loader2, Save } from "lucide-react";
 
 import { toast } from "@/store";
-import { DeleteDialog } from "./DeleteDialog";
+import { DeleteDialog } from "@/features/client";
 
 type FormAction = (formData: FormData) => void | Promise<void>;
 

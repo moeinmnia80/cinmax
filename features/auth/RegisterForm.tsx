@@ -5,9 +5,9 @@ import { useState } from "react";
 import {
   RegisterPlans,
   RegisterAccount,
+  RegisterSettingUp,
   RegisterStepIndicator,
 } from "@/features/client";
-import { RegisterSettingUp } from "./RegisterSettingUp";
 
 export const RegisterForm = () => {
   const [step, setStep] = useState(0);

@@ -18,6 +18,7 @@ export { SubmitButton } from "@/features/auth/SubmitButton";
 export { PlanOption } from "@/features/auth/RegisterPlanOption";
 export { RegisterPlans } from "@/features/auth/RegisterPlans";
 export { RegisterAccount } from "@/features/auth/RegisterAccount";
+export { RegisterSettingUp } from "@/features/auth/RegisterSettingUp";
 export { RegisterStepIndicator } from "@/features/auth/RegisterStepIndicator";
 
 export { Avatar } from "@/features/admin/PersonAvatar";
@@ -34,9 +35,16 @@ export { RegisterForm } from "@/features/auth/RegisterForm";
 export { EntityRow } from "@/features/admin/EntityRow";
 export { EntityManager } from "@/features/admin/EntityManager";
 
+export { AdminSidebarNav } from "@/features/admin/AdminSidebarNav";
+export { AdminMobileSidebar } from "@/features/admin/AdminMobileSidebar";
+
 export { EditButton } from "@/features/admin/EditButton";
 export { EditForm } from "@/features/admin/EditSerialForm";
 export { DeleteDialog } from "@/features/admin/DeleteDialog";
 export { EditMovieForm } from "@/features/admin/EditMovieForm";
 export { EditPersonForm } from "@/features/admin/EditPersonForm";
 export { EditFormActions } from "@/features/admin/EditFormAction";
+
+export { Navigation } from "@/features/admin/FeatureNavigation";
+export { FeaturedItemList } from "@/features/admin/FeaturedItemList";
+export { FeaturedSearchResults } from "@/features/admin/FeaturedSearchResults";

@@ -89,7 +89,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
                 fill
                 sizes="(min-width: 1280px) 280px, 240px"
                 priority={i === 0}
-                className={`object-cover transition-[opacity,transform] duration-700 group-hover:scale-110 motion-reduce:transition-none ${
+                className={`object-cover transition-[opacity,transform, scale] duration-700 group-hover:scale-110 motion-reduce:transition-none ${
                   active ? "opacity-100" : "opacity-0"
                 }`}
               />

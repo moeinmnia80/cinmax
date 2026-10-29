@@ -1,26 +1,33 @@
 "use client";
+
 import { use, useOptimistic, useState, useTransition } from "react";
 
 import { getKey, getMedia } from "@/utils";
 import { Search } from "@/components/Search";
 import { useSlider } from "@/hooks/useSlider";
-import { Navigation } from "./FeatureNavigation";
-import { FeaturedSlider } from "./FeaturedSlider";
-import { addFeaturedItem } from "@/app/actions/feature";
-import { useFeaturedSearch } from "@/hooks/useFeaturedSearch";
-import { FeaturedSearchResults } from "./FeaturedSearchResults";
+import { FeaturedSlider } from "@/features/server";
 import type { DashboardFeatured } from "@/data/dashboard";
+import { useFeaturedSearch } from "@/hooks/useFeaturedSearch";
+import { FeaturedSearchResults, Navigation } from "@/features/client";
+import { addFeaturedItem, removeFeaturedItem } from "@/app/actions/feature";
 
 interface FeaturedItemsListProps {
   data: Promise<DashboardFeatured[]>;
 }
 
+type OptimisticAction =
+  | { kind: "add"; item: DashboardFeatured }
+  | { kind: "remove"; key: string };
+
 export function FeaturedItemList({ data }: FeaturedItemsListProps) {
   const serverItems = use(data);
 
-  const [items, addOptimisticItem] = useOptimistic(
+  const [items, updateOptimisticItems] = useOptimistic(
     serverItems,
-    (state, item: DashboardFeatured) => [...state, item],
+    (state, action: OptimisticAction) =>
+      action.kind === "add"
+        ? [...state, action.item]
+        : state.filter((item) => getKey(item) !== action.key),
   );
 
   const [isPending, startTransition] = useTransition();
@@ -39,11 +46,9 @@ export function FeaturedItemList({ data }: FeaturedItemsListProps) {
     scrollOnNextRender(items.length);
 
     startTransition(async () => {
-      addOptimisticItem({
-        ...media,
-        id: -1,
-        order: items.length,
-        active: true,
+      updateOptimisticItems({
+        kind: "add",
+        item: { ...media, id: -1, order: items.length, active: true },
       });
 
       const result = await addFeaturedItem({
@@ -53,6 +58,21 @@ export function FeaturedItemList({ data }: FeaturedItemsListProps) {
 
       if (result.success) clearSearch();
       else setError(result.message);
+    });
+  };
+
+  const handleRemove = (item: DashboardFeatured) => {
+    setError(null);
+
+    startTransition(async () => {
+      updateOptimisticItems({ kind: "remove", key: getKey(item) });
+
+      const result = await removeFeaturedItem({
+        type: item.type,
+        id: getMedia(item).id,
+      });
+
+      if (!result.success) setError(result.message);
     });
   };
 
@@ -70,6 +90,7 @@ export function FeaturedItemList({ data }: FeaturedItemsListProps) {
               disabled={isPending}
               error={error}
               onAdd={handleAdd}
+              onRemove={handleRemove}
             />
           )}
         </div>

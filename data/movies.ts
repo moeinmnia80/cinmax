@@ -2,6 +2,7 @@ import { cacheLife, cacheTag } from "next/cache";
 
 import db from "@/lib/db";
 import { MovieDetail } from "@/types/types";
+import { lastChangeOf, recentArgs, weekOf } from "@/utils";
 
 export async function getMovies() {
   "use cache";
@@ -22,20 +23,29 @@ export async function getMovieCards() {
   cacheTag("movie-cards");
   cacheLife("hours");
 
-  const [movieCount, movieAVGRating] = await Promise.allSettled([
-    db.movie.count(),
-    db.movie.aggregate({
-      _count: true,
-      _sum: {
-        rating: true,
-      },
-    }),
-  ]);
+  const now = Date.now();
+
+  const [movieCount, movieAVGRating, recentMovies, movieChange] =
+    await Promise.allSettled([
+      db.movie.count(),
+      db.movie.aggregate({
+        _count: true,
+        _sum: {
+          rating: true,
+        },
+      }),
+      db.movie.findMany(recentArgs(now)),
+      db.movie.aggregate({
+        _max: { updatedAt: true },
+      }),
+    ]);
 
   return [
     {
       label: "Total",
       value: movieCount,
+      ...weekOf(recentMovies, now),
+      lastChange: lastChangeOf(movieChange),
     },
     {
       label: "AVG RATING",
@@ -52,6 +62,8 @@ export async function getMovieCards() {
             }
           : movieAVGRating,
       className: "text-destructive",
+
+      lastChange: lastChangeOf(movieChange),
     },
   ];
 }

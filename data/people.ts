@@ -2,37 +2,101 @@ import { cacheLife, cacheTag } from "next/cache";
 
 import db from "@/lib/db";
 import { Person } from "@/types/types";
+import { DAY, DAYS, lastChangeOf, weekOf } from "@/utils";
 
 export async function getPeopleDetails() {
   "use cache";
   cacheTag("people-cards");
   cacheLife("hours");
 
-  const [personCount, directorCount, writerCount, producerCount] =
-    await Promise.allSettled([
-      db.person.count({ where: { role: "Actor" } }),
-      db.person.count({ where: { role: "Director" } }),
-      db.person.count({ where: { role: "Writer" } }),
-      db.person.count({ where: { role: "Producer" } }),
-    ]);
+  const now = Date.now();
+
+  const [
+    personCount,
+    directorCount,
+    writerCount,
+    producerCount,
+    lastActorCount,
+    recentActors,
+    lastDirectorCount,
+    recentDirector,
+    lastWriterCount,
+    recentWriter,
+    lastProducerCount,
+    recentProducer,
+  ] = await Promise.allSettled([
+    db.person.count({ where: { role: "Actor" } }),
+    db.person.count({ where: { role: "Director" } }),
+    db.person.count({ where: { role: "Writer" } }),
+    db.person.count({ where: { role: "Producer" } }),
+    db.person.aggregate({
+      where: { role: "Actor" },
+      _max: { updatedAt: true },
+    }),
+    db.person.findMany({
+      where: { role: "Actor", createdAt: { gte: new Date(now - DAYS * DAY) } },
+      select: { createdAt: true },
+    }),
+    db.person.aggregate({
+      where: { role: "Director" },
+      _max: { updatedAt: true },
+    }),
+    db.person.findMany({
+      where: {
+        role: "Director",
+        createdAt: { gte: new Date(now - DAYS * DAY) },
+      },
+      select: { createdAt: true },
+    }),
+    db.person.aggregate({
+      where: { role: "Writer" },
+      _max: { updatedAt: true },
+    }),
+    db.person.findMany({
+      where: {
+        role: "Writer",
+        createdAt: { gte: new Date(now - DAYS * DAY) },
+      },
+      select: { createdAt: true },
+    }),
+    db.person.aggregate({
+      where: { role: "Producer" },
+      _max: { updatedAt: true },
+    }),
+    db.person.findMany({
+      where: {
+        role: "Producer",
+        createdAt: { gte: new Date(now - DAYS * DAY) },
+      },
+      select: { createdAt: true },
+    }),
+  ]);
 
   return [
     {
       label: "Actor",
       value: personCount,
+      ...weekOf(recentActors, now),
+      lastChange: lastChangeOf(lastActorCount),
     },
     {
       label: "Directors",
       value: directorCount,
+      ...weekOf(recentDirector, now),
+      lastChange: lastChangeOf(lastDirectorCount),
       className: "text-destructive",
     },
     {
       label: "Writers",
       value: writerCount,
+      ...weekOf(recentWriter, now),
+      lastChange: lastChangeOf(lastWriterCount),
     },
     {
       label: "Producers",
       value: producerCount,
+      ...weekOf(recentProducer, now),
+      lastChange: lastChangeOf(lastProducerCount),
     },
   ];
 }

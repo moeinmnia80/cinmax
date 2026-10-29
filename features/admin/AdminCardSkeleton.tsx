@@ -6,8 +6,10 @@ export const AdminCardSkeleton = async () => {
           key={index}
           className="relative rounded-xl border border-white/10 bg-card p-5 hover:border-foreground/40 transition-colors overflow-hidden group"
         >
-          <div className="w-12 h-6 bg-gray-200/20 animate-pulse rounded-md" />
-          <div className="size-8 bg-gray-200/20 animate-pulse rounded-md mt-1" />
+          <div className="w-16 h-6 bg-gray-200/20 animate-pulse rounded-md" />
+          <div className="size-7 bg-gray-200/20 animate-pulse rounded-md mt-1" />
+          <div className="w-18 h-3 bg-gray-200/20 animate-pulse rounded-sm mt-1" />
+          <div className="w-32 h-3 bg-gray-200/20 animate-pulse rounded-sm mt-1" />
         </div>
       ))}
     </div>

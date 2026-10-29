@@ -34,14 +34,22 @@ export function Navigation({ length, current, onChange }: NavigationProps) {
 
 function NextButton({ ...props }: ComponentProps<"button">) {
   return (
-    <button type="button" className="disabled:opacity-40" {...props}>
+    <button
+      type="button"
+      className="disabled:opacity-40 bg-foreground/5 rounded-full p-2 backdrop-blur-xs border border-foreground/10"
+      {...props}
+    >
       <ChevronRight size={20} />
     </button>
   );
 }
 function PrevButton({ ...props }: ComponentProps<"button">) {
   return (
-    <button type="button" className="disabled:opacity-40" {...props}>
+    <button
+      type="button"
+      className="disabled:opacity-40 bg-foreground/5 rounded-full p-2 backdrop-blur-xs border border-foreground/10"
+      {...props}
+    >
       <ChevronLeft size={20} />
     </button>
   );

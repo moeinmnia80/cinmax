@@ -21,7 +21,7 @@ const Branch = ({
   color: string;
   muted: boolean;
 }) => {
-  const endX = W - 8; // leave room for the arrowhead
+  const endX = W - 8;
   const stroke = muted ? "currentColor" : color;
 
   return (
@@ -34,11 +34,10 @@ const Branch = ({
       opacity={muted ? 0.25 : 1}
       strokeDasharray={muted ? "4 4" : undefined}
     >
-      {/* curve out of the Featured number, into the row */}
       <path
         d={`M2 ${MID} C ${W * 0.55} ${MID}, ${W * 0.4} ${toY}, ${endX} ${toY}`}
       />
-      {/* arrowhead */}
+
       <path
         d={`M${endX - 4} ${toY - 5} L${endX + 4} ${toY} L${endX - 4} ${toY + 5}`}
         strokeDasharray="none"

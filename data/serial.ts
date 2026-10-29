@@ -2,6 +2,7 @@ import { cacheLife, cacheTag } from "next/cache";
 
 import db from "@/lib/db";
 import { SerialDetail } from "@/types/types";
+import { DAY, DAYS, lastChangeOf, recentArgs, weekOf } from "@/utils";
 
 export interface SerialType extends Omit<
   SerialDetail,
@@ -72,32 +73,6 @@ export async function getSerialWithQuery(query: string) {
     },
   });
 }
-
-export const DAY = 24 * 60 * 60 * 1000;
-export const DAYS = 7;
-
-type Created = PromiseSettledResult<{ createdAt: Date }[]>;
-type LastChange = PromiseSettledResult<{ _max: { updatedAt: Date | null } }>;
-
-export const lastChangeOf = (result: LastChange) =>
-  result.status === "fulfilled" ? result.value._max.updatedAt : undefined;
-
-export const weekOf = (result: Created, now: number) => {
-  if (result.status !== "fulfilled") return {};
-
-  const trend = Array<number>(DAYS).fill(0);
-  for (const { createdAt } of result.value) {
-    const age = Math.floor((now - createdAt.getTime()) / DAY);
-    trend[DAYS - 1 - Math.min(Math.max(age, 0), DAYS - 1)]++;
-  }
-  return { addedThisWeek: result.value.length, trend };
-};
-
-export const recentArgs = (now: number) =>
-  ({
-    where: { createdAt: { gte: new Date(now - DAYS * DAY) } },
-    select: { createdAt: true },
-  }) as const;
 
 export async function getSerialCards() {
   "use cache";

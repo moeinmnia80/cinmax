@@ -55,3 +55,37 @@ export async function addFeaturedItem(
     return { success: false, message: "Failed to add featured item" };
   }
 }
+
+const removeFeaturedSchema = z.object({
+  type: z.enum(["Movie", "Serial"]),
+  id: z.number().int().positive(),
+});
+
+export type RemoveFeaturedResult =
+  | { success: true }
+  | { success: false; message: string };
+
+export async function removeFeaturedItem(
+  input: z.infer<typeof removeFeaturedSchema>,
+): Promise<RemoveFeaturedResult> {
+  const parsed = removeFeaturedSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, message: "Invalid data" };
+  }
+
+  const { type, id } = parsed.data;
+
+  try {
+    await db.featuredItem.deleteMany({
+      where: type === "Movie" ? { movieId: id } : { serialId: id },
+    });
+
+    updateTag("dashboard-featured");
+    updateTag("dashboard-boxes");
+
+    return { success: true };
+  } catch (error) {
+    console.error("removeFeaturedItem error:", error);
+    return { success: false, message: "Failed to remove featured item" };
+  }
+}

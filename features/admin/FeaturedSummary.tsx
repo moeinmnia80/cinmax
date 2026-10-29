@@ -1,9 +1,8 @@
 import "server-only";
 import { Suspense, use } from "react";
 
-import { AdminBoxSkeleton } from "@/features/server";
+import { FeaturedSummarySkeleton, FeaturedFlow } from "@/features/server";
 import { getFeaturedSummary, type FeaturedSummaryData } from "@/data/dashboard";
-import { FeaturedFlow } from "./FeatureFlow";
 
 function Summary({ data }: { data: Promise<FeaturedSummaryData> }) {
   const s = use(data);
@@ -47,7 +46,7 @@ export const FeaturedSummary = () => {
   const summary = getFeaturedSummary();
 
   return (
-    <Suspense fallback={<AdminBoxSkeleton />}>
+    <Suspense fallback={<FeaturedSummarySkeleton />}>
       <Summary data={summary} />
     </Suspense>
   );

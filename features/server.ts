@@ -24,10 +24,14 @@ export { EditFormSkeleton } from "@/features/admin/EditFormSkeleton";
 
 export { AdminCard } from "@/features/admin/AdminCard";
 export { AdminHeader } from "@/features/admin/AdminHeader";
+export { AdminSidebar } from "@/features/admin/AdminSidebar";
 export { AdminBoxSkeleton } from "@/features/admin/AdminBoxSkeleton";
 export { AdminCardSkeleton } from "@/features/admin/AdminCardSkeleton";
+export { AdminSidebarHeader } from "@/features/admin/AdminSidebarHeader";
 
+export { FeaturedFlow } from "@/features/admin/FeatureFlow";
 export { FeaturedSummary } from "@/features/admin/FeaturedSummary";
+export { FeaturedSummarySkeleton } from "@/features/admin/FeaturedSummarySkeleton";
 
 export { LoginStats } from "@/features/auth/LoginStats";
 export { LoginShowCase } from "@/features/auth/LoginShowCase";
@@ -42,3 +46,9 @@ export { RegisterContent } from "@/features/auth/RegisterContent";
 export { RegisterBackground } from "@/features/auth/RegisterBackground";
 export { RegisterFeatureList } from "@/features/auth/RegisterFeatureList";
 export { RegisterContentInfo } from "@/features/auth/RegisterContentInfo";
+
+export { GenreChart } from "@/features/admin/GenreChart";
+export { GenreChartSkeleton } from "@/features/admin/GenreChartSkeleton";
+
+export { FeaturedSlider } from "@/features/admin/FeaturedSlider";
+export { FeaturedItemListSkeleton } from "@/features/admin/FeaturedItemsListSkeleton";
