@@ -42,11 +42,3 @@ export { RegisterContent } from "@/features/auth/RegisterContent";
 export { RegisterBackground } from "@/features/auth/RegisterBackground";
 export { RegisterFeatureList } from "@/features/auth/RegisterFeatureList";
 export { RegisterContentInfo } from "@/features/auth/RegisterContentInfo";
-
-// type
-export type {
-  Person,
-  CrewMember,
-  HeroResponse,
-  FeaturedItem,
-} from "@/features/hero/Hero";
