@@ -35,6 +35,7 @@ export { RegisterForm } from "@/features/auth/RegisterForm";
 export { EntityRow } from "@/features/admin/EntityRow";
 export { EntityManager } from "@/features/admin/EntityManager";
 
+export { AdminMobileNav } from "@/features/admin/AdminMobileNav";
 export { AdminSidebarNav } from "@/features/admin/AdminSidebarNav";
 export { AdminMobileSidebar } from "@/features/admin/AdminMobileSidebar";
 

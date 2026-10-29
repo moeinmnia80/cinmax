@@ -5,9 +5,9 @@ import { use, useOptimistic, useState, useTransition } from "react";
 import { getKey, getMedia } from "@/utils";
 import { Search } from "@/components/Search";
 import { useSlider } from "@/hooks/useSlider";
-import { FeaturedSlider } from "@/features/server";
 import type { DashboardFeatured } from "@/data/dashboard";
 import { useFeaturedSearch } from "@/hooks/useFeaturedSearch";
+import { FeaturedSlider } from "@/features/admin/FeaturedSlider";
 import { FeaturedSearchResults, Navigation } from "@/features/client";
 import { addFeaturedItem, removeFeaturedItem } from "@/app/actions/feature";
 

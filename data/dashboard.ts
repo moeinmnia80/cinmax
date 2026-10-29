@@ -4,44 +4,6 @@ import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { Movie, Serial } from "@/types/types";
 
-// Movies
-export async function getLastMovies() {
-  "use cache";
-  cacheTag("dashboard-movie-boxes");
-  cacheLife("hours");
-
-  const movies = await db.movie.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    skip: 0,
-  });
-
-  return movies.map((m) => ({
-    ...m,
-    rating: m.rating.toNumber(),
-    budget: m.budget === null ? null : Number(m.budget),
-  }));
-}
-export type DashboardMovie = Awaited<ReturnType<typeof getLastMovies>>[number];
-
-// Series
-export async function getLastSerials() {
-  "use cache";
-  cacheTag("dashboard-serial-boxes");
-  cacheLife("hours");
-
-  const serials = await db.serial.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    skip: 0,
-  });
-
-  return serials.map((s) => ({ ...s, rating: s.rating.toNumber() }));
-}
-export type DashboardSerial = Awaited<
-  ReturnType<typeof getLastSerials>
->[number];
-
 // Featured
 const mediaInclude = {
   genres: { include: { genre: true } },

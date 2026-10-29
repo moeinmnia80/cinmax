@@ -7,8 +7,6 @@ export { CrewStripSkeleton } from "@/features/hero/CrewStripSkeleton";
 export { HeroContentSkeleton } from "@/features/hero/HeroContentSkeleton";
 export { HeroBackgroundSkeleton } from "@/features/hero/HeroBackgroundSkeleton";
 
-export { MovieList } from "@/features/admin/MovieList";
-export { SerialList } from "@/features/admin/SerialList";
 export { SerialTableSkeleton } from "@/features/admin/SerialTableSkeleton";
 
 export { EditButton } from "@/features/admin/EditButton";
@@ -23,6 +21,7 @@ export { EditFormLoader } from "@/features/admin/EditFormLoading";
 export { EditFormSkeleton } from "@/features/admin/EditFormSkeleton";
 
 export { AdminCard } from "@/features/admin/AdminCard";
+export { AdminShell } from "@/features/admin/AdminShell";
 export { AdminHeader } from "@/features/admin/AdminHeader";
 export { AdminSidebar } from "@/features/admin/AdminSidebar";
 export { AdminBoxSkeleton } from "@/features/admin/AdminBoxSkeleton";

@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { ComponentProps, useEffect } from "react";
 import { X } from "lucide-react";
 
 import { AdminSidebarNav } from "@/features/client";
-import { AdminSidebarHeader } from "@/features/server";
 
-type Props = { open: boolean; onClose: () => void };
+type Props = { open: boolean; onClose: () => void } & ComponentProps<"div">;
 
-export const AdminMobileSidebar = ({ open, onClose }: Props) => {
+export const AdminMobileSidebar = ({ open, onClose, children }: Props) => {
   useEffect(() => {
     if (!open) return;
 
@@ -47,7 +46,7 @@ export const AdminMobileSidebar = ({ open, onClose }: Props) => {
       >
         <div className="flex items-center justify-between border-b border-foreground/10">
           <div className="flex-1" onClick={onClose}>
-            <AdminSidebarHeader />
+            {children}
           </div>
           <button
             onClick={onClose}

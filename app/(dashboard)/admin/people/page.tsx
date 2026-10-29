@@ -2,15 +2,13 @@ import { Suspense } from "react";
 
 import { getPeople, getPeopleDetails } from "@/data/people";
 import {
-  AdminCardSkeleton,
-  PeopleSheetSkeleton,
-  PeopleHeaderSkeleton,
-} from "@/features/server";
-import {
   AdminCard,
   EditPeople,
   PeopleSheet,
   PeopleHeader,
+  AdminCardSkeleton,
+  PeopleSheetSkeleton,
+  PeopleHeaderSkeleton,
 } from "@/features/server";
 
 interface PeoplePageProps {

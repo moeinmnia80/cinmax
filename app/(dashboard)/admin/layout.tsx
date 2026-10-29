@@ -1,4 +1,4 @@
-import { AdminShell } from "@/features/admin/AdminShell";
+import { AdminShell } from "@/features/server";
 
 export default function AdminLayout({
   children,

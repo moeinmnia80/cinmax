@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { getMovieCards, getMovies } from "@/data/movies";
+import { MovieTable } from "@/features/admin/MovieTable";
 import { MovieHeader } from "@/features/admin/MovieHeader";
 import {
   AdminCard,
@@ -8,7 +9,6 @@ import {
   AdminCardSkeleton,
   SerialTableSkeleton,
 } from "@/features/server";
-import { MovieTable } from "@/features/admin/MovieTable";
 
 interface MoviePageProps {
   searchParams: Promise<{ search?: "string"; edit?: "string" }>;
