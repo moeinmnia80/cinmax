@@ -62,7 +62,7 @@ export const movieSchema = z.object({
     .int("Must be a whole number.")
     .positive("Must be greater than 0."),
   rating: z.coerce.number().min(0).max(10, "Rating must be 0–10."),
-  category: z.enum(MOVIE_CATEGORIES, { error: "Pick a category." }),
+  categories: z.array(z.coerce.number().int().positive()).default([]),
 
   genres: z.array(z.string()).min(1, "Pick at least one genre."),
   language: z.string().trim().min(1, "Language is required."),

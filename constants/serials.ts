@@ -46,3 +46,5 @@ export const REQUIRED_FIELDS = [
   "badge",
   "genres",
 ] as const;
+
+export type SerialField = (typeof REQUIRED_FIELDS)[number];

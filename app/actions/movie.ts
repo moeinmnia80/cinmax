@@ -35,11 +35,10 @@ export async function saveMovie(
   _prevState: EditMovieForm,
   formData: FormData,
 ): Promise<EditMovieForm> {
-  console.log(Object.fromEntries(formData));
-
   const parsed = movieSchema.safeParse({
     ...Object.fromEntries(formData),
     genres: formData.getAll("genres"),
+    categories: formData.getAll("categories"),
   });
 
   if (!parsed.success) {
@@ -161,6 +160,8 @@ export async function saveMovie(
         genreIds.push(genre.id);
       }
 
+      const categoryIds = [...new Set(data.categories)];
+
       await tx.movie.create({
         data: {
           title: data.title,
@@ -171,7 +172,6 @@ export async function saveMovie(
           year: data.year,
           durationMinutes: data.durationMinutes,
           rating: data.rating,
-          category: data.category,
           recognition: data.recognition ?? null,
           trailer: data.trailer ?? null,
           budget: data.budget ?? null,
@@ -189,6 +189,10 @@ export async function saveMovie(
             create: genreIds.map((id) => ({
               genre: { connect: { id } },
             })),
+          },
+
+          categories: {
+            create: categoryIds.map((categoryId) => ({ categoryId })),
           },
         },
       });
