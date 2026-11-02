@@ -10,7 +10,7 @@ function Summary({ data }: { data: Promise<FeaturedSummaryData> }) {
   return (
     <section
       aria-labelledby="featured-summary"
-      className="col-span-1 sm:col-span-1 rounded-2xl border border-foreground/20 bg-foreground/5 animate-scale-in p-1"
+      className="col-span-1 sm:col-span-1 rounded-2xl border border-foreground/10 bg-foreground/5 animate-scale-in p-1"
     >
       {s.total ? (
         <div className="flex flex-col items-center justify-between rounded-xl h-full">

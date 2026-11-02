@@ -33,7 +33,7 @@ export const AdminMobileNav = ({ sidebarHeader, children }: Props) => {
           <span className="font-bold uppercase tracking-widest">cinmax</span>
         </header>
 
-        <main className="flex-5">{children}</main>
+        <main className="relative flex-5">{children}</main>
       </div>
     </>
   );

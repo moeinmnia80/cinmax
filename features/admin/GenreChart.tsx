@@ -55,7 +55,7 @@ export const GenreChart = ({ data, size = 340 }: GenreChartProps) => {
   return (
     <section
       aria-labelledby="genre-chart"
-      className="col-span-1 sm:col-span-2 rounded-2xl border border-foreground/20 bg-foreground/5 animate-scale-in"
+      className="col-span-1 sm:col-span-2 rounded-2xl border border-foreground/10 bg-foreground/5 animate-scale-in"
     >
       {items.length ? (
         <div className="flex flex-col items-center gap-1 h-full p-1 md:items-stretch md:flex-row md:justify-between">
@@ -64,7 +64,7 @@ export const GenreChart = ({ data, size = 340 }: GenreChartProps) => {
             width={size}
             height={size}
             style={{ maxWidth: "100%", height: "auto" }}
-            className="shrink-0"
+            className="shrink-0 pr-2"
             role="img"
             aria-label={`Genre share: ${slices.map((s) => `${s.genre} ${s.percent}%`).join(", ")}`}
           >
@@ -106,8 +106,8 @@ export const GenreChart = ({ data, size = 340 }: GenreChartProps) => {
               Total titles
             </text>
           </svg>
-
-          <ul className="flex flex-col justify-between w-full gap-1 bg-background border border-foreground/10 rounded-xl p-3">
+          <div className="hidden sm:block w-px h-full bg-foreground/10 mx-2" />
+          <ul className="flex flex-col justify-between w-full gap-1 p-3">
             {slices.map((s) => (
               <li key={s.genre} className="flex items-center gap-1">
                 <span

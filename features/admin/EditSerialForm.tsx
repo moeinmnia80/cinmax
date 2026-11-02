@@ -4,9 +4,9 @@ import { useActionState, useEffect } from "react";
 
 import { SerialType } from "@/data/serial";
 import { SerialStatus } from "@/types/types";
-import { deleteSerial, saveSerial } from "@/app/actions/serial";
-import { STATUS_OPTIONS } from "@/constants/serials";
 import { useFormChanges } from "@/hooks/useFormChanges";
+import { deleteSerial, saveSerial } from "@/app/actions/serial";
+import { REQUIRED_FIELDS, STATUS_OPTIONS } from "@/constants/serials";
 import { CONTROL, Field, LABEL_TEXT, TextInput } from "@/components/Form";
 import {
   CastField,
@@ -14,6 +14,7 @@ import {
   ImageUpload,
   GenresField,
   EditFormActions,
+  CategoriesField,
 } from "@/features/client";
 import {
   Select,
@@ -29,16 +30,6 @@ const initialState = {
   success: false,
 };
 
-const REQUIRED_FIELDS = [
-  "title",
-  "description",
-  "startYear",
-  "language",
-  "country",
-  "studio",
-  "rating",
-] as const;
-
 export const EditForm = ({
   edit,
   serial,
@@ -50,6 +41,7 @@ export const EditForm = ({
     saveSerial,
     initialState,
   );
+
   const { formRef, dirty, valid, resetBaseline } =
     useFormChanges(REQUIRED_FIELDS);
 
@@ -75,17 +67,21 @@ export const EditForm = ({
       <Field label="title" error={state.errors?.title}>
         <TextInput name="title" defaultValue={serial?.title} />
       </Field>
-      <Field label="description" error={state.errors?.description}>
+      <Field
+        label="description"
+        error={state.errors?.description}
+        className="col-span-2 row-span-2"
+      >
         <textarea
           name="description"
-          rows={3}
+          rows={5}
           defaultValue={serial?.description ?? ""}
           className={`${CONTROL} resize-none text-sm font-normal`}
         />
       </Field>
       <Field
         label="start year"
-        className="col-span-2"
+        className="col-span-1 col-start-3 row-start-2 row-end-3"
         error={state.errors?.startYear}
       >
         <TextInput
@@ -96,7 +92,7 @@ export const EditForm = ({
       </Field>
       <Field
         label="end year"
-        className="col-span-2"
+        className="col-span-1 col-start-4 row-start-2 row-end-3"
         error={state.errors?.endYear}
       >
         <TextInput
@@ -142,7 +138,11 @@ export const EditForm = ({
           inputMode="numeric"
         />
       </Field>
-      <Field label="badge" error={state.errors?.badge}>
+      <Field
+        label="badge"
+        error={state.errors?.badge}
+        className="row-start-4 col-start-3 col-span-2"
+      >
         <TextInput name="badge" defaultValue={serial?.badge ?? ""} />
       </Field>
 
@@ -168,10 +168,16 @@ export const EditForm = ({
         className="col-span-4"
         defaultValue={(serial?.genres || []).map(({ genre }) => genre.name)}
       />
+      <CategoriesField
+        name="categories"
+        label="categories"
+        className="col-span-4"
+        defaultValue={serial?.categories?.map(({ categoryId }) => categoryId)}
+      />
 
       <Field
         label="language"
-        className="col-span-2"
+        className="col-span-1"
         error={state.errors?.language}
       >
         <TextInput
@@ -181,19 +187,23 @@ export const EditForm = ({
       </Field>
       <Field
         label="country"
-        className="col-span-2"
+        className="col-span-1"
         error={state.errors?.country}
       >
         <TextInput name="country" defaultValue={serial?.country?.name ?? ""} />
       </Field>
-      <Field label="price" error={state.errors?.purchasePrice}>
+      <Field
+        label="price"
+        error={state.errors?.purchasePrice}
+        className="col-span-1"
+      >
         <TextInput
           name="purchasePrice"
           placeholder="Blank If Free"
           defaultValue={serial?.purchasePrice ?? ""}
         />
       </Field>
-      <Field label="studio" error={state.errors?.studio}>
+      <Field label="studio" error={state.errors?.studio} className="col-span-1">
         <TextInput name="studio" defaultValue={serial?.studio?.name ?? ""} />
       </Field>
 
@@ -202,19 +212,19 @@ export const EditForm = ({
         <p className={LABEL_TEXT} aria-hidden="true">
           media
         </p>
-        <div className="mt-2 grid grid-cols-2 items-start gap-4">
+        <div className="mt-2 flex gap-4">
           <ImageUpload
             name="image"
             label="poster"
             hint="2:3 · JPG/PNG"
-            aspectClassName="aspect-[2/3]"
+            aspectClassName="aspect-2/3 min-w-25"
             defaultUrl={serial?.image}
           />
           <ImageUpload
             name="backdrop"
             label="backdrop"
             hint="16:9 · JPG/PNG"
-            aspectClassName="aspect-video"
+            aspectClassName="aspect-video min-w-67.5"
             defaultUrl={serial?.backdrop}
           />
         </div>
@@ -224,10 +234,12 @@ export const EditForm = ({
           <CastField
             target={{ type: "serial", id: serial.id }}
             defaultValue={serial?.cast}
+            className="col-span-2"
           />
           <CrewField
             target={{ type: "serial", id: serial.id }}
             defaultValue={serial?.crew}
+            className="col-span-2"
           />
         </>
       )}

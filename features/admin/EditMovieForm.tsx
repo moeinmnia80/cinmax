@@ -3,8 +3,7 @@
 import { useActionState, useEffect } from "react";
 
 import { MovieType } from "@/data/movies";
-import { MovieCategory } from "@/types/types";
-import { CATEGORY_OPTIONS } from "@/constants/movies";
+import { CategoriesField } from "./CategoriesField";
 import { useFormChanges } from "@/hooks/useFormChanges";
 import { deleteMovie, saveMovie } from "@/app/actions/movie";
 import { CONTROL, Field, LABEL_TEXT, TextInput } from "@/components/Form";
@@ -15,13 +14,6 @@ import {
   GenresField,
   EditFormActions,
 } from "@/features/client";
-import {
-  Select,
-  SelectItems,
-  SelectLabel,
-  SelectButton,
-  SelectContent,
-} from "@/components/ui/Select";
 
 const initialState = {
   errors: {},
@@ -58,11 +50,6 @@ export const EditMovieForm = ({
   useEffect(() => {
     if (state.success) resetBaseline();
   }, [state, resetBaseline]);
-
-  const currentCategory =
-    CATEGORY_OPTIONS.find(
-      (option) => (option.id as MovieCategory) === movie?.category,
-    ) ?? CATEGORY_OPTIONS[0];
 
   return (
     <form
@@ -147,25 +134,12 @@ export const EditMovieForm = ({
           inputMode="decimal"
         />
       </Field>
-      <Select
-        name="category"
-        defaultValue={currentCategory}
+      <CategoriesField
+        name="categories"
+        label="categories"
         className="col-span-4"
-      >
-        <SelectLabel className={LABEL_TEXT}>category</SelectLabel>
-        <SelectButton className="mt-1 flex w-full rounded-sm border border-foreground/10 bg-foreground/5 px-2 py-2 text-sm font-normal" />
-        <SelectContent className="mt-1 w-full animate-slide-down overflow-hidden rounded-lg border border-foreground/10 bg-foreground/5 text-sm font-normal backdrop-blur-2xl">
-          {CATEGORY_OPTIONS.map((option) => (
-            <SelectItems
-              key={option.id}
-              option={option}
-              className="flex h-12 cursor-pointer items-center px-4 hover:bg-b-secondary"
-            >
-              <span className="truncate uppercase">{option.label}</span>
-            </SelectItems>
-          ))}
-        </SelectContent>
-      </Select>
+        defaultValue={movie?.categories?.map(({ categoryId }) => categoryId)}
+      />
       <GenresField
         name="genres"
         label="genres"

@@ -39,14 +39,6 @@ enum PersonType {
   Producer
 }
 
-enum MovieCategory {
-  Hollywood
-  Independent
-  Bollywood
-  Korean
-  Animation
-}
-
 enum FeaturedType {
   Movie
   Serial
@@ -57,6 +49,16 @@ enum ImageCategory {
   backdrop
   gallery
   banner
+}
+
+enum WeekDay {
+  sat
+  sun
+  mon
+  tue
+  wed
+  thu
+  fri
 }
 
 // ==========================================
@@ -174,6 +176,20 @@ model Plan {
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id   Int    @id @default(autoincrement())
+  slug String @unique
+  name String @unique
+
+  movies  MovieCategory[]
+  serials SerialCategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
+
 model UserSubscription {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @unique @db.Uuid
@@ -214,17 +230,16 @@ model UserPurchase {
 // ==========================================
 
 model Movie {
-  id              Int           @id @default(autoincrement())
-  slug            String        @unique
+  id              Int     @id @default(autoincrement())
+  slug            String  @unique
   title           String
   tagline         String?
-  rating          Decimal       @db.Decimal(3, 1)
-  votesCount      Int           @default(0)
+  rating          Decimal @db.Decimal(3, 1)
+  votesCount      Int     @default(0)
   year            Int
   durationMinutes Int
-  category        MovieCategory @default(Hollywood)
-  description     String        @db.Text
-  longDescription String?       @db.Text
+  description     String  @db.Text
+  longDescription String? @db.Text
   image           String
   backdrop        String
   trailer         String?
@@ -257,6 +272,8 @@ model Movie {
   featuredItems    FeaturedItem[]
   continueWatching ContinueWatching[]
   purchases        UserPurchase[]
+  broadcasts       Broadcast[]
+  categories       MovieCategory[]
 
   relatedMovies MovieRelated[]       @relation("SourceMovie")
   relatedTo     MovieRelated[]       @relation("TargetMovie")
@@ -266,10 +283,9 @@ model Movie {
   updatedAt DateTime @updatedAt
 
   @@index([slug])
+  @@index([year])
   @@index([title])
   @@index([rating])
-  @@index([year])
-  @@index([category])
 }
 
 model MovieImage {
@@ -309,6 +325,17 @@ model MovieGenre {
   genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
 
   @@id([movieId, genreId])
+}
+
+model MovieCategory {
+  movieId    Int
+  categoryId Int
+
+  movie    Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, categoryId])
+  @@index([categoryId])
 }
 
 model MovieCast {
@@ -436,6 +463,8 @@ model Serial {
   featuredItems    FeaturedItem[]
   continueWatching ContinueWatching[]
   purchases        UserPurchase[]
+  broadcasts       Broadcast[]
+  categories       SerialCategory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -472,6 +501,17 @@ model SerialCrew {
   @@unique([serialId, personId, role])
   @@index([serialId])
   @@index([personId])
+}
+
+model SerialCategory {
+  serialId   Int
+  categoryId Int
+
+  serial   Serial   @relation(fields: [serialId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([serialId, categoryId])
+  @@index([categoryId])
 }
 
 model SerialImage {
@@ -564,4 +604,28 @@ model FeaturedItem {
   updatedAt DateTime @updatedAt
 
   @@index([active, order])
+}
+
+model Broadcast {
+  id    Int          @id @default(autoincrement())
+  type  FeaturedType
+  label String?
+
+  days WeekDay[]
+  time String    @db.VarChar(5)
+
+  startDate DateTime  @map("start_date") @db.Date
+  endDate   DateTime? @map("end_date") @db.Date
+
+  movieId Int?
+  movie   Movie? @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  serialId Int?
+  serial   Serial? @relation(fields: [serialId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([movieId])
+  @@index([serialId])
 }

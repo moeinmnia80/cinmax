@@ -48,7 +48,7 @@ const Branch = ({
 
 export const FeaturedFlow = ({ total, movies, serials }: FeaturedFlowProps) => (
   <div
-    className="flex items-center justify-center gap-1 w-full bg-background border border-foreground/10 rounded-xl"
+    className="flex items-center justify-center gap-1 w-full rounded-xl"
     style={{ height: H }}
   >
     <div className="flex flex-col items-center min-w-16">

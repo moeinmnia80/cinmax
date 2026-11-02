@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
+import { Loader2, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { CheckCircle2, CircleAlert, Loader2, Save } from "lucide-react";
 
 import { toast } from "@/store";
 import { DeleteDialog } from "@/features/client";
@@ -66,29 +66,12 @@ export const EditFormActions = ({
 
   return (
     <div
-      className="sticky bottom-2 z-20 col-span-4 rounded-full border border-foreground/10 backdrop-blur-xl"
+      className="col-span-4 rounded-full border border-foreground/10 backdrop-blur-xl"
       onKeyDown={(e) => {
         if (e.key === "Escape" && confirming) setConfirming(false);
       }}
     >
       {id !== undefined && <input type="hidden" name="id" value={id} />}
-
-      {message && (
-        <p
-          role="status"
-          aria-live="polite"
-          className={`flex items-center gap-2 pt-3 text-sm ${
-            success ? "text-emerald-500" : "text-destructive"
-          }`}
-        >
-          {success ? (
-            <CheckCircle2 className="size-4 shrink-0" aria-hidden="true" />
-          ) : (
-            <CircleAlert className="size-4 shrink-0" aria-hidden="true" />
-          )}
-          {message}
-        </p>
-      )}
 
       <div className="flex flex-1 flex-col-reverse gap-3 px-2 py-2 sm:flex-row sm:items-center sm:justify-between">
         {id && (

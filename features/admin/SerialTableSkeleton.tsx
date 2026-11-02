@@ -4,8 +4,8 @@ export const SerialTableSkeleton = async () => {
   return (
     <>
       <Table>
-        <THead className="text-sm border-b border-foreground/10">
-          <Row className="flex py-2">
+        <THead className="max-md:hidden border-b border-foreground/10 text-xs">
+          <Row className="flex items-center h-12 bg-foreground/5 rounded-t-2xl overflow-hidden p-2">
             <TD className="flex-2 ps-3">TITLE</TD>
             <TD className="flex-1">YEARS</TD>
             <TD className="flex-1">SEASONS</TD>
@@ -23,7 +23,7 @@ export const SerialTableSkeleton = async () => {
               className="flex text-foreground/20 text-sm border-b border-foreground/10 last:border-0 py-2"
             >
               <TD className="ps-3 flex-2 flex items-center gap-2">
-                <div className="w-14 aspect-3/4 rounded-xs bg-gray-200/20 animate-pulse" />
+                <div className="w-19 aspect-2/3 rounded-md bg-gray-200/20 animate-pulse" />
                 <div>
                   <p className="w-25 h-4 bg-gray-200/20 animate-pulse rounded-sm" />
                   <p className="w-12.5 h-4 bg-gray-200/20 animate-pulse rounded-sm mt-1" />

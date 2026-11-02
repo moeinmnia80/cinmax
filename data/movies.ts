@@ -97,6 +97,7 @@ export const getMovie = async (slug?: string): Promise<MovieType | null> => {
       cast: { select: { person: true } },
       relatedMovies: { select: { targetMovie: true } },
       language: true,
+      categories: { include: { category: true } },
     },
   });
 
@@ -126,6 +127,7 @@ export async function getMovieWithQuery(query: string) {
       country: true,
       studio: true,
       language: true,
+      categories: { include: { category: true } },
     },
   });
 }

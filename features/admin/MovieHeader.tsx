@@ -3,6 +3,7 @@ import { use } from "react";
 import { MovieType } from "@/data/movies";
 import { Search } from "@/components/Search";
 import { AdminHeader } from "@/features/server";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const MovieHeader = ({ data }: { data: Promise<MovieType[]> }) => {
   const movies = use(data);
@@ -10,8 +11,10 @@ export const MovieHeader = ({ data }: { data: Promise<MovieType[]> }) => {
     <AdminHeader
       title="movies"
       desc={`Library / ${movies.length.toLocaleString()} titles`}
+      className="flex items-center gap-2"
     >
       <Search />
+      <ThemeToggle />
     </AdminHeader>
   );
 };

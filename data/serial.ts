@@ -43,6 +43,7 @@ export const getSerial = async (slug?: string): Promise<SerialType | null> => {
       },
       relatedMovies: { select: { serial: true, movie: true } },
       language: { select: { name: true } },
+      categories: { include: { category: true } },
     },
   });
 

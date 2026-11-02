@@ -10,6 +10,7 @@ const mediaInclude = {
   cast: { include: { person: true } },
   crew: { include: { person: true } },
   language: true,
+  categories: true,
 } satisfies Prisma.MovieInclude & Prisma.SerialInclude;
 
 const featuredInclude = {

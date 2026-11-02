@@ -1,18 +1,24 @@
 import Image from "next/image";
 import { connection } from "next/server";
 
-import { MovieCategory } from "@/types/types";
 import { EditButton } from "@/features/server";
 import { getMovieWithQuery } from "@/data/movies";
 // import { FeatureButton } from "@/features/client/FeatureButton";
 import { Row, Table, TBody, TD, THead } from "@/components/ui/Table";
 import { CATEGORY_STYLES, COL, MOVIE_COLUMNS } from "@/constants/movies";
+import { cn } from "@/utils";
 
 const CategoryBadge = ({
   category,
   featured,
 }: {
-  category: MovieCategory;
+  category: {
+    name: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    slug: string;
+  };
   featured: boolean;
 }) => {
   const { badge, dot } = CATEGORY_STYLES[featured ? "featured" : "default"];
@@ -21,10 +27,13 @@ const CategoryBadge = ({
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${badge}`}
     >
       <span className={`size-1.5 rounded-full ${dot}`} aria-hidden="true" />
-      {category}
+      {category.name}
     </span>
   );
 };
+
+const CELL =
+  "flex flex-col items-start gap-0.5 before:text-[10px] before:uppercase before:tracking-wider before:text-foreground/40 md:flex-row md:items-center md:gap-0 md:before:hidden";
 
 export const MovieTable = async ({
   searchParams,
@@ -37,9 +46,9 @@ export const MovieTable = async ({
   const movies = await getMovieWithQuery(query);
 
   return (
-    <Table>
-      <THead className="border-b border-foreground/10 font-mono text-xs tracking-widest uppercase text-foreground/60">
-        <Row className="flex py-3">
+    <Table className="animate-slide-up md:min-w-225">
+      <THead className="max-md:hidden border-b border-foreground/10 text-xs tracking-wider uppercase text-foreground">
+        <Row className="flex items-center h-12 bg-foreground/5 rounded-t-2xl overflow-hidden p-2">
           {MOVIE_COLUMNS.map(({ label, className }) => (
             <TD key={label} className={`flex items-center ${className}`}>
               {label}
@@ -57,29 +66,35 @@ export const MovieTable = async ({
             return (
               <Row
                 key={movie.id}
-                className="flex border-b border-foreground/10 py-3 text-sm text-foreground/50 transition-colors last:border-0 hover:bg-foreground/2"
+                className="grid grid-cols-2 gap-3 border-b border-foreground/10 p-2 text-sm text-foreground/50 last:border-0 md:flex md:gap-0"
               >
-                <TD className={`flex items-center gap-4 ps-3 ${COL.title}`}>
-                  {movie.image ? (
-                    <Image
-                      src={movie.image}
-                      alt={`${movie.title} poster`}
-                      width={56}
-                      height={84}
-                      sizes="56px"
-                      className="aspect-2/3 w-14 shrink-0 rounded-xs object-cover"
-                    />
-                  ) : (
-                    <span
-                      aria-hidden="true"
-                      className="grid aspect-2/3 w-14 shrink-0 place-items-center rounded-xs bg-foreground/5 font-mono text-sm text-foreground/40 line-clamp-2"
-                    >
-                      {movie.title}
-                    </span>
-                  )}
+                <TD className="col-span-2 flex items-center gap-3 md:col-span-1 md:flex-3">
+                  <Image
+                    src={movie.image}
+                    alt={`${movie.title} poster`}
+                    width={60}
+                    height={75}
+                    sizes="60px"
+                    loading="eager"
+                    className="aspect-2/3 w-19 shrink-0 rounded-lg object-cover"
+                  />
                   <div className="min-w-0">
-                    <p className="truncate text-base font-medium text-foreground line-clamp-1 max-w-40">
+                    <p className="truncate font-medium text-foreground capitalize">
                       {movie.title}
+                    </p>
+                    <p className="uppercase">{movie.language.name}</p>
+                    <p className="flex items-center gap-1.5 text-xs">
+                      {movie.studio && (
+                        <>
+                          <span className="max-w-28 truncate">
+                            {movie.studio.name}
+                          </span>
+                          <span aria-hidden="true">·</span>
+                        </>
+                      )}
+                      <span className="truncate uppercase">
+                        {movie.country?.name ?? "—"}
+                      </span>
                     </p>
                     {director && (
                       <p className="truncate font-mono text-xs">{director}</p>
@@ -87,17 +102,20 @@ export const MovieTable = async ({
                   </div>
                 </TD>
 
-                <TD className={`flex items-center font-mono ${COL.year}`}>
+                <TD className={`${CELL} before:content-['Years'] md:flex-1`}>
                   {movie.year}
                 </TD>
 
                 <TD
-                  className={`flex flex-wrap content-center items-center gap-1.5 ${COL.genres}`}
+                  className={cn(
+                    CELL,
+                    "col-span-2 md:col-span-1 flex-row flex-wrap content-center gap-1 md:gap-1 md:flex-2 items-center",
+                  )}
                 >
                   {movie.genres.map(({ genre }) => (
                     <span
                       key={genre.id}
-                      className="rounded-md bg-foreground/5 px-2 py-1 text-xs text-foreground/70"
+                      className="bg-foreground/5 capitalize px-2 py-0.5 rounded-md"
                     >
                       {genre.name}
                     </span>
@@ -105,22 +123,22 @@ export const MovieTable = async ({
                 </TD>
 
                 <TD
-                  className={`flex items-center font-mono font-semibold text-foreground ${COL.rating}`}
+                  className={`${CELL} text-foreground before:content-['Rating'] md:flex-1`}
                 >
                   {movie.rating.toFixed(1)}
                 </TD>
 
                 <TD className={`flex items-center ${COL.category}`}>
-                  <CategoryBadge
-                    category={movie.category}
-                    featured={featured}
-                  />
+                  {movie.categories.map(({ category }) => (
+                    <CategoryBadge
+                      key={category.id}
+                      category={category}
+                      featured={featured}
+                    />
+                  ))}
                 </TD>
 
-                <TD
-                  className={`flex items-center justify-end gap-5 pe-3 ${COL.actions}`}
-                >
-                  {/* <FeatureButton movieId={movie.id} featured={featured} /> */}
+                <TD className="col-span-2 flex items-center justify-end border-t border-foreground/10 pt-3 md:col-span-1 md:flex-1 md:justify-center md:border-0 md:pt-0">
                   <EditButton slug={movie.slug} />
                 </TD>
               </Row>

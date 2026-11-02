@@ -19,11 +19,12 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
   const cards = await fetchCards();
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 animate-slide-down bg-foreground/5 p-1 rounded-2xl border border-foreground/20">
+    <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 animate-slide-up rounded-2xl">
+      <div className="absolute -z-10 top-1/2 left-1/3 size-50 bg-destructive blur-[250px]" />
       {cards.map((card) => (
         <div
           key={card.label}
-          className="relative rounded-xl border border-foreground/10 bg-background p-5 overflow-hidden group *:cursor-default"
+          className="relative rounded-xl border border-foreground/10 bg-foreground/5 p-5 overflow-hidden group *:cursor-default backdrop-blur-2xl"
         >
           <p className="text-xs tracking-widest uppercase text-foreground/30">
             {card.label}

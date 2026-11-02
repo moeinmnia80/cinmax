@@ -75,7 +75,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
       <div className="relative ml-auto hidden lg:inline-block">
         <Link
           href={`/${item.type.toLowerCase()}/${media.slug}`}
-          className="group relative block aspect-2/3 w-60 overflow-hidden rounded-xl border border-foreground/10 shadow-2xl shadow-black/80 xl:w-70"
+          className="group relative block aspect-2/3 w-60 overflow-hidden rounded-2xl border border-foreground/5 shadow-2xl shadow-black/80 xl:w-70"
         >
           {featuredContent.map((it, i) => {
             const m = getMedia(it);
@@ -96,7 +96,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
             );
           })}
 
-          <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-background/50 to-transparent" />
           <div className="absolute inset-x-3 bottom-3 flex items-center justify-between">
             <span className="text-xs font-light text-foreground/60">
               {year}

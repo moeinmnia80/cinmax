@@ -872,15 +872,25 @@ export const movies: Movie[] = [
   },
 ];
 
-import type { MovieCategory } from "@/types/types";
-
-export const CATEGORY_OPTIONS: { id: MovieCategory; label: string }[] = [
+export const CATEGORY_OPTIONS = [
   { id: "Hollywood", label: "Hollywood" },
-  { id: "Independent", label: "Independent" },
-  { id: "Bollywood", label: "Bollywood" },
+  {
+    id: "Bollywood",
+    label: "Bollywood",
+  },
   { id: "Korean", label: "Korean" },
+  { id: "Turkish", label: "Turkish" },
+  { id: "Japanese", label: "Japanese" },
+  { id: "Chinese", label: "Chinese" },
+  { id: "Iranian", label: "Iranian" },
+  { id: "European", label: "European" },
+  { id: "Arabic", label: "Arabic" },
+  { id: "Thai", label: "Thai" },
+  { id: "Latin", label: "Latin" },
   { id: "Animation", label: "Animation" },
-];
+  { id: "Anime", label: "Anime" },
+  { id: "Donghua", label: "Donghua" },
+] as const;
 
 export const COL = {
   title: "flex-3 shrink-0",
@@ -892,12 +902,12 @@ export const COL = {
 } as const;
 
 export const MOVIE_COLUMNS = [
-  { label: "Title", className: `${COL.title} ps-3` },
+  { label: "Title", className: `${COL.title}` },
   { label: "Year", className: COL.year },
   { label: "Genres", className: COL.genres },
   { label: "IMDb", className: COL.rating },
   { label: "Category", className: COL.category },
-  { label: "Actions", className: `${COL.actions} justify-end pe-3` },
+  { label: "Actions", className: `${COL.actions} justify-center` },
 ];
 
 export const CATEGORY_STYLES = {

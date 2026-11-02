@@ -48,15 +48,6 @@ export const PersonType = {
 } as const;
 export type PersonType = (typeof PersonType)[keyof typeof PersonType];
 
-export const MovieCategory = {
-  Hollywood: "Hollywood",
-  Independent: "Independent",
-  Bollywood: "Bollywood",
-  Korean: "Korean",
-  Animation: "Animation",
-} as const;
-export type MovieCategory = (typeof MovieCategory)[keyof typeof MovieCategory];
-
 export const FeaturedType = { Movie: "Movie", Serial: "Serial" } as const;
 export type FeaturedType = (typeof FeaturedType)[keyof typeof FeaturedType];
 
@@ -149,6 +140,14 @@ export interface Plan {
   updatedAt: Date;
 }
 
+export interface CategoryItem {
+  id: number;
+  slug: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface UserSubscription {
   id: string;
   userId: string;
@@ -182,7 +181,6 @@ export interface Movie {
   votesCount: number;
   year: number;
   durationMinutes: number;
-  category: MovieCategory;
   description: string;
   longDescription: string | null;
   image: string;
@@ -270,6 +268,11 @@ export interface MovieStreaming {
 export interface MovieRelated {
   sourceMovieId: number;
   targetMovieId: number;
+}
+
+export interface Category {
+  movieId: number;
+  categoryId: number;
 }
 
 // ==========================================
@@ -384,14 +387,7 @@ export type WithPerson<T> = T & { person: Person };
 /** Lightweight card for lists, grids, carousels */
 export type MovieCard = Pick<
   Movie,
-  | "id"
-  | "slug"
-  | "title"
-  | "rating"
-  | "year"
-  | "image"
-  | "category"
-  | "durationMinutes"
+  "id" | "slug" | "title" | "rating" | "year" | "image" | "durationMinutes"
 > & { genres: Pick<Genre, "id" | "slug" | "name">[] };
 
 export type SerialCard = Pick<
@@ -420,6 +416,12 @@ export interface MovieDetailCrew extends Partial<MovieCrew> {
 export interface MovieDetailRelated extends Partial<MovieRelated> {
   targetMovie: Movie;
 }
+export interface MovieDetailCategories extends Partial<Category> {
+  categoryId: number;
+  movieId: number;
+  category: CategoryItem;
+}
+
 export interface MovieDetail extends Movie {
   language?: Language;
   country?: Country | null;
@@ -435,6 +437,7 @@ export interface MovieDetail extends Movie {
   images?: MovieImage[];
   reviews?: Review[];
   relatedMovies?: MovieDetailRelated[];
+  categories?: MovieDetailCategories[];
 }
 
 /** Full serial details page */
@@ -454,6 +457,11 @@ export interface SerialDetailRelatedMovie extends Partial<SerialRelatedMovie> {
   movie: Partial<Movie>;
 }
 
+export interface SerialDetailCategories extends Partial<Category> {
+  categoryId: number;
+  serialId: number;
+  category: CategoryItem;
+}
 export interface SerialDetail extends Serial {
   language?: Partial<Language>;
   country?: Partial<Country> | null;
@@ -463,6 +471,7 @@ export interface SerialDetail extends Serial {
   crew?: SerialDetailCrew[];
   images?: SerialImage[];
   relatedMovies?: SerialDetailRelatedMovie[];
+  categories?: SerialDetailCategories[];
 }
 
 /** Person page with filmography */
@@ -509,7 +518,7 @@ export interface Paginated<T> {
 export interface MovieFilters {
   q?: string;
   genre?: string;
-  category?: MovieCategory;
+  category?: string;
   year?: number;
   minRating?: number;
   sort?: "rating" | "year" | "title" | "createdAt";

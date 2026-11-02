@@ -2,7 +2,7 @@ import { AdminSidebarNav } from "@/features/client";
 import { AdminSidebarHeader } from "@/features/server";
 
 export const AdminSidebar = () => (
-  <aside className="hidden md:flex md:flex-col w-64 shrink-0 sticky top-0 h-dvh border-r border-foreground/10 animate-slide-right">
+  <aside className="relative hidden w-15 md:flex md:flex-col items-center gap-3 shrink-0 animate-slide-right p-2 mt-25 z-30">
     <AdminSidebarHeader />
     <AdminSidebarNav />
   </aside>

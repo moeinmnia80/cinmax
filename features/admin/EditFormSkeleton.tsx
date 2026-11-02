@@ -1,13 +1,13 @@
 import { cn } from "@/utils";
 
+const base =
+  "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5";
+
 const Bone = ({ className = "" }: { className?: string }) => (
   <div
     className={cn(base, "animate-pulse rounded-sm bg-gray-200/20", className)}
   />
 );
-
-const base =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5";
 
 const FieldSkeleton = ({
   className = "",

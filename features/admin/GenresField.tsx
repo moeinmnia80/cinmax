@@ -119,16 +119,16 @@ export const GenresField = ({
         {genres.map((genre) => (
           <li
             key={genre}
-            className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 bg-destructive/10 py-1 pr-2 pl-3 text-sm text-destructive"
+            className="inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors border-foreground bg-foreground text-background"
           >
             {genre}
             <button
               type="button"
               onClick={() => remove(genre)}
               aria-label={`Remove ${genre}`}
-              className="rounded-full outline-0 transition hover:text-destructive/40 focus-visible:ring-1 focus-visible:ring-destructive/50"
+              className="rounded-full outline-0 transition hover:text-destructive"
             >
-              <X className="size-3.5" aria-hidden="true" />
+              <X className="size-4 stroke-2" aria-hidden="true" />
             </button>
           </li>
         ))}
@@ -138,7 +138,6 @@ export const GenresField = ({
             <div
               className="relative"
               onBlur={(e) => {
-                // close only when focus leaves the whole widget
                 if (!e.currentTarget.contains(e.relatedTarget)) close();
               }}
             >
@@ -168,7 +167,7 @@ export const GenresField = ({
                 <ul
                   id={listboxId}
                   role="listbox"
-                  className="absolute top-full left-0 z-10 mt-1 max-h-40 w-40 overflow-auto rounded-md bg-foreground/5 backdrop-blur-2xl"
+                  className="absolute top-full left-0 z-10 mt-1 max-h-40 w-40 overflow-auto rounded-md bg-background border border-foreground/10"
                 >
                   {suggestions.map((genre, i) => (
                     <li
@@ -176,7 +175,6 @@ export const GenresField = ({
                       id={`${listboxId}-${i}`}
                       role="option"
                       aria-selected={i === activeIndex}
-                      // keep focus in the input so onBlur doesn't close first
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => add(genre.name)}
                       onMouseEnter={() => setActiveIndex(i)}

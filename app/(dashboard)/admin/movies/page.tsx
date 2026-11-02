@@ -3,12 +3,7 @@ import { Suspense } from "react";
 import { getMovieCards, getMovies } from "@/data/movies";
 import { MovieTable } from "@/features/admin/MovieTable";
 import { MovieHeader } from "@/features/admin/MovieHeader";
-import {
-  AdminCard,
-  EditMovies,
-  AdminCardSkeleton,
-  SerialTableSkeleton,
-} from "@/features/server";
+import { AdminCard, EditMovies, AdminCardSkeleton } from "@/features/server";
 
 interface MoviePageProps {
   searchParams: Promise<{ search?: "string"; edit?: "string" }>;
@@ -21,16 +16,14 @@ export default function MoviePage({ searchParams }: MoviePageProps) {
       <Suspense fallback={<></>}>
         <MovieHeader data={movies} />
       </Suspense>
-      <div className="flex gap-4 px-5 py-5">
-        <div className="flex-5 flex flex-col gap-4">
+      <div className="hidden sm:block absolute top-19 right-0 w-full h-full border-t border-l border-foreground/10 rounded-tl-2xl -z-10" />
+      <div className="flex gap-4 p-4 sm:p-3">
+        <div className="flex-5 flex flex-col gap-1">
           <Suspense fallback={<AdminCardSkeleton />}>
             <AdminCard key="movieCards" fetchCards={getMovieCards} />
           </Suspense>
-          <div className="w-full min-h-12 bg-foreground/5 rounded-md border border-foreground/10">
-            <h2 className="p-3 border-b border-foreground/10 capitalize">
-              all movies
-            </h2>
-            <Suspense fallback={<SerialTableSkeleton />}>
+          <div className="w-full bg-background/25 backdrop-blur-2xl rounded-2xl border border-foreground/10">
+            <Suspense fallback={<></>}>
               <MovieTable searchParams={searchParams} />
             </Suspense>
           </div>

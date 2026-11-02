@@ -1,7 +1,7 @@
 import { SerialStatus } from "@/types/types";
 
 export const COLUMNS = [
-  { label: "Title", className: "flex-2 ps-3" },
+  { label: "Title", className: "flex-2" },
   { label: "Years", className: "flex-1" },
   { label: "Seasons", className: "flex-1" },
   { label: "Episodes", className: "flex-1" },
@@ -32,23 +32,17 @@ export const STATUS_OPTIONS = [
   { id: "cancelled", label: "cancelled" },
 ] as const;
 
-export const serialFields = [
+export const REQUIRED_FIELDS = [
   "title",
   "description",
   "startYear",
-  "endYear",
+  "language",
   "seasons",
   "episodes",
-  "rating",
-  "badge",
-  "status",
-  "backdrop",
-  "image",
-  "language",
   "country",
   "studio",
-  "purchasePrice",
+  "rating",
+  "durationMinutes",
+  "badge",
   "genres",
 ] as const;
-
-export type SerialField = (typeof serialFields)[number];

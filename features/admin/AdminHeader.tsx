@@ -11,7 +11,7 @@ export function AdminHeader({
   desc = "this is test phrase",
 }: AdminHeaderProps) {
   return (
-    <div className="flex justify-between items-center border-b border-foreground/10 py-5 px-4 animate-slide-down">
+    <div className="flex justify-between items-center py-3 px-4 animate-slide-down">
       <div className="flex flex-col">
         <h1 className="text-2xl font-black text-foreground uppercase tracking-wide">
           {title}

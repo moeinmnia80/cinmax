@@ -1,62 +1,109 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useEffectEvent,
+} from "react";
 
-function snapshot(form: HTMLFormElement) {
-  const entries: [string, string][] = [];
-  for (const [key, value] of new FormData(form)) {
-    entries.push([
-      key,
-      value instanceof File
-        ? `${value.name}:${value.size}:${value.lastModified}`
-        : value.trim(),
-    ]);
-  }
-  return JSON.stringify(entries);
-}
+const IGNORED = /^(\$ACTION_|search-)/;
 
-function hasValue(form: HTMLFormElement, name: string) {
-  const value = new FormData(form).get(name);
-  if (value instanceof File) return value.size > 0;
-  return typeof value === "string" && value.trim() !== "";
-}
+const norm = (v: FormDataEntryValue) =>
+  v instanceof File
+    ? v.size === 0
+      ? ""
+      : `${v.name}:${v.size}:${v.lastModified}`
+    : v.trim();
+const entries = (data: FormData) =>
+  [...data]
+    .filter(([k]) => !IGNORED.test(k))
+    .map(([k, v]) => `${k}=${norm(v)}`)
+    .sort();
+
+const snapshot = (data: FormData) => JSON.stringify(entries(data));
+
+const hasValue = (data: FormData, name: string) =>
+  data
+    .getAll(name)
+    .some((v) => (v instanceof File ? v.size > 0 : v.trim() !== ""));
 
 export function useFormChanges(requiredFields: readonly string[]) {
-  const formRef = useRef<HTMLFormElement>(null);
+  const [form, setForm] = useState<HTMLFormElement | null>(null);
   const baseline = useRef("");
-  const [dirty, setDirty] = useState(false);
-  const [valid, setValid] = useState(false);
+  const touched = useRef(false);
+  const [status, setStatus] = useState({ dirty: false, valid: false });
 
-  const check = useCallback(() => {
-    const form = formRef.current;
+  const check = useEffectEvent(() => {
     if (!form) return;
-    setDirty(snapshot(form) !== baseline.current);
-    setValid(requiredFields.every((name) => hasValue(form, name)));
-  }, [requiredFields]);
+    const data = new FormData(form);
+    const dirty = snapshot(data) !== baseline.current;
+    const valid = requiredFields.every((name) => hasValue(data, name));
+    setStatus((prev) =>
+      prev.dirty === dirty && prev.valid === valid ? prev : { dirty, valid },
+    );
+    if (dirty) {
+      console.log("baseline:", baseline.current);
+      console.log("now:", snapshot(data));
+      console.log("categories:", data.getAll("categories"));
+    }
+  });
 
-  const resetBaseline = useCallback(() => {
-    const form = formRef.current;
+  const rebaseline = useEffectEvent(() => {
     if (!form) return;
-    baseline.current = snapshot(form);
+    touched.current = false;
+    baseline.current = snapshot(new FormData(form));
     check();
-  }, [check]);
+  });
+
+  const requiredKey = requiredFields.join("|");
+  useEffect(() => {
+    check();
+  }, [requiredKey]);
 
   useEffect(() => {
-    const form = formRef.current;
     if (!form) return;
 
-    let raf = requestAnimationFrame(resetBaseline);
+    touched.current = false;
+    let raf = 0;
+    let settleTimer: ReturnType<typeof setTimeout> | undefined;
 
     const schedule = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(check);
+      raf = requestAnimationFrame(() => check());
     };
 
-    const events = ["input", "change", "click", "keyup"] as const;
-    events.forEach((e) => form.addEventListener(e, schedule));
+    const settle = () => {
+      if (touched.current) return schedule();
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => rebaseline(), 50);
+    };
+
+    const onUserEvent = (e: Event) => {
+      if (e.isTrusted) touched.current = true;
+      schedule();
+    };
+
+    const events = ["input", "change", "click", "keyup", "reset"] as const;
+    events.forEach((e) => form.addEventListener(e, onUserEvent));
+
+    const observer = new MutationObserver(settle);
+    observer.observe(form, { childList: true, subtree: true });
+
+    settle();
+
     return () => {
       cancelAnimationFrame(raf);
-      events.forEach((e) => form.removeEventListener(e, schedule));
+      clearTimeout(settleTimer);
+      observer.disconnect();
+      events.forEach((e) => form.removeEventListener(e, onUserEvent));
     };
-  }, [check, resetBaseline]);
+  }, [form]);
 
-  return { formRef, dirty, valid, resetBaseline };
+  const commitRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    commitRef.current = () => rebaseline();
+  });
+  const resetBaseline = useCallback(() => commitRef.current(), []);
+
+  return { formRef: setForm, ...status, resetBaseline };
 }

@@ -28,6 +28,7 @@ export { ImageUpload } from "@/features/admin/ImageUpload";
 export { CastField } from "@/features/admin/CastField";
 export { CrewField } from "@/features/admin/CrewField";
 export { GenresField } from "@/features/admin/GenresField";
+export { CategoriesField } from "@/features/admin/CategoriesField";
 
 export { LoginForm } from "@/features/auth/LoginForm";
 export { RegisterForm } from "@/features/auth/RegisterForm";
