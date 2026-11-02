@@ -47,4 +47,14 @@ export const REQUIRED_FIELDS = [
   "genres",
 ] as const;
 
-export type SerialField = (typeof REQUIRED_FIELDS)[number];
+export const OPTIONAL_FIELDS = [
+  "endYear",
+  "purchasePrice",
+  "categories",
+  "image",
+  "backdrop",
+] as const;
+
+export type SerialField =
+  | (typeof REQUIRED_FIELDS)[number]
+  | (typeof OPTIONAL_FIELDS)[number];
