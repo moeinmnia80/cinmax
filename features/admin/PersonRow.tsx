@@ -12,7 +12,7 @@ export function PersonRow({ person }: PersonRowProps) {
   const isDirector = person.role.toLowerCase() === "director";
 
   return (
-    <li className="flex items-center justify-between gap-4 border-b border-foreground/10 px-5 py-4 transition-colors hover:bg-foreground/5 odd:border-r">
+    <li className="col-span-2 sm:grid-cols-4 flex items-center justify-between gap-4 border-b border-foreground/10 px-5 py-4 transition-colors hover:bg-foreground/5 odd:border-b sm:odd:border-r">
       <div className="flex min-w-0 items-center gap-5">
         <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-full bg-foreground/5 font-condensed text-lg font-bold">
           {person.image ? (

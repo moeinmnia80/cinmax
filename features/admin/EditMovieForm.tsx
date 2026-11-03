@@ -14,6 +14,7 @@ import {
   GenresField,
   EditFormActions,
 } from "@/features/client";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 const initialState = {
   errors: {},
@@ -51,20 +52,26 @@ export const EditMovieForm = ({
     if (state.success) resetBaseline();
   }, [state, resetBaseline]);
 
+  useScrollLock();
+
   return (
     <form
       key={edit}
       ref={formRef}
       action={formAction}
-      className="mt-5 grid grid-cols-4 gap-4"
+      className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-4 overflow-scroll"
     >
-      <Field label="title" className="col-span-4" error={state.errors?.title}>
+      <Field
+        label="title"
+        className="col-span-1 sm:col-span-2 "
+        error={state.errors?.title}
+      >
         <TextInput name="title" defaultValue={movie?.title} />
       </Field>
 
       <Field
         label="tagline"
-        className="col-span-4"
+        className="col-span-1 sm:col-span-2"
         error={state.errors?.tagline}
       >
         <TextInput name="tagline" defaultValue={movie?.tagline ?? ""} />
@@ -72,12 +79,12 @@ export const EditMovieForm = ({
 
       <Field
         label="description"
-        className="col-span-4"
+        className="col-span-2"
         error={state.errors?.description}
       >
         <textarea
           name="description"
-          rows={3}
+          rows={6}
           defaultValue={movie?.description ?? ""}
           className={`${CONTROL} resize-none text-sm font-normal`}
         />
@@ -85,7 +92,7 @@ export const EditMovieForm = ({
 
       <Field
         label="long description"
-        className="col-span-4"
+        className="col-span-2"
         error={state.errors?.longDescription}
       >
         <textarea
@@ -137,36 +144,36 @@ export const EditMovieForm = ({
       <CategoriesField
         name="categories"
         label="categories"
-        className="col-span-4"
+        className="col-span-2 sm:col-span-4"
         defaultValue={movie?.categories?.map(({ categoryId }) => categoryId)}
       />
       <GenresField
         name="genres"
         label="genres"
-        className="col-span-4"
+        className="col-span-2 sm:col-span-4"
         defaultValue={(movie?.genres || []).map(({ genre }) => genre.name)}
       />
       <Field
         label="language"
-        className="col-span-2"
+        className="col-span-1"
         error={state.errors?.language}
       >
         <TextInput name="language" defaultValue={movie?.language?.name ?? ""} />
       </Field>
       <Field
         label="country"
-        className="col-span-2"
+        className="col-span-1"
         error={state.errors?.country}
       >
         <TextInput name="country" defaultValue={movie?.country?.name ?? ""} />
       </Field>
 
-      <Field label="studio" className="col-span-2" error={state.errors?.studio}>
+      <Field label="studio" className="col-span-1" error={state.errors?.studio}>
         <TextInput name="studio" defaultValue={movie?.studio?.name ?? ""} />
       </Field>
       <Field
         label="recognition"
-        className="col-span-2"
+        className="col-span-1"
         error={state.errors?.recognition}
       >
         <TextInput
@@ -175,7 +182,7 @@ export const EditMovieForm = ({
           defaultValue={movie?.recognition ?? ""}
         />
       </Field>
-      <Field label="budget" className="col-span-2" error={state.errors?.budget}>
+      <Field label="budget" className="col-span-1" error={state.errors?.budget}>
         <TextInput
           name="budget"
           placeholder="USD"
@@ -185,7 +192,7 @@ export const EditMovieForm = ({
       </Field>
       <Field
         label="box office"
-        className="col-span-2"
+        className="col-span-1"
         error={state.errors?.boxOffice}
       >
         <TextInput
@@ -198,7 +205,7 @@ export const EditMovieForm = ({
 
       <Field
         label="trailer"
-        className="col-span-4"
+        className="col-span-2"
         error={state.errors?.trailer}
       >
         <TextInput
@@ -207,24 +214,24 @@ export const EditMovieForm = ({
           defaultValue={movie?.trailer ?? ""}
         />
       </Field>
-      <fieldset className="bg-foreground/5 rounded-xl border border-foreground/10 p-4 col-span-4">
+      <fieldset className="bg-foreground/5 rounded-xl border border-foreground/10 p-4 col-span-2 sm:col-span-4">
         <legend className="sr-only">Media</legend>
         <p className={LABEL_TEXT} aria-hidden="true">
           media
         </p>
-        <div className="mt-2 grid grid-cols-2 items-start gap-4">
+        <div className="mt-2 flex gap-4">
           <ImageUpload
             name="image"
             label="poster"
             hint="2:3 · JPG/PNG"
-            aspectClassName="aspect-[2/3]"
+            aspectClassName="aspect-2/3 min-w-22 sm:min-w-25"
             defaultUrl={movie?.image}
           />
           <ImageUpload
             name="backdrop"
             label="backdrop"
             hint="16:9 · JPG/PNG"
-            aspectClassName="aspect-video"
+            aspectClassName="aspect-video min-w-58 sm:min-w-67.5"
             defaultUrl={movie?.backdrop}
           />
         </div>
@@ -234,10 +241,12 @@ export const EditMovieForm = ({
           <CastField
             target={{ type: "movie", id: movie.id }}
             defaultValue={movie?.cast}
+            className="col-span-2"
           />
           <CrewField
             target={{ type: "movie", id: movie.id }}
             defaultValue={movie?.crew}
+            className="col-span-2"
           />
         </>
       )}
@@ -245,6 +254,7 @@ export const EditMovieForm = ({
         id={movie?.id}
         title={movie?.title}
         deleteAction={deleteMovie}
+        className="col-span-2 sm:col-span-4"
         message={state.message}
         success={state.success}
         canSave={canSave}

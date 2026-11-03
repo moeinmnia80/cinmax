@@ -8,7 +8,8 @@ export const Table = ({
   ...props
 }: ComponentProps<"div">) => {
   return (
-    <div className="md:overflow-auto md:max-h-150">
+    // <div className="md:overflow-auto md:max-h-150">
+    <div className="">
       <div role="table" className={cn("md:min-w-max", className)} {...props}>
         {children}
       </div>

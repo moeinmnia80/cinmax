@@ -22,8 +22,9 @@ export default function PeoplePage({ searchParams }: PeoplePageProps) {
       <Suspense fallback={<PeopleHeaderSkeleton />}>
         <PeopleHeader data={people} />
       </Suspense>
-      <div className="flex gap-4 py-5 px-4">
-        <div className="flex-5 flex flex-col gap-4">
+      <div className="hidden sm:block absolute top-19 right-0 w-full h-full border-t border-l border-foreground/10 rounded-tl-2xl -z-10" />
+      <div className="flex gap-1 p-4 sm:p-3">
+        <div className="flex-5 flex flex-col gap-1">
           <Suspense fallback={<AdminCardSkeleton />}>
             <AdminCard fetchCards={getPeopleDetails} />
           </Suspense>
@@ -31,11 +32,9 @@ export default function PeoplePage({ searchParams }: PeoplePageProps) {
             <PeopleSheet searchParams={searchParams} />
           </Suspense>
         </div>
-        <div className="flex-2">
-          <Suspense fallback={<></>}>
-            <EditPeople searchParams={searchParams} />
-          </Suspense>
-        </div>
+        <Suspense fallback={<></>}>
+          <EditPeople searchParams={searchParams} />
+        </Suspense>
       </div>
     </>
   );

@@ -110,6 +110,9 @@ export function Search({ className, variant, size, ...props }: SearchProps) {
 
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
+  const isEdit = searchParams.get("edit");
+  if (isEdit) return;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     commit(e.target.value);

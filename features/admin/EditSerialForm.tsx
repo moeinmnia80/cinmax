@@ -62,15 +62,19 @@ export const EditForm = ({
       key={edit}
       ref={formRef}
       action={formAction}
-      className="mt-5 grid grid-cols-4 gap-4"
+      className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-4"
     >
-      <Field label="title" error={state.errors?.title}>
+      <Field
+        label="title"
+        error={state.errors?.title}
+        className="col-span-2 sm:col-span-4"
+      >
         <TextInput name="title" defaultValue={serial?.title} />
       </Field>
       <Field
         label="description"
         error={state.errors?.description}
-        className="col-span-2 row-span-2"
+        className="col-span-2"
       >
         <textarea
           name="description"
@@ -81,7 +85,7 @@ export const EditForm = ({
       </Field>
       <Field
         label="start year"
-        className="col-span-1 col-start-3 row-start-2 row-end-3"
+        className="col-span-1 sm:col-start-3 sm:row-start-2 sm:row-end-3"
         error={state.errors?.startYear}
       >
         <TextInput
@@ -92,7 +96,7 @@ export const EditForm = ({
       </Field>
       <Field
         label="end year"
-        className="col-span-1 col-start-4 row-start-2 row-end-3"
+        className="col-span-1 sm:col-start-4 sm:row-start-2 sm:row-end-3"
         error={state.errors?.endYear}
       >
         <TextInput
@@ -141,12 +145,16 @@ export const EditForm = ({
       <Field
         label="badge"
         error={state.errors?.badge}
-        className="row-start-4 col-start-3 col-span-2"
+        className="col-span-2 sm:row-start-4 sm:col-start-3"
       >
         <TextInput name="badge" defaultValue={serial?.badge ?? ""} />
       </Field>
 
-      <Select name="status" defaultValue={currentStatus} className="col-span-4">
+      <Select
+        name="status"
+        defaultValue={currentStatus}
+        className="col-span-2 sm:col-span-4"
+      >
         <SelectLabel className={LABEL_TEXT}>status</SelectLabel>
         <SelectButton className="mt-1 flex w-full rounded-sm border border-foreground/10 bg-foreground/5 px-2 py-2 text-sm font-normal" />
         <SelectContent className="mt-1 w-full animate-slide-down overflow-hidden rounded-lg border border-foreground/10 bg-foreground/5 text-sm font-normal backdrop-blur-2xl">
@@ -165,13 +173,13 @@ export const EditForm = ({
       <GenresField
         name="genres"
         label="genres"
-        className="col-span-4"
+        className="col-span-2 sm:col-span-4 w-full"
         defaultValue={(serial?.genres || []).map(({ genre }) => genre.name)}
       />
       <CategoriesField
         name="categories"
         label="categories"
-        className="col-span-4"
+        className="col-span-2 sm:col-span-4"
         defaultValue={serial?.categories?.map(({ categoryId }) => categoryId)}
       />
 
@@ -207,7 +215,7 @@ export const EditForm = ({
         <TextInput name="studio" defaultValue={serial?.studio?.name ?? ""} />
       </Field>
 
-      <fieldset className="bg-foreground/5 rounded-xl border border-foreground/10 p-4 col-span-4">
+      <fieldset className="bg-foreground/5 rounded-xl border border-foreground/10 p-4 col-span-2 sm:col-span-4">
         <legend className="sr-only">Media</legend>
         <p className={LABEL_TEXT} aria-hidden="true">
           media
@@ -217,14 +225,14 @@ export const EditForm = ({
             name="image"
             label="poster"
             hint="2:3 · JPG/PNG"
-            aspectClassName="aspect-2/3 min-w-25"
+            aspectClassName="aspect-2/3 min-w-22 sm:min-w-25"
             defaultUrl={serial?.image}
           />
           <ImageUpload
             name="backdrop"
             label="backdrop"
             hint="16:9 · JPG/PNG"
-            aspectClassName="aspect-video min-w-67.5"
+            aspectClassName="aspect-video min-w-58 sm:min-w-67.5"
             defaultUrl={serial?.backdrop}
           />
         </div>
@@ -247,6 +255,7 @@ export const EditForm = ({
         id={serial?.id}
         title={serial?.title}
         deleteAction={deleteSerial}
+        className="col-span-2 sm:col-span-4"
         message={state.message}
         success={state.success}
         canSave={canSave}

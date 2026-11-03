@@ -36,7 +36,7 @@ export const SerialTable = async ({
     <div className="w-full md:overflow-x-auto">
       <Table className="animate-slide-up md:min-w-225">
         <THead className="max-md:hidden border-b border-foreground/10 text-xs tracking-wider uppercase text-foreground">
-          <Row className="flex items-center h-12 bg-foreground/5 rounded-t-2xl overflow-hidden p-2">
+          <Row className="flex items-center h-12 bg-foreground/5 rounded-t-2xl overflow-hidden p-2 backdrop-blur-3xl">
             {COLUMNS.map(({ label, className }) => (
               <TD key={label} className={className}>
                 {label}

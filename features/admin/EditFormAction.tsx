@@ -3,15 +3,19 @@
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
 import { Loader2, Save } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
+import { cn } from "@/utils";
 import { toast } from "@/store";
 import { DeleteDialog } from "@/features/client";
 
 type FormAction = (formData: FormData) => void | Promise<void>;
 
-interface EditFormActionsProps {
+interface EditFormActionsProps extends Omit<
+  ComponentProps<"div">,
+  "title" | "id"
+> {
   id?: string | number;
   message?: string;
   success?: boolean;
@@ -37,6 +41,7 @@ export const EditFormActions = ({
   cancelHref,
   saveLabel = "Save changes",
   savingLabel = "Saving…",
+  className,
 }: EditFormActionsProps) => {
   const { pending, action } = useFormStatus();
   const [confirming, setConfirming] = useState(false);
@@ -66,14 +71,17 @@ export const EditFormActions = ({
 
   return (
     <div
-      className="col-span-4 rounded-full border border-foreground/10 backdrop-blur-xl"
+      className={cn(
+        "col-span-4 rounded-full sm:border border-foreground/10 backdrop-blur-xl",
+        className,
+      )}
       onKeyDown={(e) => {
         if (e.key === "Escape" && confirming) setConfirming(false);
       }}
     >
       {id !== undefined && <input type="hidden" name="id" value={id} />}
 
-      <div className="flex flex-1 flex-col-reverse gap-3 px-2 py-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-1 flex-col-reverse gap-3 sm:px-2 py-2 sm:flex-row sm:items-center sm:justify-between">
         {id && (
           <DeleteDialog
             title={title}
@@ -85,7 +93,7 @@ export const EditFormActions = ({
           <Link
             href={cancelHref ?? pathname}
             aria-disabled={pending}
-            className={`${base} flex-1 border border-foreground/15 text-foreground/70 hover:bg-foreground/10 hover:text-foreground focus-visible:ring-foreground/40 ${
+            className={`${base} sm:flex-1 border border-foreground/15 text-foreground/70 hover:bg-foreground/10 hover:text-foreground focus-visible:ring-foreground/40 ${
               pending ? "pointer-events-none opacity-50" : ""
             }`}
           >
@@ -95,7 +103,7 @@ export const EditFormActions = ({
           <button
             type="submit"
             disabled={!canSave || pending}
-            className={`${base} flex-2 text-nowrap bg-foreground uppercase text-background hover:bg-foreground/85 focus-visible:ring-foreground/40`}
+            className={`${base} sm:flex-2 text-nowrap bg-foreground uppercase text-background hover:bg-foreground/85 focus-visible:ring-foreground/40`}
           >
             {isSaving ? (
               <Loader2 className="size-4 animate-spin" aria-hidden="true" />

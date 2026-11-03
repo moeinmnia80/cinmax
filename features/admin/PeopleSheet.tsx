@@ -24,7 +24,7 @@ export async function PeopleSheet({ searchParams }: PeopleSheetProps) {
         </p>
       </header>
 
-      <ul className="-mb-px grid grid-cols-2">
+      <ul className="-mb-px grid grid-cols-2 sm:grid-cols-4">
         {people.map((person) => (
           <PersonRow key={person.id} person={person} />
         ))}

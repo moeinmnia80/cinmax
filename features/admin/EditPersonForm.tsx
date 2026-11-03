@@ -66,6 +66,8 @@ export const EditPersonForm = ({
   const currentRole =
     ROLE_PEOPLE.find((option) => option.id === person?.role) ?? ROLE_PEOPLE[0];
 
+  console.log(person);
+
   return (
     <form
       key={edit}

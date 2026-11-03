@@ -1,31 +1,53 @@
 "use client";
 
-import Link from "next/link";
-import { Check } from "lucide-react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { ComponentProps } from "react";
+import Link, { useLinkStatus } from "next/link";
+import { Check, LoaderCircle } from "lucide-react";
 
-export const EditButton = ({ slug }: { slug: string }) => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+import { cn } from "@/utils";
+import { useQueryToggle } from "@/hooks/useQueryToggle";
 
-  const isEdit = searchParams.get("edit") === slug;
+const ButtonContent = ({ isEdit }: { isEdit: boolean }) => {
+  const { pending } = useLinkStatus();
 
-  const params = new URLSearchParams(searchParams);
-  if (isEdit) params.delete("edit");
-  else params.set("edit", slug);
+  if (pending) {
+    return (
+      <>
+        <LoaderCircle
+          size={15}
+          aria-hidden="true"
+          className="animate-spin motion-reduce:animate-pulse"
+        />
+        <span role="status" className="sr-only">
+          Loading
+        </span>
+      </>
+    );
+  }
 
-  const query = params.toString();
+  return isEdit ? <Check size={15} aria-hidden="true" /> : "Edit";
+};
+
+interface EditButtonProps extends ComponentProps<"a"> {
+  slug: string;
+}
+
+export const EditButton = ({ slug, className }: EditButtonProps) => {
+  const { isOpen, href } = useQueryToggle(slug);
 
   return (
     <Link
-      href={query ? `${pathname}?${query}` : pathname}
+      href={href}
       replace
       scroll={false}
-      aria-label={isEdit ? "Close editor" : "Edit"}
-      aria-pressed={isEdit}
-      className="rounded bg-foreground/5 px-2 py-1 text-xs uppercase text-foreground/60 outline-0 transition hover:bg-foreground/10 focus-visible:ring-2 focus-visible:ring-foreground/40"
+      aria-label={isOpen ? "Close editor" : "Edit"}
+      aria-pressed={isOpen}
+      className={cn(
+        "inline-flex h-6 min-w-10 items-center justify-center rounded bg-foreground/5 px-2 text-xs uppercase text-foreground/60 outline-0 transition hover:bg-foreground/10 focus-visible:ring-2 focus-visible:ring-foreground/40",
+        className,
+      )}
     >
-      {isEdit ? <Check size={15} aria-hidden="true" /> : "Edit"}
+      <ButtonContent isEdit={isOpen} />
     </Link>
   );
 };

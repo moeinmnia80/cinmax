@@ -292,3 +292,17 @@ export const broadcastDays = [
     ],
   },
 ] as const;
+
+import { FeaturedType, WeekDay } from "@prisma/client";
+const toLabel = (id: string) =>
+  id.charAt(0).toUpperCase() + id.slice(1).toLowerCase();
+
+export const WEEKDAYS = Object.values(WeekDay).map((id) => ({
+  id,
+  label: toLabel(id.slice(0, 3)),
+}));
+
+export const BROADCAST_TYPES = Object.values(FeaturedType).map((id) => ({
+  id,
+  label: toLabel(id),
+}));
