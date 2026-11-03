@@ -38,9 +38,8 @@ const MIN_QUERY_LENGTH = 2;
 const LIMIT = 10;
 
 export async function GET(request: NextRequest) {
+  const search = request.nextUrl.searchParams.get("search")?.trim() ?? "";
   try {
-    const search = request.nextUrl.searchParams.get("search")?.trim() ?? "";
-
     if (search.length < MIN_QUERY_LENGTH) {
       return NextResponse.json({ success: true, results: [] });
     }
