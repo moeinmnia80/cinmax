@@ -24,7 +24,7 @@ export default async function MetadataPage() {
       />
       <div className="hidden sm:block absolute top-19 right-0 w-full h-full border-t border-l border-foreground/10 rounded-tl-2xl -z-10" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4 sm:p-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-1 p-4 sm:p-3">
         <EntityManager
           title="Genres"
           description="Action, Sci-Fi, Thriller…"

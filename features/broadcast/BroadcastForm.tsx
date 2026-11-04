@@ -1,26 +1,42 @@
-// features/admin/broadcasts/BroadcastForm.tsx
 "use client";
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 
-import { EditFormActions } from "@/features/client";
+import type { FeaturedType } from "@/types/types";
+import type { getBroadcastByContentSlug } from "@/data/broadcast";
 import { useFormChanges } from "@/hooks/useFormChanges";
-import { ChipGroup } from "@/features/broadcast/ChipGroup";
-import { CONTROL, Field, TextInput } from "@/components/Form";
 import { BROADCAST_TYPES, WEEKDAYS } from "@/constants/broadcast";
-import { deleteBroadcast, saveBroadcast } from "@/app/actions/broadcast";
-import { BroadcastData } from "@/data/broadcast";
-import { FeaturedType } from "@/types/types";
+import {
+  CONTROL,
+  DatePicker,
+  Field,
+  LABEL_TEXT,
+  TextInput,
+} from "@/components/Form";
+import { ChipGroup } from "@/features/broadcast/ChipGroup";
+import { EditFormActions } from "@/features/client";
+import {
+  deleteBroadcast,
+  saveBroadcast,
+  type SaveBroadcastState,
+} from "@/app/actions/broadcast";
 
 type Option = { id: number; title: string };
+type BroadcastData = NonNullable<
+  Awaited<ReturnType<typeof getBroadcastByContentSlug>>
+>;
 
-type BroadcastFormProps = {
+interface BroadcastFormProps {
   movies: Option[];
   serials: Option[];
   broadcast?: BroadcastData | null;
-};
+}
 
-const initialState = { errors: {}, message: "", success: false };
+const initialState: SaveBroadcastState = {
+  errors: {},
+  message: "",
+  success: false,
+};
 
 export const BroadcastForm = ({
   movies,
@@ -33,7 +49,11 @@ export const BroadcastForm = ({
   );
   const [type, setType] = useState<FeaturedType>(broadcast?.type ?? "Serial");
 
-  const targetName = type === "Movie" ? "movieId" : "serialId";
+  const isMovie = type === "Movie";
+  const targetName = isMovie ? "movieId" : "serialId";
+  const options = isMovie ? movies : serials;
+  const errors = state.errors ?? {};
+
   const requiredFields = useMemo(
     () => [targetName, "days", "time", "startDate"],
     [targetName],
@@ -44,7 +64,6 @@ export const BroadcastForm = ({
 
   const isEdit = Boolean(broadcast?.id);
   const canSave = valid && (!isEdit || dirty) && !isPending;
-  const options = type === "Movie" ? movies : serials;
 
   useEffect(() => {
     if (state.success) resetBaseline();
@@ -54,48 +73,64 @@ export const BroadcastForm = ({
     <form
       ref={formRef}
       action={formAction}
-      className="mt-5 grid grid-cols-4 gap-4"
+      className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4"
     >
-      {broadcast && <input type="hidden" name="id" value={broadcast.id} />}
+      {broadcast ? (
+        <>
+          <input type="hidden" name="type" value={broadcast.type} />
+          <input
+            type="hidden"
+            name={targetName}
+            value={(isMovie ? broadcast.movieId : broadcast.serialId) ?? ""}
+          />
+          <div className="col-span-2 sm:col-span-4">
+            <p className={LABEL_TEXT}>{broadcast.type}</p>
+            <p className="mt-1 text-sm">
+              {broadcast.movie?.title ?? broadcast.serial?.title}
+            </p>
+          </div>
+        </>
+      ) : (
+        <>
+          <ChipGroup
+            type="radio"
+            name="type"
+            label="content type"
+            options={BROADCAST_TYPES}
+            defaultValue={[type]}
+            onValueChange={(value) => setType(value as FeaturedType)}
+            error={errors.type}
+            className="col-span-2 sm:col-span-4"
+          />
 
-      <ChipGroup
-        type="radio"
-        name="type"
-        label="content type"
-        options={BROADCAST_TYPES}
-        defaultValue={[type]}
-        onValueChange={(v) => setType(v as "Movie" | "Serial")}
-        className="col-span-4"
-      />
-
-      <Field
-        label={type === "Movie" ? "movie" : "serial"}
-        className="col-span-4"
-        error={state?.errors?.[targetName]}
-      >
-        <select
-          key={type}
-          name={targetName}
-          defaultValue={
-            (type === "Movie" ? broadcast?.movieId : broadcast?.serialId) ?? ""
-          }
-          className={`${CONTROL} text-sm font-normal`}
-        >
-          <option value="" disabled>
-            Select a {type === "Movie" ? "movie" : "serial"}
-          </option>
-          {options.map((o) => (
-            <option key={o.id} value={o.id}>
-              {o.title}
-            </option>
-          ))}
-        </select>
-      </Field>
+          <Field
+            label={isMovie ? "movie" : "serial"}
+            error={errors[targetName]}
+            className="col-span-2 sm:col-span-4"
+          >
+            <select
+              key={type} // reset the selection when the type changes
+              name={targetName}
+              defaultValue=""
+              className={`${CONTROL} text-sm font-normal`}
+            >
+              <option value="" disabled>
+                Select a {isMovie ? "movie" : "serial"}
+              </option>
+              {options.map(({ id, title }) => (
+                <option key={id} value={id}>
+                  {title}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </>
+      )}
 
       <Field
         label="label (optional)"
-        className="col-span-4"
-        error={state?.errors?.label}
+        error={errors.label}
+        className="col-span-2 sm:col-span-4"
       >
         <TextInput
           name="label"
@@ -110,55 +145,39 @@ export const BroadcastForm = ({
         label="airs on"
         options={WEEKDAYS}
         defaultValue={broadcast?.days}
-        error={state?.errors?.days}
-        className="col-span-4"
+        error={errors.days}
+        className="col-span-2 sm:col-span-4"
       />
 
-      <Field label="time" className="col-span-2" error={state?.errors?.time}>
-        <input type="time" name="time" defaultValue={broadcast?.time ?? ""} />
-        {/* <TextInput
-          name="time"
-          type="time"
-          defaultValue={broadcast?.time ?? ""}
-        /> */}
+      <Field label="time" error={errors.time} className="col-span-2">
+        <TextInput name="time" defaultValue={broadcast?.time ?? ""} />
       </Field>
-      <div className="col-span-2" />
 
       <Field
         label="start date"
-        className="col-span-2"
-        error={state?.errors?.startDate}
+        error={errors.startDate}
+        className="col-span-1 sm:col-start-1"
       >
-        <input type="date" name="startDate" />
-        {/* 
-        <TextInput
+        <DatePicker
           name="startDate"
-          type="date"
-          defaultValue={toDateInput(broadcast?.startDate)}
-        /> */}
+          defaultValue={broadcast?.startDate?.toISOString().slice(0, 10)}
+        />
       </Field>
-      <Field
-        label="end date"
-        className="col-span-2"
-        error={state?.errors?.endDate}
-      >
-        <input type="time" name="time" />
-
-        {/* <TextInput
+      <Field label="end date" error={errors.endDate} className="col-span-1">
+        <DatePicker
           name="endDate"
-          type="date"
-          placeholder="Blank if ongoing"
-          defaultValue={toDateInput(broadcast?.endDate)}
-        /> */}
+          defaultValue={broadcast?.endDate?.toISOString().slice(0, 10)}
+        />
       </Field>
 
       <EditFormActions
         id={broadcast?.id}
-        title={broadcast?.label ?? undefined}
+        title={broadcast?.movie?.title ?? broadcast?.serial?.title}
         deleteAction={deleteBroadcast}
         message={state.message}
         success={state.success}
         canSave={canSave}
+        className="col-span-2 sm:col-span-4"
       />
     </form>
   );

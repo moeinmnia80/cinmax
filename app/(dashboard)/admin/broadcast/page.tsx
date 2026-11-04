@@ -1,26 +1,31 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Clapperboard, Clock, Plus, Tv } from "lucide-react";
+import { Suspense } from "react";
+import { Clapperboard, Clock, Tv } from "lucide-react";
 
 import { getBroadcasts } from "@/data/broadcast";
 import { WEEKDAYS } from "@/constants/broadcast";
+import { AdminHeader } from "@/features/server";
+import { EditBroadcast } from "@/features/broadcast/EditBroadcast";
+import { NewButton } from "@/features/admin/NewButton";
 
-export default async function BroadcastsPage() {
+export default async function BroadcastsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ edit?: string }>;
+}) {
   const broadcasts = await getBroadcasts();
 
   return (
-    <section className="p-6">
-      <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Broadcast schedule</h1>
-        <Link
-          href="/admin/broadcasts/new"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90"
-        >
-          <Plus className="size-4" aria-hidden /> New
-        </Link>
-      </header>
+    <>
+      <AdminHeader title="Broadcast" desc="Schedule time" className="flex">
+        <Suspense fallback={null}>
+          <NewButton />
+        </Suspense>
+      </AdminHeader>
+      <div className="absolute top-19 right-0 -z-10 hidden h-full w-full rounded-tl-2xl border-t border-l border-foreground/10 sm:block" />
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 p-4 sm:grid-cols-2 sm:gap-1 sm:p-3 xl:grid-cols-4">
         {WEEKDAYS.map((day) => {
           const items = broadcasts.filter((b) => b.days.includes(day.id));
 
@@ -45,14 +50,18 @@ export default async function BroadcastsPage() {
                   const content = isMovie ? b.movie : b.serial;
                   const Icon = isMovie ? Clapperboard : Tv;
 
+                  if (!content) return null;
+
                   return (
                     <li key={b.id}>
                       <Link
-                        href={`/admin/broadcast/${b.id}`}
+                        href={`?edit=${content?.slug}`}
+                        replace
+                        scroll={false}
                         className="group flex gap-3 rounded-xl border border-transparent bg-background/40 p-2 outline-none transition hover:border-foreground/15 focus-visible:ring-2 focus-visible:ring-foreground/30"
                       >
                         <div className="relative h-16 w-11 shrink-0 overflow-hidden rounded-md bg-foreground/10">
-                          {content?.image && (
+                          {content.image && (
                             <Image
                               src={content.image}
                               alt=""
@@ -65,7 +74,7 @@ export default async function BroadcastsPage() {
 
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium">
-                            {content?.title}
+                            {content.title}
                           </p>
                           <p className="mt-0.5 flex items-center gap-1 text-xs text-foreground/60">
                             <Clock className="size-3" aria-hidden /> {b.time}
@@ -84,6 +93,10 @@ export default async function BroadcastsPage() {
           );
         })}
       </div>
-    </section>
+
+      <Suspense fallback={null}>
+        <EditBroadcast searchParams={searchParams} />
+      </Suspense>
+    </>
   );
 }

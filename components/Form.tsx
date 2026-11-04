@@ -265,7 +265,7 @@ export function DatePicker({
         <div
           role="dialog"
           aria-label="Choose date"
-          className="absolute left-0 z-20 mt-1 w-64 animate-slide-down rounded-xl border border-foreground/10 bg-foreground/5 backdrop-blur-2xl p-3 shadow-2xl"
+          className="absolute left-0 z-20 mt-1 w-64 animate-slide-down rounded-xl border border-foreground/10 bg-background p-3 shadow-2xl"
         >
           <div className="mb-2 flex items-center justify-between">
             <NavButton

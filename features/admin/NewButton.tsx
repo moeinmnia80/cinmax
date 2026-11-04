@@ -31,15 +31,27 @@ const ButtonContent = ({
     );
   }
 
-  return !isOpen ? label ? label : <PlusCircleIcon size={15} /> : "Esc";
+  return !isOpen ? (
+    label ? (
+      label
+    ) : (
+      <PlusCircleIcon size={15} className="text-foreground/50" />
+    )
+  ) : (
+    "Esc"
+  );
 };
 
 interface NewButtonProps extends ComponentProps<"a"> {
-  slug: string;
+  slug?: string;
   label?: string;
 }
 
-export const NewButton = ({ slug, label, className }: NewButtonProps) => {
+export const NewButton = ({
+  slug = "unsaved-draft",
+  label,
+  className,
+}: NewButtonProps) => {
   const { isOpen, href } = useQueryToggle(slug);
 
   return (
@@ -50,7 +62,7 @@ export const NewButton = ({ slug, label, className }: NewButtonProps) => {
       aria-label={isOpen ? "Close editor" : "Edit"}
       aria-pressed={isOpen}
       className={cn(
-        "size-10 shrink-0 flex items-center justify-center text-nowrap text-sm text-foreground/85 uppercase bg-foreground/5 border border-foreground/10 rounded-lg p-2 hover:bg-foreground/10 transition duration-200",
+        "size-10 shrink-0 flex items-center justify-center text-nowrap text-sm text-foreground/85 uppercase bg-foreground/5 border border-foreground/10 rounded-full p-2 hover:bg-foreground/10 transition duration-200",
         className,
       )}
     >

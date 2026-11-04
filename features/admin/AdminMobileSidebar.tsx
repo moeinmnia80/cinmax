@@ -44,20 +44,22 @@ export const AdminMobileSidebar = ({ open, onClose, children }: Props) => {
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-foreground/10">
+        <div className="flex items-center justify-between border-b border-foreground/10 p-2">
           <div className="flex-1" onClick={onClose}>
             {children}
           </div>
           <button
             onClick={onClose}
             aria-label="Close menu"
-            className="mr-3 grid size-9 place-items-center rounded-md hover:bg-foreground/5"
+            className="grid size-9 place-items-center rounded-md hover:bg-foreground/5"
           >
             <X size={18} />
           </button>
         </div>
 
-        <AdminSidebarNav onNavigate={onClose} />
+        <div className="flex flex-col p-2">
+          <AdminSidebarNav onNavigate={onClose} />
+        </div>
       </aside>
     </div>
   );

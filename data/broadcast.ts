@@ -3,8 +3,8 @@ import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/lib/db";
 
 const include = {
-  movie: { select: { id: true, title: true, image: true } },
-  serial: { select: { id: true, title: true, image: true } },
+  movie: true,
+  serial: true,
 } as const;
 
 export const getBroadcasts = async () => {
@@ -38,6 +38,19 @@ export const getBroadcastOptions = async () => {
   return { movies, serials };
 };
 
+export const getBroadcastByContentSlug = async (slug: string) => {
+  "use cache";
+  cacheTag("broadcasts");
+  cacheLife("minutes");
+  return db.broadcast.findFirst({
+    where: { OR: [{ movie: { slug } }, { serial: { slug } }] },
+    include,
+  });
+};
+
 export type BroadcastData = NonNullable<
   Awaited<ReturnType<typeof getBroadcast>>
+>;
+export type BroadcastsData = NonNullable<
+  Awaited<ReturnType<typeof getBroadcasts>>
 >;

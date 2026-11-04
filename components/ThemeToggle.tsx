@@ -3,8 +3,9 @@
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ComponentProps } from "react";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: ComponentProps<"button">) {
   const { resolvedTheme, setTheme } = useTheme();
 
   const toggleTheme = () =>
@@ -21,6 +22,7 @@ export function ThemeToggle() {
         "transition-colors duration-200 hover:bg-accent active:scale-95",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         "focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        className,
       )}
     >
       <Sun

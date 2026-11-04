@@ -5,6 +5,7 @@ import {
   HomeIcon,
   CreditCard,
   Clapperboard,
+  Cast,
 } from "lucide-react";
 
 export const navItems = [
@@ -14,4 +15,5 @@ export const navItems = [
   { href: "/admin/people", label: "People", icon: Users },
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
   { href: "/admin/metadata", label: "Metadata", icon: Tags },
+  { href: "/admin/broadcast", label: "Broadcast", icon: Cast },
 ];

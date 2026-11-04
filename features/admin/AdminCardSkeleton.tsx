@@ -1,6 +1,6 @@
 export const AdminCardSkeleton = async () => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 animate-slide-down">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 animate-slide-down">
       {Array.from({ length: 4 }).map((_, index) => (
         <div
           key={index}

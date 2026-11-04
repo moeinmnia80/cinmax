@@ -32,17 +32,16 @@ export const ChipGroup = ({
   return (
     <fieldset className={className}>
       <legend className={LABEL_TEXT}>{label}</legend>
+
       <div className="mt-2 flex flex-wrap gap-2">
-        {options.map((o) => (
-          <label key={o.id} className="cursor-pointer">
+        {options.map(({ id, label: optionLabel }) => (
+          <label key={id} className="cursor-pointer">
             <input
               type={type}
               name={name}
-              value={o.id}
-              defaultChecked={selected.has(String(o.id))}
-              onChange={(e) =>
-                e.target.checked && onValueChange?.(String(o.id))
-              }
+              value={id}
+              defaultChecked={selected.has(String(id))}
+              onChange={(e) => e.target.checked && onValueChange?.(String(id))}
               className="peer sr-only"
             />
             <span
@@ -54,11 +53,12 @@ export const ChipGroup = ({
                 "peer-focus-visible:ring-2 peer-focus-visible:ring-foreground/40",
               )}
             >
-              {o.label}
+              {optionLabel}
             </span>
           </label>
         ))}
       </div>
+
       {error?.[0] && (
         <p className="mt-1 text-xs text-destructive">{error[0]}</p>
       )}

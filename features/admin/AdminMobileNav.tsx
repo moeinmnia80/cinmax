@@ -21,7 +21,7 @@ export const AdminMobileNav = ({ sidebarHeader, children }: Props) => {
       </AdminMobileSidebar>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-foreground/10 bg-background/80 px-4 backdrop-blur md:hidden">
+        <header className="sticky top-0 z-40 flex h-18 items-center gap-3 border-b border-foreground/10 bg-background/10 px-4 backdrop-blur md:hidden">
           <button
             onClick={() => setOpen(true)}
             aria-label="Open menu"

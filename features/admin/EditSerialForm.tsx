@@ -74,7 +74,7 @@ export const EditForm = ({
       <Field
         label="description"
         error={state.errors?.description}
-        className="col-span-2"
+        className="col-span-2 row-span-2"
       >
         <textarea
           name="description"
@@ -108,7 +108,7 @@ export const EditForm = ({
       </Field>
       <Field
         label="seasons"
-        className="col-span-1"
+        className="col-span-1 sm:col-start-3 sm:row-start-3 sm:row-end-4"
         error={state.errors?.seasons}
       >
         <TextInput
@@ -119,7 +119,7 @@ export const EditForm = ({
       </Field>
       <Field
         label="episodes"
-        className="col-span-1"
+        className="col-span-1 sm:col-start-4 sm:row-start-3 sm:row-end-4"
         error={state.errors?.episodes}
       >
         <TextInput

@@ -19,7 +19,7 @@ export const AdminCard = async ({ fetchCards }: AdminCardProps) => {
   const cards = await fetchCards();
 
   return (
-    <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 animate-slide-up rounded-2xl">
+    <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-1 animate-slide-up rounded-2xl">
       <div className="absolute -z-10 top-1/2 left-1/3 size-50 bg-destructive blur-[250px]" />
       {cards.map((card) => (
         <div

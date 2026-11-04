@@ -14,11 +14,11 @@ export default async function AdminDashboardPage() {
         <ThemeToggle />
       </AdminHeader>
       <div className="hidden sm:block absolute top-19 right-0 w-full h-full border-t border-l border-foreground/10 rounded-tl-2xl -z-10" />
-      <div className="flex flex-col gap-1 p-4 sm:p-3">
+      <div className="flex flex-col gap-3 sm:gap-1 p-4 sm:p-3">
         <Suspense fallback={<AdminCardSkeleton />}>
           <AdminCard fetchCards={getCards} />
         </Suspense>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-auto gap-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-auto gap-3 sm:gap-1">
           <AdminBox />
         </div>
       </div>
