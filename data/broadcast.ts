@@ -1,6 +1,7 @@
 import { cacheLife, cacheTag } from "next/cache";
 
 import { db } from "@/lib/db";
+import { serializeMovie, serializeSerial } from "./dashboard";
 
 const include = {
   movie: true,
@@ -11,7 +12,25 @@ export const getBroadcasts = async () => {
   "use cache";
   cacheTag("broadcasts");
   cacheLife("minutes");
-  return db.broadcast.findMany({ include, orderBy: { time: "asc" } });
+  const broadcasts = await db.broadcast.findMany({
+    include,
+    orderBy: { time: "asc" },
+  });
+
+  return broadcasts.map((item) => {
+    if (item.type === "Movie") {
+      return {
+        ...item,
+        movie: item.movie ? serializeMovie(item.movie) : null,
+      };
+    }
+    if (item.type === "Serial") {
+      return {
+        ...item,
+        serial: item.serial ? serializeSerial(item.serial) : null,
+      };
+    }
+  });
 };
 
 export const getBroadcast = async (id: number) => {
@@ -27,15 +46,20 @@ export const getBroadcastOptions = async () => {
   cacheLife("minutes");
   const [movies, serials] = await Promise.all([
     db.movie.findMany({
-      select: { id: true, title: true },
       orderBy: { title: "asc" },
     }),
     db.serial.findMany({
-      select: { id: true, title: true },
       orderBy: { title: "asc" },
     }),
   ]);
-  return { movies, serials };
+  return {
+    movies: movies.map((movie) => ({
+      ...serializeMovie(movie),
+    })),
+    serials: serials.map((serial) => ({
+      ...serializeSerial(serial),
+    })),
+  };
 };
 
 export const getBroadcastByContentSlug = async (slug: string) => {

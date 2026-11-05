@@ -13,7 +13,7 @@ interface HeroContentProps {
   data: Promise<DashboardFeatured[]>;
 }
 
-const formatDuration = (minutes: number) => {
+export const formatDuration = (minutes: number) => {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   return [h > 0 && `${h}h`, m > 0 && `${m}m`].filter(Boolean).join(" ");

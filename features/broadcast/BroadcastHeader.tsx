@@ -1,6 +1,9 @@
+import { Suspense } from "react";
 import { BroadcastNav } from "./BroadcastNav";
+import { getBroadcasts } from "@/data/broadcast";
 
 export const BroadcastHeader = () => {
+  const broadcasts = getBroadcasts();
   return (
     <div className="flex flex-col gap-5 sm:flex-row sm:justify-between sm:items-end w-full">
       <div>
@@ -21,7 +24,9 @@ export const BroadcastHeader = () => {
       </div>
 
       <div className="flex items-center w-full sm:w-fit gap-1 overflow-x-auto bg-foreground/5 border border-foreground/10 rounded-full p-1.5">
-        <BroadcastNav />
+        <Suspense fallback={<></>}>
+          <BroadcastNav data={broadcasts} />
+        </Suspense>
       </div>
     </div>
   );
