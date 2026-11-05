@@ -27,7 +27,7 @@ export default async function BroadcastsPage({
 
       <div className="grid gap-3 p-4 sm:grid-cols-2 sm:gap-1 sm:p-3 xl:grid-cols-4">
         {WEEKDAYS.map((day) => {
-          const items = broadcasts.filter((b) => b.days.includes(day.id));
+          const items = broadcasts.filter((b) => b?.days.includes(day.id));
 
           return (
             <div
@@ -46,14 +46,14 @@ export default async function BroadcastsPage({
                 )}
 
                 {items.map((b) => {
-                  const isMovie = b.movieId !== null;
-                  const content = isMovie ? b.movie : b.serial;
+                  const isMovie = b?.movieId !== null;
+                  const content = isMovie ? b?.movie : b?.serial;
                   const Icon = isMovie ? Clapperboard : Tv;
 
                   if (!content) return null;
 
                   return (
-                    <li key={b.id}>
+                    <li key={b?.id}>
                       <Link
                         href={`?edit=${content?.slug}`}
                         replace
@@ -77,11 +77,11 @@ export default async function BroadcastsPage({
                             {content.title}
                           </p>
                           <p className="mt-0.5 flex items-center gap-1 text-xs text-foreground/60">
-                            <Clock className="size-3" aria-hidden /> {b.time}
+                            <Clock className="size-3" aria-hidden /> {b?.time}
                           </p>
                           <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground/70">
                             <Icon className="size-3" aria-hidden />
-                            {b.label ?? b.type}
+                            {b?.label ?? b?.type}
                           </span>
                         </div>
                       </Link>
