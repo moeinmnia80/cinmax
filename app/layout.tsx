@@ -1,6 +1,7 @@
 import { JetBrains_Mono } from "next/font/google";
 
 import "@/app/globals.css";
+import "@moeinmnia/motion/styles.css";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { barlowCondensed } from "@/lib/fonts";
