@@ -29,14 +29,14 @@ export const BroadcastShow = ({ data }: { data: Promise<BroadcastsData> }) => {
 
   return (
     <>
-      <div className="flex gap-2 w-full">
+      <div className="flex gap-2 w-full overflow-x-scroll">
         {broadcasts.map((item) => {
           const media = item?.type === "Movie" ? item.movie : item?.serial;
           return (
             <Link
               href={`/${item?.type.toLowerCase()}/${media?.slug}`}
               key={item?.id}
-              className="relative rounded-2xl overflow-hidden animate-slide-left"
+              className="relative shrink-0 rounded-2xl overflow-hidden animate-slide-left"
             >
               {media?.image && (
                 <Image
