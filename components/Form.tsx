@@ -55,21 +55,10 @@ export const TextInput = ({
 );
 
 /* ------------------------------------------------------------------ */
-/* DatePicker                                                          */
+/* Date helpers                                                        */
 /* ------------------------------------------------------------------ */
 
 type View = "days" | "months" | "years";
-
-type DatePickerProps = {
-  name: string;
-  /** "YYYY-MM-DD" or a full ISO string such as person.birthDate.toISOString() */
-  defaultValue?: string | null;
-  placeholder?: string;
-  min?: Date;
-  max?: Date; // defaults to today
-  startView?: View; // view to open on when no date is selected yet
-  onChange?: (date: Date | undefined) => void;
-};
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -94,6 +83,9 @@ const sameDay = (a?: Date, b?: Date) =>
 const dayStart = (d: Date) =>
   new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
+// deterministic values only: safe to compute at module level / during prerender
+const MIN_DATE = new Date(1900, 0, 1);
+
 const formatDate = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
   month: "long",
@@ -110,19 +102,32 @@ const MONTHS = Array.from({ length: 12 }, (_, i) =>
 );
 const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]; // week starts on Monday
 
+/* ------------------------------------------------------------------ */
+/* DatePicker                                                          */
+/* ------------------------------------------------------------------ */
+
+type DatePickerProps = {
+  name: string;
+  /** "YYYY-MM-DD" or a full ISO string such as person.birthDate.toISOString() */
+  defaultValue?: string | null;
+  placeholder?: string;
+  min?: Date; // defaults to 1900-01-01
+  max?: Date; // defaults to today (resolved only when the calendar opens)
+  startView?: View; // view to open on when no date is selected yet
+  onChange?: (date: Date | undefined) => void;
+};
+
 export function DatePicker({
   name,
   defaultValue,
   placeholder = "Select date",
-  min = new Date(1900, 0, 1),
-  max = new Date(),
+  min,
+  max,
   startView = "days",
   onChange,
 }: DatePickerProps) {
   const [date, setDate] = useState(() => fromISODate(defaultValue));
   const [open, setOpen] = useState(false);
-  const [view, setView] = useState<View>("days");
-  const [cursor, setCursor] = useState(() => fromISODate(defaultValue) ?? max);
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -132,19 +137,6 @@ export function DatePicker({
     setPrevDefault(defaultValue);
     setDate(fromISODate(defaultValue));
   }
-
-  const today = dayStart(new Date());
-  const lo = dayStart(min);
-  const hi = dayStart(max);
-  const outOfRange = (d: Date) => d < lo || d > hi;
-  const yearOutOfRange = (y: number) =>
-    new Date(y, 11, 31) < lo || new Date(y, 0, 1) > hi;
-  const monthOutOfRange = (y: number, m: number) =>
-    new Date(y, m + 1, 0) < lo || new Date(y, m, 1) > hi;
-
-  const year = cursor.getFullYear();
-  const month = cursor.getMonth();
-  const pageStart = Math.floor(year / 12) * 12;
 
   const iso = date ? toISODate(date) : "";
   const submitValue = date ? toSubmitValue(date) : "";
@@ -184,19 +176,88 @@ export function DatePicker({
     input?.dispatchEvent(new Event("change", { bubbles: true }));
   }, [iso]);
 
-  const toggle = () => {
-    if (!open) {
-      setCursor(date ?? max);
-      setView(date ? "days" : startView);
-    }
-    setOpen((v) => !v);
-  };
-
   const commit = (next?: Date) => {
     setDate(next);
     setOpen(false);
     onChange?.(next);
   };
+
+  return (
+    <div ref={rootRef} className="relative">
+      <input
+        ref={inputRef}
+        type="hidden"
+        name={name}
+        value={submitValue}
+        readOnly
+      />
+
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          CONTROL,
+          "flex w-full items-center justify-between text-left font-normal text-md",
+        )}
+      >
+        <span className={date ? "" : "text-foreground/40"}>
+          {date ? formatDate.format(date) : placeholder}
+        </span>
+        <Calendar1Icon size={15} />
+      </button>
+
+      {/* mounted only when open → every `new Date()` below runs on the client, after interaction */}
+      {open && (
+        <CalendarPanel
+          date={date}
+          min={min}
+          max={max}
+          startView={startView}
+          onCommit={commit}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* CalendarPanel                                                       */
+/* ------------------------------------------------------------------ */
+
+type CalendarPanelProps = {
+  date?: Date;
+  min?: Date;
+  max?: Date;
+  startView: View;
+  onCommit: (date?: Date) => void;
+};
+
+function CalendarPanel({
+  date,
+  min = MIN_DATE,
+  max,
+  startView,
+  onCommit,
+}: CalendarPanelProps) {
+  const today = dayStart(new Date());
+  const lo = dayStart(min);
+  const hi = dayStart(max ?? today);
+
+  // fresh state on every open (the panel unmounts when closed)
+  const [view, setView] = useState<View>(date ? "days" : startView);
+  const [cursor, setCursor] = useState<Date>(() => date ?? hi);
+
+  const outOfRange = (d: Date) => d < lo || d > hi;
+  const yearOutOfRange = (y: number) =>
+    new Date(y, 11, 31) < lo || new Date(y, 0, 1) > hi;
+  const monthOutOfRange = (y: number, m: number) =>
+    new Date(y, m + 1, 0) < lo || new Date(y, m, 1) > hi;
+
+  const year = cursor.getFullYear();
+  const month = cursor.getMonth();
+  const pageStart = Math.floor(year / 12) * 12;
 
   const shift = (dir: 1 | -1) =>
     setCursor(
@@ -236,157 +297,128 @@ export function DatePicker({
   const selectedCell = "bg-foreground text-background hover:bg-foreground";
 
   return (
-    <div ref={rootRef} className="relative">
-      <input
-        ref={inputRef}
-        type="hidden"
-        name={name}
-        value={submitValue}
-        readOnly
-      />
-
-      <button
-        type="button"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={toggle}
-        className={cn(
-          CONTROL,
-          "flex w-full items-center justify-between text-left font-normal text-md",
-        )}
-      >
-        <span className={date ? "" : "text-foreground/40"}>
-          {date ? formatDate.format(date) : placeholder}
-        </span>
-        <Calendar1Icon size={15} />
-      </button>
-
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Choose date"
-          className="absolute left-0 z-20 mt-1 w-64 animate-slide-down rounded-xl border border-foreground/10 bg-background p-3 shadow-2xl"
+    <div
+      role="dialog"
+      aria-label="Choose date"
+      className="absolute left-0 z-20 mt-1 w-64 animate-slide-down rounded-xl border border-foreground/10 bg-background p-3 shadow-2xl"
+    >
+      <div className="mb-2 flex items-center justify-between">
+        <NavButton
+          label="Previous"
+          disabled={!canShift(-1)}
+          onClick={() => shift(-1)}
+          dir="left"
+        />
+        <button
+          type="button"
+          onClick={zoomOut}
+          disabled={view === "years"}
+          className="rounded-md px-2 py-1 font-mono text-xs uppercase tracking-widest transition-colors hover:bg-foreground/10 disabled:pointer-events-none"
         >
-          <div className="mb-2 flex items-center justify-between">
-            <NavButton
-              label="Previous"
-              disabled={!canShift(-1)}
-              onClick={() => shift(-1)}
-              dir="left"
-            />
-            <button
-              type="button"
-              onClick={zoomOut}
-              disabled={view === "years"}
-              className="rounded-md px-2 py-1 font-mono text-xs uppercase tracking-widest transition-colors hover:bg-foreground/10 disabled:pointer-events-none"
-            >
-              {title}
-            </button>
-            <NavButton
-              label="Next"
-              disabled={!canShift(1)}
-              onClick={() => shift(1)}
-              dir="right"
-            />
+          {title}
+        </button>
+        <NavButton
+          label="Next"
+          disabled={!canShift(1)}
+          onClick={() => shift(1)}
+          dir="right"
+        />
+      </div>
+
+      {view === "days" && (
+        <>
+          <div className="mb-1 grid grid-cols-7 text-center font-mono text-[10px] uppercase tracking-widest text-foreground/40">
+            {WEEKDAYS.map((d) => (
+              <span key={d}>{d}</span>
+            ))}
           </div>
-
-          {view === "days" && (
-            <>
-              <div className="mb-1 grid grid-cols-7 text-center font-mono text-[10px] uppercase tracking-widest text-foreground/40">
-                {WEEKDAYS.map((d) => (
-                  <span key={d}>{d}</span>
-                ))}
-              </div>
-              <div className="grid grid-cols-7">
-                {days.map((d) => (
-                  <button
-                    key={d.getTime()}
-                    type="button"
-                    disabled={outOfRange(d)}
-                    aria-pressed={sameDay(d, date)}
-                    onClick={() => commit(d)}
-                    className={cn(
-                      cell,
-                      d.getMonth() !== month && "text-foreground/25",
-                      sameDay(d, today) &&
-                        "ring-1 ring-inset ring-foreground/30",
-                      sameDay(d, date) && selectedCell,
-                    )}
-                  >
-                    {d.getDate()}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-
-          {view === "months" && (
-            <div className="grid grid-cols-3 gap-1">
-              {MONTHS.map((label, m) => (
-                <button
-                  key={label}
-                  type="button"
-                  disabled={monthOutOfRange(year, m)}
-                  onClick={() => {
-                    setCursor(new Date(year, m, 1));
-                    setView("days");
-                  }}
-                  className={cn(
-                    cell,
-                    "h-11 uppercase tracking-wider",
-                    date?.getFullYear() === year &&
-                      date.getMonth() === m &&
-                      selectedCell,
-                  )}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {view === "years" && (
-            <div className="grid grid-cols-3 gap-1">
-              {Array.from({ length: 12 }, (_, i) => pageStart + i).map((y) => (
-                <button
-                  key={y}
-                  type="button"
-                  disabled={yearOutOfRange(y)}
-                  onClick={() => {
-                    setCursor(new Date(y, month, 1));
-                    setView("months");
-                  }}
-                  className={cn(
-                    cell,
-                    "h-11",
-                    date?.getFullYear() === y && selectedCell,
-                  )}
-                >
-                  {y}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="mt-2 flex items-center justify-between border-t border-foreground/10 pt-2 font-mono text-xs uppercase tracking-widest text-foreground/50">
-            <button
-              type="button"
-              onClick={() => commit(undefined)}
-              className="px-2 py-1 transition-colors hover:text-foreground"
-            >
-              Clear
-            </button>
-            <button
-              type="button"
-              disabled={outOfRange(today)}
-              onClick={() => commit(today)}
-              className="px-2 py-1 transition-colors hover:text-foreground disabled:opacity-30"
-            >
-              Today
-            </button>
+          <div className="grid grid-cols-7">
+            {days.map((d) => (
+              <button
+                key={d.getTime()}
+                type="button"
+                disabled={outOfRange(d)}
+                aria-pressed={sameDay(d, date)}
+                onClick={() => onCommit(d)}
+                className={cn(
+                  cell,
+                  d.getMonth() !== month && "text-foreground/25",
+                  sameDay(d, today) && "ring-1 ring-inset ring-foreground/30",
+                  sameDay(d, date) && selectedCell,
+                )}
+              >
+                {d.getDate()}
+              </button>
+            ))}
           </div>
+        </>
+      )}
+
+      {view === "months" && (
+        <div className="grid grid-cols-3 gap-1">
+          {MONTHS.map((label, m) => (
+            <button
+              key={label}
+              type="button"
+              disabled={monthOutOfRange(year, m)}
+              onClick={() => {
+                setCursor(new Date(year, m, 1));
+                setView("days");
+              }}
+              className={cn(
+                cell,
+                "h-11 uppercase tracking-wider",
+                date?.getFullYear() === year &&
+                  date.getMonth() === m &&
+                  selectedCell,
+              )}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       )}
+
+      {view === "years" && (
+        <div className="grid grid-cols-3 gap-1">
+          {Array.from({ length: 12 }, (_, i) => pageStart + i).map((y) => (
+            <button
+              key={y}
+              type="button"
+              disabled={yearOutOfRange(y)}
+              onClick={() => {
+                setCursor(new Date(y, month, 1));
+                setView("months");
+              }}
+              className={cn(
+                cell,
+                "h-11",
+                date?.getFullYear() === y && selectedCell,
+              )}
+            >
+              {y}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-2 flex items-center justify-between border-t border-foreground/10 pt-2 font-mono text-xs uppercase tracking-widest text-foreground/50">
+        <button
+          type="button"
+          onClick={() => onCommit(undefined)}
+          className="px-2 py-1 transition-colors hover:text-foreground"
+        >
+          Clear
+        </button>
+        <button
+          type="button"
+          disabled={outOfRange(today)}
+          onClick={() => onCommit(today)}
+          className="px-2 py-1 transition-colors hover:text-foreground disabled:opacity-30"
+        >
+          Today
+        </button>
+      </div>
     </div>
   );
 }
