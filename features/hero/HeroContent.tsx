@@ -88,6 +88,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
                 aria-hidden={!active}
                 fill
                 sizes="(min-width: 1280px) 449px, (min-width: 768px) 350px, 100vw"
+                quality={70}
                 priority={i === 0}
                 className={`object-cover transition-[opacity,transform, scale] duration-700 group-hover:scale-110 motion-reduce:transition-none ${
                   active ? "opacity-100" : "opacity-0"

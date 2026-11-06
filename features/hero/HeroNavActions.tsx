@@ -80,11 +80,11 @@ export const HeroNavActions = () => {
         <div className="hidden sm:flex items-center gap-2">
           {data?.user?.image ? (
             <Image
-              src={data?.user.image}
-              alt="replace"
+              src={data.user.image}
+              alt="User avatar"
               loading="eager"
-              width={200}
-              height={200}
+              width={48}
+              height={48}
               priority
               className="size-9 rounded-full object-cover border-2 border-foreground/15"
             />
