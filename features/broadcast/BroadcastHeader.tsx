@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { SplitText } from "@moeinmnia/motion/react";
+
 import { BroadcastNav } from "./BroadcastNav";
 import { getBroadcasts } from "@/data/broadcast";
 
@@ -12,9 +14,14 @@ export const BroadcastHeader = () => {
             <span className="size-1.5 animate-pulse rounded-full bg-foreground/60" />
             Broadcast
           </span>
-          <span className="text-xs font-semibold uppercase tracking-widest text-foreground/20">
+          <SplitText
+            as="span"
+            by="words"
+            step={160}
+            className="text-xs font-semibold uppercase tracking-widest text-foreground/20"
+          >
             Cinemax One · EST
-          </span>
+          </SplitText>
         </div>
         <h2 className="flex items-center text-4xl font-black uppercase leading-[0.9] tracking-[-0.02em] text-destructive sm:text-6xl">
           <span className="text-foreground mr-3">Tonight on</span>
