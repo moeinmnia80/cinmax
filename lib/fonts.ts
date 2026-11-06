@@ -93,4 +93,5 @@ export const barlowCondensed = localFont({
       style: "normal",
     },
   ],
+  display: "swap",
 });
