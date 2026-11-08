@@ -29,7 +29,6 @@ export const HeroBackground = ({ data }: HeroBackgroundProps) => {
             aria-hidden={!active}
             fill
             sizes="100vw"
-            quality={65}
             priority={i === 0}
             className={`object-cover object-[70%] transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
               active ? "opacity-100" : "opacity-0"
