@@ -1,18 +1,24 @@
+import { Hero } from "@/features/server";
 import { MobileMenu } from "@/features/client";
-import { Container, Hero } from "@/features/server";
 
 import { Broadcast } from "@/features/broadcast/Broadcast";
+import { Movies } from "@/features/movies/Movies";
 
-export default function Home() {
+interface HomePageProps {
+  searchParams: Promise<{ search?: string }>;
+}
+
+export default function HomePage({ searchParams }: HomePageProps) {
   return (
-    <main>
-      <Container>
-        <div className="flex flex-col flex-1 items-center min-h-dvh">
-          <MobileMenu />
-          <Hero />
-          <Broadcast />
-        </div>
-      </Container>
+    <main className="flex flex-col flex-1 items-center min-h-dvh">
+      {/* <Container> */}
+      {/* <div> */}
+      <MobileMenu />
+      <Hero searchParams={searchParams} />
+      <Broadcast />
+      <Movies />
+      {/* </div> */}
+      {/* </Container> */}
     </main>
   );
 }

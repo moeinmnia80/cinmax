@@ -127,7 +127,7 @@ export function Search({ className, variant, size, ...props }: SearchProps) {
   return (
     <search
       role="search"
-      className={cn("w-full max-w-sm", className)}
+      className={cn("w-full max-w-sm backdrop-blur-sm rounded-full", className)}
       {...props}
     >
       <label htmlFor="search" className="sr-only">
@@ -137,7 +137,7 @@ export function Search({ className, variant, size, ...props }: SearchProps) {
       <div className={searchVariants({ variant, size })}>
         <SearchIcon
           aria-hidden
-          className="pointer-events-none absolute left-4 size-4 text-foreground/40 transition-colors group-focus-within:text-foreground/80"
+          className="pointer-events-none absolute left-4 size-4 z-20 text-foreground/40 transition-colors group-focus-within:text-foreground/80"
         />
 
         <input

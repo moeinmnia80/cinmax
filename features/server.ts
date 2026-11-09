@@ -2,7 +2,6 @@ export { Logo } from "@/components/ui/Logo";
 export { Container } from "@/components/ui/Container";
 
 export { Hero } from "@/features/hero/Hero";
-export { HeroNavigation } from "@/features/hero/HeroNavigation";
 export { CrewStripSkeleton } from "@/features/hero/CrewStripSkeleton";
 export { HeroContentSkeleton } from "@/features/hero/HeroContentSkeleton";
 export { HeroBackgroundSkeleton } from "@/features/hero/HeroBackgroundSkeleton";

@@ -27,11 +27,11 @@ export const HeroContentSkeleton = () => {
             <div className="inline-block w-[90vw] lg:w-160 xl:w-130 h-13 sm:h-0 xl:h-27 rounded-xl bg-gray-200/20 animate-pulse" />
             <div className="inline-block w-[80vw] lg:w-80 xl:w-110 h-13 xl:h-27 rounded-xl bg-gray-200/20 animate-pulse" />
           </h1>
-          <p className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             <div className="inline-block w-[90vw] lg:w-160 xl:w-130 h-4 rounded-xl bg-gray-200/20 animate-pulse" />
             <div className="inline-block w-[90vw] lg:w-160 xl:w-130 h-4 rounded-xl bg-gray-200/20 animate-pulse" />
             <div className="inline-block w-[80vw] lg:w-80 xl:w-110 h-4 rounded-xl bg-gray-200/20 animate-pulse" />
-          </p>
+          </div>
           <div className="flex items-center gap-4 flex-wrap mt-8">
             <div className="flex items-center gap-2.5 bg-destructive hover:bg-red-600 text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-95 shadow-lg shadow-red-900/40 text-sm tracking-wide uppercase">
               <Play size={16} fill="white" /> Watch Now
