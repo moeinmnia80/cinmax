@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [65, 75],
     remotePatterns: [
       {
         protocol: "https",

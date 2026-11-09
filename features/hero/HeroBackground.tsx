@@ -30,7 +30,8 @@ export const HeroBackground = ({ data }: HeroBackgroundProps) => {
             fill
             sizes="100vw"
             priority={i === 0}
-            className={`object-cover object-[70%] transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
+            quality={65}
+            className={`object-cover  will-change-[opacity] transform-gpu transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
               active ? "opacity-100" : "opacity-0"
             }`}
           />

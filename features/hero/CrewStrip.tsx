@@ -22,6 +22,7 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
   const next = () => setCurrent(() => (current + 1) % length);
 
   const current = useHeroSlide((state) => state.current);
+
   const setCurrent = useHeroSlide((state) => state.setCurrent);
 
   useEffect(() => {
@@ -47,10 +48,11 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
               {member.person.image ? (
                 <Image
                   priority
-                  width={100}
-                  height={100}
+                  width={36}
+                  height={36}
                   alt={member.person.name}
                   src={member.person.image}
+                  sizes="36px"
                   className="w-9 h-9 rounded-full object-cover border border-white/15"
                 />
               ) : (

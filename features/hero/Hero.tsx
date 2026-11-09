@@ -23,7 +23,9 @@ export const Hero = () => {
       <Suspense fallback={<HeroBackgroundSkeleton />}>
         <HeroBackground data={featuredMovies} />
       </Suspense>
-      <HeroNavigation />
+      <Suspense fallback={<></>}>
+        <HeroNavigation />
+      </Suspense>
       <FilterDrawer />
       <Suspense fallback={<HeroContentSkeleton />}>
         <HeroContent data={featuredMovies} />

@@ -7,17 +7,11 @@ import { Disc3, Play } from "lucide-react";
 
 import { useHeroSlide } from "@/store/useHeroSlide";
 import { DashboardFeatured } from "@/data/dashboard";
-import { getKey, getMedia, getYear } from "@/utils";
+import { getKey, getMedia, getYear, formatDuration } from "@/utils";
 
 interface HeroContentProps {
   data: Promise<DashboardFeatured[]>;
 }
-
-export const formatDuration = (minutes: number) => {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return [h > 0 && `${h}h`, m > 0 && `${m}m`].filter(Boolean).join(" ");
-};
 
 export const HeroContent = ({ data }: HeroContentProps) => {
   const featuredContent = use(data);
@@ -51,7 +45,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
             {media?.language.name}
           </span>
         </div>
-        <h1 className="text-[clamp(3rem,7vw,7rem)] font-black leading-none uppercase text-foreground mb-6">
+        <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black leading-none uppercase text-foreground mb-6">
           {media?.title}
           <span className="text-destructive text-5xl">.</span>
         </h1>
@@ -61,7 +55,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
         <div className="flex items-center gap-4 flex-wrap">
           <Link
             href={`/${item?.type.toLowerCase()}/${media?.slug}`}
-            className="flex items-center gap-2.5 bg-destructive hover:bg-red-600 text-foreground font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-95 shadow-lg shadow-red-900/40 text-sm tracking-wide uppercase hover:opacity-50"
+            className="flex items-center gap-2.5 bg-destructive hover:bg-red-600 text-foreground font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-95 shadow-lg shadow-red-900/40 text-sm tracking-wide uppercase hover:opacity-55"
           >
             <Play size={16} fill="white" /> Watch Now
           </Link>
@@ -87,10 +81,10 @@ export const HeroContent = ({ data }: HeroContentProps) => {
                 alt={active ? `${m.title} poster` : ""}
                 aria-hidden={!active}
                 fill
-                sizes="(min-width: 1280px) 449px, (min-width: 768px) 350px, 100vw"
-                quality={70}
+                sizes="(min-width: 1280px) 280px, 240px"
                 priority={i === 0}
-                className={`object-cover transition-[opacity,transform, scale] duration-700 group-hover:scale-110 motion-reduce:transition-none ${
+                fetchPriority="high"
+                className={`object-cover transition-[opacity,transform] duration-700 group-hover:scale-110 motion-reduce:transition-none ${
                   active ? "opacity-100" : "opacity-0"
                 }`}
               />

@@ -101,7 +101,7 @@ export async function saveSerial(
     const buffer = await toWebp(file, width);
     const result = await uploadPublicFile(
       buffer,
-      `serials/${slug}/${name}.webp`,
+      `serials/${baseSlug}/${name}.webp`,
       "image/webp",
     );
     uploadedKeys.push(result.key);
