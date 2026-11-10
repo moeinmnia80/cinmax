@@ -1,8 +1,6 @@
 export { CrewStrip } from "@/features/hero/CrewStrip";
 export { MobileMenu } from "@/features/hero/MobileMenu";
 export { HeroContent } from "@/features/hero/HeroContent";
-export { MobileSidebar } from "@/features/hero/MobileSidebar";
-export { MobileOverlay } from "@/features/hero/MobileOverlay";
 export { HeroBackground } from "@/features/hero/HeroBackground";
 export { HeroNavActions } from "@/features/hero/HeroNavActions";
 

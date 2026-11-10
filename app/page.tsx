@@ -11,14 +11,10 @@ interface HomePageProps {
 export default function HomePage({ searchParams }: HomePageProps) {
   return (
     <main className="flex flex-col flex-1 items-center min-h-dvh">
-      {/* <Container> */}
-      {/* <div> */}
       <MobileMenu />
       <Hero searchParams={searchParams} />
       <Broadcast />
       <Movies />
-      {/* </div> */}
-      {/* </Container> */}
     </main>
   );
 }

@@ -8,7 +8,7 @@ import {
   Cast,
 } from "lucide-react";
 
-export const navItems = [
+export const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: HomeIcon, exact: true },
   { href: "/admin/serials", label: "Serials", icon: Tv },
   { href: "/admin/movies", label: "Movies", icon: Clapperboard },
@@ -16,4 +16,9 @@ export const navItems = [
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
   { href: "/admin/metadata", label: "Metadata", icon: Tags },
   { href: "/admin/broadcast", label: "Broadcast", icon: Cast },
+];
+
+export const navItems = [
+  { href: "/serials", label: "Serials", icon: Tv },
+  { href: "/movies", label: "Movies", icon: Clapperboard },
 ];

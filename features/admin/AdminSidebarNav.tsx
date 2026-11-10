@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/utils";
-import { navItems } from "@/constants/mobileSidebarNavItems";
+import { adminNavItems } from "@/constants/navItems";
 
 type Props = { onNavigate?: () => void };
 
@@ -18,7 +18,7 @@ export const AdminSidebarNav = ({ onNavigate }: Props) => {
 
   return (
     <nav aria-label="Admin navigation" className="flex flex-col gap-2">
-      {navItems.map(({ href, label, icon: Icon, exact }) => {
+      {adminNavItems.map(({ href, label, icon: Icon, exact }) => {
         const active = isActiveRoute(pathname, href, exact);
 
         return (

@@ -35,7 +35,7 @@ export const Hero = ({ searchParams }: HeroProps) => {
           <Logo />
           <div className="relative flex flex-col items-center">
             <Suspense fallback={<></>}>
-              <Search className="relative z-60 max-w-lg" />
+              <Search className="relative z-60 hidden sm:inline-flex max-w-lg" />
             </Suspense>
             <Suspense fallback={<></>}>
               <HeroSearchResult searchParams={searchParams} />

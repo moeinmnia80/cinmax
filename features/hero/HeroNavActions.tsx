@@ -53,10 +53,12 @@ export const HeroNavActions = () => {
               </span>
             )}
             <button
+              type="button"
               onClick={handleLogout}
+              aria-label="Log out"
               className="text-white/30 hover:text-destructive transition-colors px-1"
             >
-              <LogOut size={13} />
+              <LogOut size={13} aria-hidden="true" />
             </button>
           </div>
         ) : (
