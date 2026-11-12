@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Reveal } from "@moeinmnia/motion/react";
 
 import { SerialType } from "@/data/serial";
+import { formatDuration } from "@/utils";
 
 export const SerialList = ({ data }: { data: Promise<SerialType[]> }) => {
   const serials = use(data);
@@ -14,7 +15,7 @@ export const SerialList = ({ data }: { data: Promise<SerialType[]> }) => {
           <Link
             href={`/serial/${serial.slug}`}
             prefetch={false}
-            className="group flex flex-col gap-2 shrink-0 w-40 md:w-60 overflow-hidden rounded-2xl border border-foreground/10"
+            className="relative group flex flex-col gap-2 shrink-0 w-40 md:w-60 overflow-hidden rounded-2xl border border-foreground/10"
           >
             <div className="relative aspect-2/3 w-full">
               {serial.image && (
@@ -23,10 +24,19 @@ export const SerialList = ({ data }: { data: Promise<SerialType[]> }) => {
                   alt={serial.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 351px"
-                  priority
+                  loading="lazy"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               )}
+            </div>
+            <div className="absolute inset-0 bg-linear-to-t from-background via-background/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 text-sm bg-background/5 p-3">
+              <h2 className=" ine-clamp-2 font-bold capitalize leading-tight">
+                {serial.title}
+              </h2>
+              <p className="mt-1 text-xs text-foreground/70 capitalize">
+                {`serial · ${serial.startYear} · ${formatDuration(serial.durationMinutes ?? 0)}`}
+              </p>
             </div>
           </Link>
         </Reveal>

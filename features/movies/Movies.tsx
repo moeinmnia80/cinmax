@@ -13,9 +13,10 @@ export const Movies = () => {
   return (
     <section
       aria-labelledby={id}
-      className="flex flex-col justify-center gap-4 w-full min-h-dvh border-t border-foreground/5"
+      className="relative gap-4 w-full border-t border-foreground/5"
     >
-      <Container className="">
+      <span className="absolute top-20 left-20 -z-10 block size-95 bg-destructive blur-3xl rounded-full opacity-20" />
+      <Container className="flex flex-col justify-center bg-foreground/5  min-h-dvh backdrop-blur-lg">
         <div className="flex items-center justify-between">
           <div>
             <div className="uppercase text-destructive">
@@ -48,7 +49,7 @@ export const Movies = () => {
         </div>
         <Suspense fallback={<></>}>
           <MovieList data={movies} />
-        </Suspense>{" "}
+        </Suspense>
       </Container>
     </section>
   );

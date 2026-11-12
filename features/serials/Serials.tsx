@@ -13,7 +13,7 @@ export const Serials = () => {
   return (
     <section
       aria-labelledby={id}
-      className="flex flex-col justify-center gap-4 w-full min-h-dvh border-t border-foreground/5"
+      className="flex flex-col justify-center gap-4 w-full min-h-dvh border-t border-foreground/5 "
     >
       <Container className="">
         <div className="flex items-center justify-between">
@@ -48,7 +48,7 @@ export const Serials = () => {
         </div>
         <Suspense fallback={<></>}>
           <SerialList data={serials} />
-        </Suspense>{" "}
+        </Suspense>
       </Container>
     </section>
   );

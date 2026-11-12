@@ -33,7 +33,7 @@ export const Hero = ({ searchParams }: Props) => {
       <nav className="z-20 flex items-center justify-between py-7 gap-4 w-full">
         <Logo />
         <div className="relative flex flex-col items-center">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<></>}>
             <Search className="relative z-60 hidden sm:inline-flex max-w-lg" />
           </Suspense>
           <Suspense fallback={<></>}>
