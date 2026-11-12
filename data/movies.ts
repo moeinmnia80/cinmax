@@ -4,12 +4,20 @@ import db from "@/lib/db";
 import { MovieDetail } from "@/types/types";
 import { lastChangeOf, recentArgs, weekOf } from "@/utils";
 
-export async function getMovies() {
+interface GetMoviesOptions {
+  limit?: number;
+}
+
+export async function getMovies(options?: GetMoviesOptions) {
   "use cache";
   cacheTag("movies");
   cacheLife("hours");
 
-  const movies = await db.movie.findMany();
+  const limit = options?.limit;
+
+  const movies = await db.movie.findMany({
+    ...(limit ? { orderBy: { createdAt: "desc" }, take: limit } : {}),
+  });
 
   return movies.map((movie) => ({
     ...movie,
@@ -80,6 +88,7 @@ export const getMovie = async (slug?: string): Promise<MovieType | null> => {
   "use cache";
   cacheTag("movie-data");
   cacheLife("minutes");
+  console.log("slug", slug);
 
   if (!slug) return null;
 

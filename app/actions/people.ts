@@ -33,7 +33,6 @@ export async function savePerson(
   _prev: PersonFormState,
   formData: FormData,
 ): Promise<PersonFormState> {
-  console.log(Object.fromEntries(formData));
   const parsed = personSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsed.success) {

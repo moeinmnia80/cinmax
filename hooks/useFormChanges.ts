@@ -41,11 +41,6 @@ export function useFormChanges(requiredFields: readonly string[]) {
     setStatus((prev) =>
       prev.dirty === dirty && prev.valid === valid ? prev : { dirty, valid },
     );
-    if (dirty) {
-      console.log("baseline:", baseline.current);
-      console.log("now:", snapshot(data));
-      console.log("categories:", data.getAll("categories"));
-    }
   });
 
   const rebaseline = useEffectEvent(() => {

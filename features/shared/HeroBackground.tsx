@@ -3,7 +3,7 @@ interface Props {
   backdrop?: string | null;
   title?: string;
 }
-export const SerialHeroBackground = ({ backdrop, title }: Props) => {
+export const HeroBackground = ({ backdrop, title }: Props) => {
   return (
     <>
       {backdrop && (

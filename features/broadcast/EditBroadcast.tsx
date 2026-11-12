@@ -19,8 +19,6 @@ export const EditBroadcast = async ({
     isNew ? null : getBroadcastByContentSlug(edit),
   ]);
 
-  console.log(options, broadcast);
-
   if (!isNew && !broadcast) return null;
 
   return (

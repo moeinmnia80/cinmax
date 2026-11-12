@@ -6,7 +6,7 @@ interface Props {
   title?: string;
 }
 
-export const SerialHeroPoster = ({ image, title }: Props) => {
+export const HeroPoster = ({ image, title }: Props) => {
   return (
     <>
       <Reveal variant="left">

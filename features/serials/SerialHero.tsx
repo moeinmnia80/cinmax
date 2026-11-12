@@ -3,9 +3,9 @@ import { ChevronLeft, Star } from "lucide-react";
 
 import { SerialType } from "@/data/serial";
 import { Container } from "@/features/server";
-import { SerialHeroPoster } from "./SerialHeroPoster";
+import { HeroPoster } from "../shared/HeroPoster";
 import { SerialHeroContent } from "./SerialHeroContent";
-import { SerialHeroBackground } from "./SerialHeroBackground";
+import { HeroBackground } from "../shared/HeroBackground";
 
 interface Props {
   data: Promise<SerialType | null>;
@@ -28,11 +28,11 @@ export const SerialHero = ({ data }: Props) => {
           </div>
         </div>
         <div className="flex flex-col items-center sm:flex-row gap-10">
-          <SerialHeroPoster image={serial?.image} title={serial?.title} />
+          <HeroPoster image={serial?.image} title={serial?.title} />
           <SerialHeroContent serial={serial} />
         </div>
       </Container>
-      <SerialHeroBackground backdrop={serial?.backdrop} title={serial?.title} />
+      <HeroBackground backdrop={serial?.backdrop} title={serial?.title} />
     </div>
   );
 };

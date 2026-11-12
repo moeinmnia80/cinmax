@@ -1,5 +1,3 @@
-import { Cursor } from "@moeinmnia/motion/react";
-
 import "@/app/globals.css";
 import "@moeinmnia/motion/styles.css";
 import type { Metadata } from "next";
@@ -20,7 +18,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body
         className={`${barlowCondensed.className} min-h-full flex flex-col bg-background`}
       >
-        <Cursor />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
