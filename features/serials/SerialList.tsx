@@ -9,18 +9,18 @@ export const SerialList = ({ data }: { data: Promise<SerialType[]> }) => {
   const serials = use(data);
   return (
     <div className="flex items-center gap-3 mt-5 overflow-x-auto pb-2">
-      {serials.map((movie, index) => (
-        <Reveal key={movie.id} variant="left" delay={500 * index}>
+      {serials.map((serial, index) => (
+        <Reveal key={serial.id} variant="left" delay={500 * index}>
           <Link
-            href={`/movie/${movie.slug}`}
+            href={`/serial/${serial.slug}`}
             prefetch={false}
             className="group flex flex-col gap-2 shrink-0 w-40 md:w-60 overflow-hidden rounded-2xl border border-foreground/10"
           >
             <div className="relative aspect-2/3 w-full">
-              {movie.image && (
+              {serial.image && (
                 <Image
-                  src={movie.image}
-                  alt={movie.title}
+                  src={serial.image}
+                  alt={serial.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 351px"
                   priority
