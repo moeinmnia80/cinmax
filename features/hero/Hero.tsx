@@ -13,10 +13,10 @@ import {
 } from "@/features/client";
 import {
   Logo,
+  Container,
   CrewStripSkeleton,
   HeroContentSkeleton,
   HeroBackgroundSkeleton,
-  Container,
 } from "@/features/server";
 
 interface HeroProps {

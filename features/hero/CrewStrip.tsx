@@ -47,9 +47,9 @@ export const CrewStrip = ({ data }: CrewStripProps) => {
             <div key={i} className="flex items-center gap-2.5 shrink-0">
               {member.person.image ? (
                 <Image
-                  priority
                   width={36}
                   height={36}
+                  loading="lazy"
                   alt={member.person.name}
                   src={member.person.image}
                   sizes="36px"

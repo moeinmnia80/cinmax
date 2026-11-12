@@ -1,9 +1,9 @@
 import { use } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { Reveal } from "@moeinmnia/motion/react";
 
 import { MovieType } from "@/data/movies";
-import Link from "next/link";
 
 export const MovieList = ({ data }: { data: Promise<MovieType[]> }) => {
   const movies = use(data);

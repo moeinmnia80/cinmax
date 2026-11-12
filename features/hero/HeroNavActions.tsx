@@ -38,10 +38,9 @@ export const HeroNavActions = () => {
               <Image
                 src={data.user.image}
                 alt="User avatar"
-                loading="eager"
+                loading="lazy"
                 width={36}
                 height={36}
-                priority
                 className="size-9 rounded-full object-cover border-2 border-foreground/15"
               />
             ) : (
