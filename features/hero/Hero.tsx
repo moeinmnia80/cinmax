@@ -19,38 +19,35 @@ import {
   HeroBackgroundSkeleton,
 } from "@/features/server";
 
-interface HeroProps {
+interface Props {
   searchParams: Promise<{ search?: string }>;
 }
 
-export const Hero = ({ searchParams }: HeroProps) => {
+export const Hero = ({ searchParams }: Props) => {
   const featuredMovies = getFeaturedItems();
   return (
-    <div className="flex flex-col w-full">
-      <Container className="flex flex-col w-full min-h-dvh">
-        <Suspense fallback={<HeroBackgroundSkeleton />}>
-          <HeroBackground data={featuredMovies} />
-        </Suspense>
-        <nav className="z-20 flex items-center justify-between py-7 gap-4 w-full">
-          <Logo />
-          <div className="relative flex flex-col items-center">
-            <Suspense fallback={<></>}>
-              <Search className="relative z-60 hidden sm:inline-flex max-w-lg" />
-            </Suspense>
-            <Suspense fallback={<></>}>
-              <HeroSearchResult searchParams={searchParams} />
-            </Suspense>
-          </div>
-
-          <HeroNavActions />
-        </nav>
-        <Suspense fallback={<HeroContentSkeleton />}>
-          <HeroContent data={featuredMovies} />
-        </Suspense>
-        <Suspense fallback={<CrewStripSkeleton />}>
-          <CrewStrip data={featuredMovies} />
-        </Suspense>
-      </Container>
-    </div>
+    <Container className="flex flex-col w-full min-h-dvh">
+      <Suspense fallback={<HeroBackgroundSkeleton />}>
+        <HeroBackground data={featuredMovies} />
+      </Suspense>
+      <nav className="z-20 flex items-center justify-between py-7 gap-4 w-full">
+        <Logo />
+        <div className="relative flex flex-col items-center">
+          <Suspense fallback={<div>Loading...</div>}>
+            <Search className="relative z-60 hidden sm:inline-flex max-w-lg" />
+          </Suspense>
+          <Suspense fallback={<></>}>
+            <HeroSearchResult searchParams={searchParams} />
+          </Suspense>
+        </div>
+        <HeroNavActions />
+      </nav>
+      <Suspense fallback={<HeroContentSkeleton />}>
+        <HeroContent data={featuredMovies} />
+      </Suspense>
+      <Suspense fallback={<CrewStripSkeleton />}>
+        <CrewStrip data={featuredMovies} />
+      </Suspense>
+    </Container>
   );
 };

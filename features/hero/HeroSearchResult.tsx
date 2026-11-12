@@ -1,6 +1,6 @@
 import { use } from "react";
 
-interface HeroSearchResultProps {
+interface Props {
   searchParams: Promise<{
     search?: string;
     genre?: string;
@@ -9,7 +9,7 @@ interface HeroSearchResultProps {
   }>;
 }
 
-export const HeroSearchResult = ({ searchParams }: HeroSearchResultProps) => {
+export const HeroSearchResult = ({ searchParams }: Props) => {
   const { search } = use(searchParams);
   return <>{search && search}</>;
 };

@@ -3,6 +3,7 @@ import { MobileMenu } from "@/features/client";
 
 import { Broadcast } from "@/features/broadcast/Broadcast";
 import { Movies } from "@/features/movies/Movies";
+import { Serials } from "@/features/serials/Serials";
 
 interface HomePageProps {
   searchParams: Promise<{ search?: string }>;
@@ -15,6 +16,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
       <Hero searchParams={searchParams} />
       <Broadcast />
       <Movies />
+      <Serials />
     </main>
   );
 }

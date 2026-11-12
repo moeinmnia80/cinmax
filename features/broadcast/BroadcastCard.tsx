@@ -31,8 +31,8 @@ export const BroadcastCard = ({ item }: { item: Broadcast; index: number }) => {
             src={media.image}
             alt={media.title}
             fill
+            loading="lazy"
             sizes="(max-width: 768px) 100vw, 351px"
-            priority
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}

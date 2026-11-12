@@ -56,6 +56,28 @@ export const getSerial = async (slug?: string): Promise<SerialType | null> => {
   };
 };
 
+interface GetSerialsOptions {
+  limit?: number;
+}
+
+export async function getSerials(options?: GetSerialsOptions) {
+  "use cache";
+  cacheTag("serials");
+  cacheLife("hours");
+
+  const limit = options?.limit;
+
+  const serials = await db.serial.findMany({
+    ...(limit ? { orderBy: { createdAt: "desc" }, take: limit } : {}),
+  });
+
+  return serials.map((serial) => ({
+    ...serial,
+    rating: serial.rating.toNumber(),
+    purchasePrice: serial.purchasePrice?.toString() ?? null,
+  }));
+}
+
 export async function getSerialWithQuery(query: string) {
   return db.serial.findMany({
     where: query
