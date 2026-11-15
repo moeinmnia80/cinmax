@@ -16,7 +16,7 @@ export const HeroBackground = ({ data }: HeroBackgroundProps) => {
   const current = useHeroSlide((state) => state.current);
 
   return (
-    <div className="absolute left-0 top-0 h-dvh w-full overflow-hidden">
+    <div className="absolute left-0 top-0 h-full w-full overflow-hidden">
       {featuredContent.map((item, i) => {
         const media = getMedia(item);
         const active = i === current;
