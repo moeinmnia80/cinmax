@@ -16,7 +16,7 @@ export const HeroBackground = ({ data }: HeroBackgroundProps) => {
   const current = useHeroSlide((state) => state.current);
 
   return (
-    <div className="absolute left-0 top-0 h-full w-full overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden">
       {featuredContent.map((item, i) => {
         const media = getMedia(item);
         const active = i === current;
@@ -30,8 +30,7 @@ export const HeroBackground = ({ data }: HeroBackgroundProps) => {
             fill
             sizes="100vw"
             priority={i === 0}
-            quality={65}
-            className={`object-cover  will-change-[opacity] transform-gpu transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
+            className={`object-cover will-change-[opacity] transform-gpu transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
               active ? "opacity-100" : "opacity-0"
             }`}
           />

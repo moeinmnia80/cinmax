@@ -26,7 +26,7 @@ interface Props {
 export const Hero = ({ searchParams }: Props) => {
   const featuredMovies = getFeaturedItems();
   return (
-    <Container className="flex flex-col w-full min-h-dvh">
+    <Container className="relative flex flex-col w-full min-h-dvh">
       <Suspense fallback={<HeroBackgroundSkeleton />}>
         <HeroBackground data={featuredMovies} />
       </Suspense>
