@@ -23,7 +23,7 @@ export const BroadcastCard = ({ item }: { item: Broadcast; index: number }) => {
   return (
     <Link
       href={`/${item.type.toLowerCase()}/${media.slug}`}
-      className="group relative w-full min-w-full shrink-0 snap-center overflow-hidden rounded-2xl border border-foreground/10 sm:w-52 sm:min-w-0 sm:snap-start md:w-56 motion-safe:animate-slide-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+      className="group relative shrink-0 w-40 md:w-60 snap-center overflow-hidden rounded-2xl border border-foreground/10 sm:min-w-0 sm:snap-start motion-safe:animate-slide-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
     >
       <div className="relative aspect-2/3 w-full">
         {media.image && (
@@ -31,8 +31,8 @@ export const BroadcastCard = ({ item }: { item: Broadcast; index: number }) => {
             src={media.image}
             alt={media.title}
             fill
-            loading="lazy"
             sizes="(max-width: 768px) 100vw, 351px"
+            loading="lazy"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}

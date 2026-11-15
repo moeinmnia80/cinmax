@@ -14,7 +14,6 @@ export const MovieList = ({ data }: { data: Promise<MovieType[]> }) => {
         <Reveal key={movie.id} variant="left" delay={500 * index}>
           <Link
             href={`/movie/${movie.slug}`}
-            prefetch={false}
             className="relative group flex flex-col gap-2 shrink-0 w-40 md:w-60 overflow-hidden rounded-2xl border border-foreground/10"
           >
             <div className="relative aspect-2/3 w-full">

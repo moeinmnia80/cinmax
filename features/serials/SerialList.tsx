@@ -14,7 +14,6 @@ export const SerialList = ({ data }: { data: Promise<SerialType[]> }) => {
         <Reveal key={serial.id} variant="left" delay={500 * index}>
           <Link
             href={`/serial/${serial.slug}`}
-            prefetch={false}
             className="relative group flex flex-col gap-2 shrink-0 w-40 md:w-60 overflow-hidden rounded-2xl border border-foreground/10"
           >
             <div className="relative aspect-2/3 w-full">

@@ -13,9 +13,9 @@ export const Serials = () => {
   return (
     <section
       aria-labelledby={id}
-      className="flex flex-col justify-center gap-4 w-full min-h-dvh border-t border-foreground/5 "
+      className="w-full border-t border-foreground/5"
     >
-      <Container className="">
+      <Container className="flex flex-col justify-center gap-4 py-10">
         <div className="flex items-center justify-between">
           <div>
             <div className="uppercase text-destructive">
