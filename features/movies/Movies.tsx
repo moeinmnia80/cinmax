@@ -9,7 +9,7 @@ import { MovieList } from "./MovieList";
 
 export const Movies = () => {
   const id = useId();
-  const movies = getMovies({ limit: 10 });
+  const movies = getMovies({ limit: 6 });
   return (
     <section
       aria-labelledby={id}

@@ -27,7 +27,7 @@ export const BroadcastShow = ({ data }: { data: Promise<BroadcastsData> }) => {
   return (
     <div
       key={day}
-      className="flex w-full snap-x snap-mandatory gap-3 overflow-x-auto pb-2"
+      className="flex w-full snap-x snap-mandatory gap-3 overflow-x-auto animate-fade-in pb-2"
     >
       {broadcasts.map((item, i) => (
         <BroadcastCard key={item.id} item={item} index={i} />

@@ -9,7 +9,7 @@ import { SerialList } from "./SerialList";
 
 export const Serials = () => {
   const id = useId();
-  const serials = getSerials({ limit: 10 });
+  const serials = getSerials({ limit: 6 });
   return (
     <section
       aria-labelledby={id}

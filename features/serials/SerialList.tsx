@@ -11,7 +11,7 @@ export const SerialList = ({ data }: { data: Promise<SerialType[]> }) => {
   return (
     <div className="flex items-center gap-3 mt-5 overflow-x-auto pb-2">
       {serials.map((serial, index) => (
-        <Reveal key={serial.id} variant="left" delay={500 * index}>
+        <Reveal key={serial.id} variant="left" delay={250 * index}>
           <Link
             href={`/serial/${serial.slug}`}
             className="relative group flex flex-col gap-2 shrink-0 w-40 md:w-60 overflow-hidden rounded-2xl border border-foreground/10"

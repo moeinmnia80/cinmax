@@ -13,7 +13,6 @@ interface Props {
 
 export const MovieHero = ({ data }: Props) => {
   const movie = use(data);
-  console.log("movie", movie);
 
   return (
     <div className="relative">

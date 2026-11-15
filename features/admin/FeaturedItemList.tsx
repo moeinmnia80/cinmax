@@ -11,7 +11,7 @@ import { FeaturedSlider } from "@/features/admin/FeaturedSlider";
 import { FeaturedSearchResults, Navigation } from "@/features/client";
 import { addFeaturedItem, removeFeaturedItem } from "@/app/actions/feature";
 
-interface FeaturedItemsListProps {
+interface Props {
   data: Promise<DashboardFeatured[]>;
 }
 
@@ -19,7 +19,7 @@ type OptimisticAction =
   | { kind: "add"; item: DashboardFeatured }
   | { kind: "remove"; key: string };
 
-export function FeaturedItemList({ data }: FeaturedItemsListProps) {
+export function FeaturedItemList({ data }: Props) {
   const serverItems = use(data);
 
   const [items, updateOptimisticItems] = useOptimistic(

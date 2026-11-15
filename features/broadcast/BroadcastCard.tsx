@@ -23,7 +23,7 @@ export const BroadcastCard = ({ item }: { item: Broadcast; index: number }) => {
   return (
     <Link
       href={`/${item.type.toLowerCase()}/${media.slug}`}
-      className="group relative shrink-0 w-40 md:w-60 snap-center overflow-hidden rounded-2xl border border-foreground/10 sm:min-w-0 sm:snap-start motion-safe:animate-slide-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+      className="group relative shrink-0 w-40 md:w-60 snap-center overflow-hidden rounded-2xl border border-foreground/10 sm:min-w-0 sm:snap-start"
     >
       <div className="relative aspect-2/3 w-full">
         {media.image && (

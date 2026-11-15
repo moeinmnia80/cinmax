@@ -88,7 +88,6 @@ export const getMovie = async (slug?: string): Promise<MovieType | null> => {
   "use cache";
   cacheTag("movie-data");
   cacheLife("minutes");
-  console.log("slug", slug);
 
   if (!slug) return null;
 

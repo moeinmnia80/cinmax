@@ -1,38 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export type MovieDTO = Omit<Movie, "rating" | "purchasePrice"> & {
-  rating: string;
-  purchasePrice: number;
-};
-export type SerialDTO = Omit<Serial, "rating" | "purchasePrice"> & {
-  rating: string;
-  purchasePrice: number;
-};
-
-export type FeaturedMedia =
-  | { type: "Movie"; movie: MovieDTO }
-  | { type: "Serial"; serial: SerialDTO };
-
-export type DashboardFeatured = FeaturedMedia & {
-  id: number;
-  order: number;
-  active: boolean;
-};
-
-export const serializeMovie = (m: Movie): MovieDTO => ({
-  ...m,
-  rating: Number(m.rating).toFixed(1),
-  purchasePrice: Number(m.purchasePrice),
-});
-
-export const serializeSerial = (s: Serial): SerialDTO => ({
-  ...s,
-  rating: Number(s.rating).toFixed(1),
-  purchasePrice: Number(s.purchasePrice),
-});
-
 import db from "@/lib/db";
-import { Movie, Serial } from "@/types/types";
+import {
+  FeaturedMedia,
+  serializeMovie,
+  serializeSerial,
+} from "@/data/dashboard";
 
 const MIN_QUERY_LENGTH = 2;
 const LIMIT = 10;

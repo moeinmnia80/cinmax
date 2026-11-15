@@ -27,7 +27,7 @@ async function toWebp(file: File, maxWidth: number) {
   return sharp(input)
     .rotate()
     .resize({ width: maxWidth, withoutEnlargement: true })
-    .webp({ quality: 80 })
+    .webp({ quality: 50 })
     .toBuffer();
 }
 
