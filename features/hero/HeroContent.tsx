@@ -25,7 +25,7 @@ export const HeroContent = ({ data }: HeroContentProps) => {
   const year = getYear(item);
 
   return (
-    <div className="flex-1 relative z-10 flex flex-col h-full w-full py-10 lg:flex-row items-start lg:items-center gap-10 lg:gap-0">
+    <div className="flex-1 relative z-10 flex flex-col-reverse h-full w-full py-10 lg:flex-row items-start lg:items-center gap-10 lg:gap-0">
       <div className="flex-1 flex flex-col justify-center max-w-175">
         <div className="flex items-center gap-3 mb-5 flex-wrap">
           <span className="bg-yellow-400 text-black text-xs font-black px-2 py-0.5 rounded-sm tracking-wide">
@@ -66,10 +66,10 @@ export const HeroContent = ({ data }: HeroContentProps) => {
           )}
         </div>
       </div>
-      <div className="relative ml-auto hidden lg:inline-block">
+      <div className="relative self-center sm:ml-auto">
         <Link
           href={`/${item.type.toLowerCase()}/${media.slug}`}
-          className="group relative block aspect-2/3 w-60 overflow-hidden rounded-2xl border border-foreground/5 shadow-2xl shadow-black/80 xl:w-70"
+          className="group relative block aspect-2/3 w-50 md:w-70 shrink-0 overflow-hidden rounded-2xl border border-foreground/5 shadow-2xl shadow-black/80"
         >
           {featuredContent.map((it, i) => {
             const m = getMedia(it);
